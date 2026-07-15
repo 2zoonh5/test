@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU PROFILE</title>
+  <title>세르 💜</title>
   
-  <!-- 파비콘 흔적을 지우고 투명한 보라색 하트 이모지로 대체 -->
+  <!-- 투명한 보라색 하트 이모지 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
   <!-- Tailwind CSS & Premium Fonts -->
@@ -18,15 +18,15 @@
       theme: {
         extend: {
           colors: {
-            bg: '#F9F8FC',         /* 차분하고 정돈된 밝은 미색 */
-            themePurple: '#DAD1FE', /* 대표 컬러 연보라 */
-            brandDark: '#1E1B2C',    /* 신뢰감을 주는 딥 블랙/네이비 */
-            brandSub: '#6E6B7B',     /* 정갈한 회회색 */
-            line: 'rgba(218, 209, 254, 0.4)', /* 얇고 미세한 경계선 */
+            bg: '#F9F8FC',         
+            themePurple: '#DAD1FE', 
+            brandDark: '#1E1B2C',    
+            brandSub: '#6E6B7B',     
+            line: 'rgba(218, 209, 254, 0.4)', 
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
-            montserrat: ['Montserrat', 'sans-serif'], /* 영문 세리프/산세리프 중간의 세련된 서체 */
+            montserrat: ['Montserrat', 'sans-serif'],
           }
         }
       }
@@ -41,13 +41,11 @@
     }
     html { scroll-behavior: smooth; }
     
-    /* 깔끔하고 정밀한 스크롤바 */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #F9F8FC; }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 럭셔리 소프트 카드 스타일 ---- */
     .premium-card {
       background: #FFFFFF;
       border: 1px solid rgba(218, 209, 254, 0.5);
@@ -61,12 +59,11 @@
       border-color: rgba(184, 168, 255, 0.6);
     }
 
-    /* ---- 상단 내비게이션 바 디자인 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
       color: #6E6B7B;
-      padding: 8px 16px;
+      padding: 8px 20px;
       border-radius: 99px;
       transition: all 0.3s ease;
     }
@@ -79,7 +76,6 @@
       background: #DAD1FE;
     }
 
-    /* ---- 고급스러운 백그라운드 블러 그라데이션 ---- */
     .bg-glow-radial {
       position: absolute;
       width: 600px; height: 600px;
@@ -94,7 +90,6 @@
 </head>
 <body class="relative min-h-screen font-sans pb-32">
 
-  <!-- 뒷배경 은은한 연보라 안개 효과 -->
   <div class="bg-glow-radial"></div>
 
   <!-- HEADER & NAVIGATION -->
@@ -103,11 +98,11 @@
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
         SERU<span class="text-themePurple">.</span>
       </div>
-      <nav class="flex gap-2">
+      <nav class="flex gap-1">
         <a href="#" class="nav-link active">프로필</a>
+        <a href="./schedule.html" class="nav-link">일정</a>
         <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-link" target="_blank">노래책</a>
         <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-link" target="_blank">업보</a>
-        <a href="https://cafe.naver.com/sereudayo" class="nav-link" target="_blank">팬카페</a>
       </nav>
     </div>
   </header>
@@ -116,19 +111,15 @@
 
     <!-- HERO SECTION -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-24">
-      <!-- 왼쪽: 미니멀 프로필 원형 프레임 -->
       <div class="md:col-span-5 flex justify-center">
         <div class="relative group">
-          <!-- 이미지 외부 은은한 링 효과 -->
           <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
           <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl">
-            <!-- 이미지 경로 적용해보세요 -->
             <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover">
           </div>
         </div>
       </div>
 
-      <!-- 오른쪽: 간결하고 세련된 소개 및 버튼 -->
       <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
         <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-brandSub uppercase mb-4 justify-center md:justify-start font-montserrat">
           <span>SINCE 2025. 11. 22</span>
@@ -137,26 +128,37 @@
         </div>
         
         <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
-          세르 <span class="font-light text-themePurple text-2xl md:text-3xl align-top">SERU</span>
+          세르 <span class="font-light text-themePurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
         </h1>
         
         <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
           연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는 숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 정갈하게 바뀐 네비게이션 버튼 세트 -->
-        <div class="flex gap-4 justify-center md:justify-start">
-          <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="px-6 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all shadow-lg shadow-brandDark/10">
-            OFFICIAL CAFE
+        <!-- 세련된 구조로 개편된 바로가기 버튼 세트 (요청 아이콘 삽입 완료) -->
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+          <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all shadow-lg shadow-brandDark/10">
+            <!-- 요청하신 외부링크 아이콘 (정교한 SVG 렌더링) -->
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            공식 팬카페 바로가기
           </a>
-          <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" class="px-6 py-3.5 bg-white text-brandDark hover:bg-[#FAF9FF] border border-line rounded-full text-xs font-bold tracking-wider transition-all shadow-sm">
-            SOOP BROADCAST
+          <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-brandDark hover:bg-[#FAF9FF] border border-line rounded-full text-xs font-bold tracking-wider transition-all shadow-sm">
+            <svg class="w-4 h-4 text-brandDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            SOOP 방송국 바로가기
           </a>
         </div>
       </div>
     </section>
 
-    <!-- INFO CARDS (인물 기본 정보) -->
+    <!-- INFO CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
       <div class="premium-card p-6 text-center">
         <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Birthday</div>
@@ -177,13 +179,13 @@
       </div>
     </section>
 
-    <!-- FANDOM INFO WIDGET (1:1 화면 분할) -->
+    <!-- FANDOM INFO WIDGET -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      <!-- 왼쪽 카드: 해또 FANDOM -->
+      <!-- 왼쪽 카드: 해또 FANDOM (설정화 반영 신규 스토리) -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
           <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
-          <h3 class="text-2xl font-bold text-brandDark mb-4">해또 <span class="font-light text-brandSub text-sm">haetto</span></h3>
+          <h3 class="text-2xl font-bold text-brandDark mb-4">해또 <span class="font-light text-brandSub text-sm font-montserrat">haetto</span></h3>
           <p class="text-sm text-brandSub leading-relaxed">
             항상 반짝이는 조개를 소중하게 품고 다니는, 리본 달린 보라색 케이프를 두른 귀여운 연보라색 해달입니다. 취미는 밤하늘 보기와 노래 듣기이며, 세르의 곁을 든든하게 지켜주는 해달 요정들입니다.
           </p>
@@ -222,16 +224,14 @@
       </div>
     </section>
 
-    <!-- PLAYLIST VOD (하이앤드 플레이어 섹션) -->
+    <!-- PLAYLIST VOD -->
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-themePurple uppercase mb-3 font-montserrat">ARCHIVE</div>
       <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <!-- 불필요한 레이아웃 테두리를 걷어내고 프레임리스 글래스모피즘 효과 적용 -->
         <div class="p-4 bg-white/40 border border-line backdrop-blur-sm rounded-[32px] shadow-2xl shadow-themePurple/10">
           <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black">
-            <!-- 재생하려는 SOOP VOD ID 입력 -->
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
         </div>
@@ -240,7 +240,6 @@
 
   </main>
 
-  <!-- 깔끔하고 세련된 미니멀 하단 푸터 -->
   <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
     <p class="font-montserrat tracking-wider">© 2026 SERU. ALL RIGHTS RESERVED.</p>
   </footer>
