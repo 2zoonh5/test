@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세르 💜</title>
+  <link rel="icon" type="image/svg+xml" href="https://qpmain.pages.dev/favicon.svg">
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#FAF9FF',       /* 베이스 연보라빛 도는 밝은 배경 */
+            card: '#F3F0FF',     /* 카드 배경 */
+            point: '#DAD1FE',    /* 대표 연보라색 */
+            accent: '#9F8FFF',   /* 포인트 딥 퍼플 */
+            txt: '#2D2A3A',      /* 가독성 높은 딥 그레이 */
+            sub: '#7B778F',      /* 서브 텍스트 */
+          },
+          fontFamily: {
+            sans: ['Pretendard', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #FAF9FF; }
+    ::-webkit-scrollbar-thumb { background: #E2DEFD; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #DAD1FE; }
+
+    /* ---- Navbar ---- */
+    .nav-tab {
+      position: relative;
+      padding: 14px 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #7B778F;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+    .nav-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 3px;
+      background: #9F8FFF;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    .nav-tab:hover { color: #9F8FFF; }
+    .nav-tab:hover::after { width: 50%; }
+    .nav-tab.active { color: #9F8FFF; }
+    .nav-tab.active::after { width: 100%; }
+
+    /* ---- Hero 2-Column ---- */
+    .hero-section {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 40px 0;
+    }
+    .hero-left {
+      flex-shrink: 0;
+      position: relative;
+    }
+    .hero-avatar {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #DAD1FE;
+      box-shadow: 0 20px 40px rgba(159, 143, 255, 0.15);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(218,209,254,0.3) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hero-right { flex: 1; min-width: 0; }
+
+    /* ---- Info Cards ---- */
+    .info-card {
+      background: #fff;
+      border: 1px solid rgba(218,209,254,0.4);
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .info-card:hover {
+      border-color: #9F8FFF;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(159, 143, 255, 0.1);
+    }
+    .info-label {
+      font-size: 0.75rem;
+      color: #7B778F;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: #2D2A3A;
+    }
+
+    /* ---- Category Tags ---- */
+    .cat-card {
+      background: #fff;
+      border: 1px solid rgba(218,209,254,0.3);
+      border-radius: 20px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+    .cat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(159, 143, 255, 0.08);
+      border-color: #9F8FFF;
+    }
+    .cat-icon {
+      width: 48px; height: 48px;
+      border-radius: 16px;
+      background: #F3F0FF;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 1.5rem;
+    }
+    .cat-name { font-size: 1.0625rem; font-weight: 700; color: #2D2A3A; margin-bottom: 4px; }
+    .cat-desc { font-size: 0.8125rem; color: #7B778F; }
+
+    /* ---- Goals ---- */
+    .goal-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 20px;
+      background: #fff;
+      border: 1px solid rgba(218,209,254,0.3);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .goal-item:hover {
+      transform: translateX(4px);
+      border-color: #9F8FFF;
+      box-shadow: 0 6px 15px rgba(159, 143, 255, 0.05);
+    }
+    .goal-num {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #9F8FFF;
+      color: #fff; font-size: 0.8125rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .goal-text { font-size: 0.95rem; font-weight: 500; color: #2D2A3A; }
+
+    /* ---- SOOP Button / Cafe Button ---- */
+    .action-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 28px; border-radius: 999px;
+      font-size: 0.9rem; font-weight: 700;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .soop-btn {
+      background: linear-gradient(135deg, #9F8FFF 0%, #8371FF 100%);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(159, 143, 255, 0.25);
+    }
+    .soop-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(159, 143, 255, 0.35);
+    }
+    .cafe-btn {
+      background: #fff;
+      color: #2D2A3A;
+      border: 1px solid rgba(218,209,254,0.6);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .cafe-btn:hover {
+      transform: translateY(-2px);
+      border-color: #9F8FFF;
+      box-shadow: 0 6px 18px rgba(159, 143, 255, 0.12);
+    }
+
+    /* ---- Fade In ---- */
+    .fade-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ---- Section Title ---- */
+    .section-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      color: #9F8FFF; text-transform: uppercase;
+      letter-spacing: 4px; text-align: center; margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 1.5rem; font-weight: 800;
+      color: #2D2A3A; text-align: center; margin-bottom: 32px;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      .hero-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+        padding: 32px 0;
+      }
+      .hero-avatar { width: 220px; height: 220px; }
+      .hero-glow { width: 280px; height: 280px; }
+      .hero-right { text-align: center; width: 100%; }
+      .nav-tab { padding: 10px 16px; font-size: 0.8125rem; }
+      .info-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+      .info-card { padding: 16px 12px !important; min-height: 100px !important; }
+      .info-value { font-size: 0.95rem !important; }
+    }
+  </style>
+</head>
+<body class="bg-bg min-h-screen font-sans text-txt">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-bg/95 backdrop-blur-md border-b border-point/20">
+    <div class="max-w-4xl mx-auto flex items-center justify-center">
+      <a href="#" class="nav-tab active" data-tab="profile">프로필</a>
+      <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-tab" data-tab="songbook" target="_blank">노래책</a>
+      <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-tab" data-tab="upbo" target="_blank">업보</a>
+      <a href="https://cafe.naver.com/sereudayo" class="nav-tab" data-tab="cafe" target="_blank">팬카페</a>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 pb-24">
+
+    <!-- HERO SECTION -->
+    <section class="fade-up visible">
+      <div class="hero-section">
+        <div class="hero-left">
+          <div class="hero-glow"></div>
+          <!-- ⚠️ 본인의 프로필 동그란 이미지 경로로 수정하세요 -->
+          <img class="hero-avatar" src="./큐피 💖_files/avatar-round.jpg" alt="세르">
+        </div>
+        <div class="hero-right">
+          <!-- Desktop Name & Buttons -->
+          <div class="hidden md:flex items-center justify-between mb-6">
+            <h1 class="text-5xl font-bold text-txt">
+              <span class="font-poppins">세르</span>
+              <span class="text-2xl text-accent align-middle ml-1">💜</span>
+            </h1>
+            <div class="flex gap-3">
+              <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="action-btn cafe-btn">
+                네이버 카페
+              </a>
+              <!-- ⚠️ 본인의 SOOP 방송국 주소로 교체하세요 -->
+              <a href="https://www.sooplive.com/station/" target="_blank" rel="noopener" class="action-btn soop-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                SOOP 방송국
+              </a>
+            </div>
+          </div>
+
+          <!-- Mobile Name & Buttons -->
+          <div class="md:hidden mb-6 text-center">
+            <h1 class="text-4xl font-bold text-txt mb-4">
+              <span class="font-poppins">세르</span><span class="text-xl align-middle ml-1">💜</span>
+            </h1>
+            <div class="flex justify-center gap-2">
+              <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="action-btn cafe-btn py-2 px-5 text-sm">
+                네이버 카페
+              </a>
+              <a href="https://www.sooplive.com/station/" target="_blank" rel="noopener" class="action-btn soop-btn py-2 px-5 text-sm">
+                SOOP 방송국
+              </a>
+            </div>
+          </div>
+
+          <!-- Info Cards Grid -->
+          <div class="info-grid-4 grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div class="info-card py-6 px-4">
+              <div class="info-label">생일</div>
+              <div class="info-value">6/8</div>
+            </div>
+            <div class="info-card py-6 px-4">
+              <div class="info-label">MBTI</div>
+              <div class="info-value">I🤍FP</div>
+            </div>
+            <div class="info-card py-6 px-4">
+              <div class="info-label">데뷔일</div>
+              <div class="info-value">2025.11.22</div>
+            </div>
+            <div class="info-card py-6 px-4">
+              <div class="info-label">방송 시간</div>
+              <div class="info-value">매일 19:00</div>
+              <p class="text-[0.65rem] text-accent mt-0.5 font-bold">오전 게릴라 방송!</p>
+            </div>
+          </div>
+
+          <!-- Fan Info Grid -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="info-card py-6 px-4">
+              <div class="info-label">팬덤명</div>
+              <div class="info-value">해또 🤍</div>
+              <p class="text-[0.6875rem] text-sub mt-1.5">세르의 사랑스러운 팬덤명</p>
+            </div>
+            <div class="info-card py-6 px-4">
+              <div class="info-label">팬닉 양식</div>
+              <div class="info-value">닉네임º˚</div>
+              <p class="text-[0.6875rem] text-sub mt-1.5">세르와 하나되는 증표</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARACTER & TIME SECTION -->
+    <section class="py-12 fade-up visible">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- 세르의 특성 -->
+        <div>
+          <div class="section-heading">Features</div>
+          <div class="section-title">세르 관찰 일지</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="cat-card">
+              <div class="cat-icon">🧸</div>
+              <div class="cat-name">쫌 귀여움</div>
+              <div class="cat-desc">부정할 수 없는 세르의 기본 패시브</div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon">⚡</div>
+              <div class="cat-name">배터리 조기방전</div>
+              <div class="cat-desc">에너지가 누구보다 빠르게 바닥납니다</div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon">😼</div>
+              <div class="cat-name">표독?함</div>
+              <div class="cat-desc">표...독? 과연 진실은 방송에서!</div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon">⭐</div>
+              <div class="cat-name">특기: 귀엽기</div>
+              <div class="cat-desc">존재 자체로 특기를 수행 중</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 방송 안내 -->
+        <div>
+          <div class="section-heading">Broadcasting</div>
+          <div class="section-title">주간 방송 안내</div>
+          <div class="space-y-4">
+            <div class="goal-item">
+              <div class="goal-num">1</div>
+              <div class="goal-text">정규 방송은 매일 저녁 19:00 시작!</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-num">2</div>
+              <div class="goal-text">기습 오전 게릴라 방송도 놓치지 마세요</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-num">3</div>
+              <div class="goal-text text-accent font-bold">매주 일요일은 세르의 정기 휴방일!</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-num">4</div>
+              <div class="goal-text">세세한 일정 공지는 팬카페를 확인해 주세요</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOD SECTION -->
+    <section class="py-12 fade-up visible">
+      <div class="section-heading">Covers</div>
+      <div class="section-title">노래 커버 및 다시보기</div>
+
+      <div class="vod-player-wrap" id="vodPlayer">
+        <!-- ⚠️ 본인의 SOOP VOD ID값 또는 유튜브 소스 번호로 변경 가능합니다 -->
+        <iframe src="https://vod.sooplive.com/player/000000000/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;"></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-10 text-sub text-xs border-t border-point/20 bg-white/50 backdrop-blur-sm">
+    <p>© 2026 SERU 💜 All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // 스크롤 시 부드럽게 나타나는 애니메이션 감지
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { 
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible'); 
+        }
+      });
+    }, { threshold: 0.05 });
+    
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
