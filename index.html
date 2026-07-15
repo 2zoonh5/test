@@ -3,34 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>세르의 방전실 💜</title>
+  <title>세르 💜</title>
   
-  <!-- 옛날 파비콘 흔적 삭제 & 귀여운 보라색 하트 이모지 파비콘 적용 -->
+  <!-- 파비콘 흔적을 지우고 투명한 보라색 하트 이모지로 대체 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
-  <!-- Tailwind CSS & Fonts -->
+  <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            bg: '#F5F2FF',         /* 화사하고 포근한 연라벤더 빛 배경 */
+            bg: '#F9F8FC',         /* 차분하고 정돈된 밝은 미색 */
             themePurple: '#DAD1FE', /* 대표 컬러 연보라 */
-            bubblePink: '#FFE5EC',  /* 서브 핑크 */
-            darkPurple: '#5C4E8C',  /* 포인트 딥 퍼플 (글씨/테두리용) */
-            glassWhite: 'rgba(255, 255, 255, 0.75)',
+            brandDark: '#1E1B2C',    /* 신뢰감을 주는 딥 블랙/네이비 */
+            brandSub: '#6E6B7B',     /* 정갈한 회회색 */
+            line: 'rgba(218, 209, 254, 0.4)', /* 얇고 미세한 경계선 */
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
-            fredoka: ['Fredoka', 'sans-serif'], /* 동글동글 키치한 영문/숫자 폰트 */
-          },
-          boxShadow: {
-            'brutal': '6px 6px 0px 0px #5C4E8C', /* 네오 브루탈리즘 입체 그림자 */
-            'brutal-sm': '3px 3px 0px 0px #5C4E8C',
+            montserrat: ['Montserrat', 'sans-serif'], /* 영문 세리프/산세리프 중간의 세련된 서체 */
           }
         }
       }
@@ -38,297 +34,206 @@
   </script>
 
   <style>
-    /* 키치하고 유니크한 폰트 & 스크롤 설정 */
     body {
-      color: #3D3360;
+      background-color: #F9F8FC;
+      color: #1E1B2C;
+      letter-spacing: -0.02em;
     }
     html { scroll-behavior: smooth; }
     
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #F5F2FF; }
-    ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 99px; border: 2px solid #F5F2FF; }
-    ::-webkit-scrollbar-thumb:hover { background: #5C4E8C; }
+    /* 깔끔하고 정밀한 스크롤바 */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #F9F8FC; }
+    ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 둥실둥실 스티커 애니메이션 ---- */
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-6px) rotate(1deg); }
-    }
-    .sticker-float {
-      animation: float 4s ease-in-out infinite;
-    }
-
-    /* ---- 네비게이션 캡슐화 디자인 ---- */
-    .capsule-nav {
-      background: rgba(255, 255, 255, 0.85);
-      border: 3px solid #5C4E8C;
-      border-radius: 999px;
-      box-shadow: 4px 4px 0px 0px #5C4E8C;
-    }
-    .capsule-tab {
-      padding: 8px 20px;
-      font-weight: 700;
-      border-radius: 999px;
-      transition: all 0.2s ease;
-      color: #7B6EAA;
-    }
-    .capsule-tab:hover {
-      background: #DAD1FE;
-      color: #5C4E8C;
-    }
-    .capsule-tab.active {
-      background: #5C4E8C;
-      color: #FFF;
-    }
-
-    /* ---- 입체 카드 (브루탈 스타일에 라운딩 추가) ---- */
-    .kitsch-card {
+    /* ---- 럭셔리 소프트 카드 스타일 ---- */
+    .premium-card {
       background: #FFFFFF;
-      border: 3px solid #5C4E8C;
+      border: 1px solid rgba(218, 209, 254, 0.5);
       border-radius: 24px;
-      box-shadow: var(--tw-shadow-brutal);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 30px rgba(218, 209, 254, 0.12);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .kitsch-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0px 0px #5C4E8C;
+    .premium-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(184, 168, 255, 0.18);
+      border-color: rgba(184, 168, 255, 0.6);
     }
 
-    /* ---- 방전 배터리 게이지 연출 ---- */
-    .battery-bar {
-      width: 100%;
-      height: 24px;
-      background: #EAE5FF;
-      border: 3px solid #5C4E8C;
+    /* ---- 상단 내비게이션 바 디자인 ---- */
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #6E6B7B;
+      padding: 8px 16px;
       border-radius: 99px;
-      overflow: hidden;
-      position: relative;
+      transition: all 0.3s ease;
     }
-    .battery-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #DAD1FE 0%, #B8A8FF 100%);
-      width: 19%; /* 19시 방송이라 19%인 컨셉! */
-      transition: width 1s ease-in-out;
+    .nav-link:hover {
+      color: #1E1B2C;
+      background: rgba(218, 209, 254, 0.3);
     }
-
-    /* ---- 스티커 배지 ---- */
-    .badge-sticker {
-      background: #FFE5EC;
-      border: 2px solid #5C4E8C;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-weight: 700;
-      display: inline-block;
-      transform: rotate(-2deg);
+    .nav-link.active {
+      color: #1E1B2C;
+      background: #DAD1FE;
     }
 
-    /* ---- VOD 프레임 폴라로이드 느낌 ---- */
-    .polaroid-frame {
-      background: #FFFFFF;
-      border: 3px solid #5C4E8C;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 6px 6px 0px 0px #5C4E8C;
+    /* ---- 고급스러운 백그라운드 블러 그라데이션 ---- */
+    .bg-glow-radial {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(218,209,254,0.4) 0%, rgba(249,248,252,0) 70%);
+      top: -10%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: -1;
     }
   </style>
 </head>
-<body class="bg-bg min-h-screen font-sans pb-24">
+<body class="relative min-h-screen font-sans pb-32">
 
-  <!-- Header & Navigation -->
-  <header class="sticky top-4 z-50 px-4 max-w-2xl mx-auto mb-12">
-    <div class="capsule-nav flex items-center justify-between px-4 py-2 backdrop-blur-sm">
-      <div class="font-fredoka text-xl font-bold tracking-tight text-darkPurple pl-2">
-        SERU <span class="text-xs">🔋</span>
+  <!-- 뒷배경 은은한 연보라 안개 효과 -->
+  <div class="bg-glow-radial"></div>
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="sticky top-0 z-50 bg-[#F9F8FC]/80 backdrop-blur-md border-b border-line/60">
+    <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
+        SERU<span class="text-themePurple">.</span>
       </div>
-      <div class="flex gap-1 text-sm">
-        <a href="#" class="capsule-tab active">Profile</a>
-        <a href="https://meloming.com/channel/yourseru/musicbook" class="capsule-tab" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="capsule-tab" target="_blank">업보</a>
-        <a href="https://cafe.naver.com/sereudayo" class="capsule-tab" target="_blank">카페</a>
-      </div>
+      <nav class="flex gap-2">
+        <a href="#" class="nav-link active">프로필</a>
+        <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-link" target="_blank">노래책</a>
+        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-link" target="_blank">업보</a>
+        <a href="https://cafe.naver.com/sereudayo" class="nav-link" target="_blank">팬카페</a>
+      </nav>
     </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-6">
+  <main class="max-w-4xl mx-auto px-6 mt-16">
 
-    <!-- HERO SECTION (다이어리 꾸미기 스타일) -->
-    <section class="mb-16">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <!-- HERO SECTION -->
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-24">
+      <!-- 왼쪽: 미니멀 프로필 원형 프레임 -->
+      <div class="md:col-span-5 flex justify-center">
+        <div class="relative group">
+          <!-- 이미지 외부 은은한 링 효과 -->
+          <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
+          <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl">
+            <!-- ⚠️ 원본 이미지 경로 확인 후 적용해보세요 -->
+            <img src="./큐피 💖_files/avatar-round.jpg" alt="세르 프로필" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 간결하고 세련된 소개 및 버튼 -->
+      <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-brandSub uppercase mb-4 justify-center md:justify-start font-montserrat">
+          <span>SINCE 2025. 11. 22</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-themePurple"></span>
+          <span>SOOP STREAMER</span>
+        </div>
         
-        <!-- 프로필 아바타 (스티커 및 사선 배치) -->
-        <div class="md:col-span-5 flex justify-center relative">
-          <div class="sticker-float relative">
-            <!-- 데코용 가상 마스킹 테이프 -->
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-themePurple/90 border-2 border-darkPurple px-6 py-1 text-[10px] font-bold uppercase tracking-widest text-darkPurple shadow-sm z-10 -rotate-3">
-              SERU WORLD
-            </div>
-            <!-- 아바타 이미지 프레임 -->
-            <div class="w-64 h-64 rounded-[40px] border-[4px] border-darkPurple overflow-hidden bg-white shadow-brutal transform rotate-2">
-              <!-- ⚠️ 실제 프로필 원본 이미지 경로를 입력하세요 -->
-              <img src="./큐피 💖_files/avatar-round.jpg" alt="세르 아바타" class="w-full h-full object-cover">
-            </div>
-            <!-- 귀여운 미니 스티커 데코 -->
-            <div class="absolute -bottom-4 -left-2 bg-bubblePink border-2 border-darkPurple rounded-full p-3 font-fredoka font-bold text-xs text-darkPurple shadow-brutal-sm -rotate-12">
-              I🤍FP
-            </div>
-            <div class="absolute -bottom-2 -right-4 bg-white border-2 border-darkPurple rounded-2xl px-3 py-1 font-bold text-xs text-darkPurple shadow-brutal-sm rotate-6">
-              쫌 귀여움 🧸
-            </div>
-          </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
+          세르 <span class="font-light text-themePurple text-2xl md:text-3xl align-top">SERU</span>
+        </h1>
+        
+        <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
+          연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는 숲 라이브 스트리머 세르입니다.
+        </p>
+
+        <!-- 정갈하게 바뀐 네비게이션 버튼 세트 -->
+        <div class="flex gap-4 justify-center md:justify-start">
+          <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="px-6 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all shadow-lg shadow-brandDark/10">
+            OFFICIAL CAFE
+          </a>
+          <!-- ⚠️ 방송국 주소 보완 필요시 아래 주소 수정 -->
+          <a href="https://www.sooplive.com/station/" target="_blank" rel="noopener" class="px-6 py-3.5 bg-white text-brandDark hover:bg-[#FAF9FF] border border-line rounded-full text-xs font-bold tracking-wider transition-all shadow-sm">
+            SOOP BROADCAST
+          </a>
         </div>
-
-        <!-- 우측 프로필 정보 보드 -->
-        <div class="md:col-span-7">
-          <div class="flex items-center gap-3 mb-4 flex-wrap justify-center md:justify-start">
-            <span class="badge-sticker">2025.11.22 데뷔 🍰</span>
-            <span class="badge-sticker bg-white">생일 6/8 🎉</span>
-          </div>
-
-          <h1 class="text-4xl md:text-5xl font-black text-darkPurple tracking-tight text-center md:text-left mb-6 font-fredoka">
-            세르 <span class="text-2xl font-sans align-middle">dayo!</span>
-          </h1>
-
-          <!-- 버튼 꾸러미 (링크 연동) -->
-          <div class="flex gap-4 justify-center md:justify-start mb-8">
-            <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="kitsch-card bg-bubblePink text-darkPurple font-extrabold px-6 py-3 rounded-full text-sm shadow-brutal-sm active:translate-y-[3px] active:shadow-none transition-all">
-              네이버 카페 ☕
-            </a>
-            <!-- ⚠️ SOOP 방송국 주소를 채워넣으세요 -->
-            <a href="https://www.sooplive.com/station/" target="_blank" rel="noopener" class="kitsch-card bg-themePurple text-darkPurple font-extrabold px-6 py-3 rounded-full text-sm shadow-brutal-sm active:translate-y-[3px] active:shadow-none transition-all">
-              SOOP 방송국 📡
-            </a>
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- MIDDLE WIDGETS GRID -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
-      
-      <!-- 1. 세르의 배터리 & 방송 안내 (중요도 높음 - 7칸 차지) -->
-      <div class="kitsch-card p-6 md:col-span-7 flex flex-col justify-between">
+    <!-- INFO CARDS (인물 기본 정보) -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+      <div class="premium-card p-6 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Birthday</div>
+        <div class="text-base font-bold text-brandDark">06 . 08</div>
+      </div>
+      <div class="premium-card p-6 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">MBTI</div>
+        <div class="text-base font-bold text-brandDark tracking-wider">I 🤍 FP</div>
+      </div>
+      <div class="premium-card p-6 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Live Time</div>
+        <div class="text-base font-bold text-brandDark">저녁 19 : 00</div>
+        <p class="text-[10px] text-themePurple font-semibold mt-1">오전 게릴라 방송 포함</p>
+      </div>
+      <div class="premium-card p-6 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Off-Day</div>
+        <div class="text-base font-bold text-brandDark">매주 일요일</div>
+      </div>
+    </section>
+
+    <!-- FANDOM INFO WIDGET (1:1 화면 분할) -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+      <!-- 왼쪽 카드: 해또 FANDOM -->
+      <div class="premium-card p-8 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-black text-darkPurple">🔋 실시간 배터리 현황</h3>
-            <span class="font-fredoka font-bold text-sm text-darkPurple bg-themePurple/50 px-2.5 py-1 rounded-full">방전 주의!</span>
-          </div>
-          <p class="text-sm text-darkPurple/80 leading-relaxed mb-6">
-            세르는 <strong class="text-darkPurple font-extrabold">에너지가 누구보다 빨리 바닥나는</strong> 연약한 배터리를 가졌습니다. 방전되기 전에 저녁 방송으로 충전해 주셔야 해요!
+          <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
+          <h3 class="text-2xl font-bold text-brandDark mb-4">해또 <span class="font-light text-brandSub text-sm">haetto</span></h3>
+          <p class="text-sm text-brandSub leading-relaxed">
+            세르의 소중한 동반자이자 밤을 가장 밝게 빛내주는 별들입니다. 언제나 따스하고 정다운 소통을 지향합니다.
           </p>
         </div>
+        <div class="border-t border-line/60 mt-8 pt-6">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">Official Nickname</span>
+            <span class="font-bold text-brandDark bg-themePurple/20 px-3 py-1.5 rounded-full">닉네임º˚</span>
+          </div>
+        </div>
+      </div>
 
+      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 -->
+      <div class="premium-card p-8">
+        <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-6 font-montserrat">IDENTITY PROFILE</div>
+        <h3 class="text-xl font-bold text-brandDark mb-6">세르 관찰 특징</h3>
+        
         <div class="space-y-4">
-          <!-- 기믹 배터리 바 -->
-          <div>
-            <div class="flex justify-between text-xs font-bold text-darkPurple mb-1.5">
-              <span>현재 세르 충전율 (19시 충전 시작)</span>
-              <span class="font-fredoka">19%</span>
-            </div>
-            <div class="battery-bar">
-              <div class="battery-fill"></div>
-            </div>
+          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
+            <span class="text-sm font-semibold text-brandDark">기본 패시브</span>
+            <span class="text-xs text-brandSub">쫌 귀여움 🧸</span>
           </div>
-
-          <!-- 기치있는 요약 메모 -->
-          <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-bold text-darkPurple/90">
-            <div class="bg-bg p-3 rounded-xl border-2 border-darkPurple/20">
-              ⏰ 정규 방송: <span class="text-accent">19:00</span>
-            </div>
-            <div class="bg-bg p-3 rounded-xl border-2 border-darkPurple/20">
-              ⚡ 게릴라: <span class="text-accent">오전 기습</span>
-            </div>
+          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
+            <span class="text-sm font-semibold text-brandDark">에너지 방전도</span>
+            <span class="text-xs text-brandSub">방전 속도 매우 빠름 🔋</span>
+          </div>
+          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
+            <span class="text-sm font-semibold text-brandDark">표?독?함 검증</span>
+            <span class="text-xs text-themePurple font-bold">진실은 방송에서 확인 😼</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-brandDark">보유 특기</span>
+            <span class="text-xs text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
           </div>
         </div>
       </div>
-
-      <!-- 2. 팬덤 '해또' & 팬닉 위젯 (5칸 차지) -->
-      <div class="kitsch-card p-6 md:col-span-5 bg-bubblePink/30 flex flex-col justify-between">
-        <div class="text-center md:text-left">
-          <div class="inline-block bg-bubblePink border-2 border-darkPurple rounded-full px-4 py-1 text-xs font-black text-darkPurple mb-3">
-            FANDOM
-          </div>
-          <h3 class="text-2xl font-black text-darkPurple mb-2">해또 🤍</h3>
-          <p class="text-sm text-darkPurple/80 leading-relaxed">
-            세르를 세상에서 가장 든든하고 따뜻하게 충전해 주는 소중한 팬덤명입니다.
-          </p>
-        </div>
-
-        <div class="mt-6 pt-4 border-t-2 border-dashed border-darkPurple/20">
-          <div class="flex justify-between items-center bg-white border-2 border-darkPurple px-4 py-3 rounded-2xl">
-            <span class="text-xs font-bold text-darkPurple/70">공식 팬닉</span>
-            <span class="font-fredoka font-black text-darkPurple text-base">닉네임º˚</span>
-          </div>
-        </div>
-      </div>
-
     </section>
 
-    <!-- FEATURES & CALENDAR BOTTOM WIDGETS -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
-
-      <!-- 3. 세르의 4대 요소 캐릭터 칩 (6칸) -->
-      <div class="kitsch-card p-6 md:col-span-6">
-        <h3 class="text-lg font-black text-darkPurple mb-4">👾 세르 관찰 가이드</h3>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-bg border-2 border-darkPurple p-3 rounded-2xl hover:scale-105 transition-transform">
-            <span class="text-xl">🧸</span>
-            <h4 class="font-black text-xs mt-1 text-darkPurple">쫌 귀여움</h4>
-            <p class="text-[10px] text-darkPurple/70 mt-0.5">인정할 수밖에 없는 매력</p>
-          </div>
-          <div class="bg-bg border-2 border-darkPurple p-3 rounded-2xl hover:scale-105 transition-transform">
-            <span class="text-xl">🔋</span>
-            <h4 class="font-black text-xs mt-1 text-darkPurple">빠른 방전</h4>
-            <p class="text-[10px] text-darkPurple/70 mt-0.5">I🤍FP의 정석 무브먼트</p>
-          </div>
-          <div class="bg-bg border-2 border-darkPurple p-3 rounded-2xl hover:scale-105 transition-transform">
-            <span class="text-xl">😼</span>
-            <h4 class="font-black text-xs mt-1 text-darkPurple">표독?함</h4>
-            <p class="text-[10px] text-darkPurple/70 mt-0.5">가끔 튀어나오는 매콤세르</p>
-          </div>
-          <div class="bg-bg border-2 border-darkPurple p-3 rounded-2xl hover:scale-105 transition-transform">
-            <span class="text-xl">⭐️</span>
-            <h4 class="font-black text-xs mt-1 text-darkPurple">특기: 귀엽기</h4>
-            <p class="text-[10px] text-darkPurple/70 mt-0.5">숨 쉬듯 귀여움을 발산 중</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. 정기 휴방 및 공지 위젯 (6칸) -->
-      <div class="kitsch-card p-6 md:col-span-6 flex flex-col justify-between">
-        <div>
-          <h3 class="text-lg font-black text-darkPurple mb-2">📅 주간 일정 브리핑</h3>
-          <p class="text-sm text-darkPurple/80 leading-relaxed mb-4">
-            정기적인 휴식을 통해 에너지를 완전히 충전한 후 더욱 텐션 높고 귀여운 모습으로 찾아옵니다!
-          </p>
-        </div>
-        
-        <div class="space-y-2.5">
-          <div class="flex items-center gap-3 bg-bubblePink border-2 border-darkPurple p-3 rounded-xl">
-            <div class="bg-white border-2 border-darkPurple w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-darkPurple shrink-0">휴</div>
-            <span class="text-sm font-black text-darkPurple">매주 일요일은 정기 휴방일!</span>
-          </div>
-          <p class="text-[11px] text-darkPurple/60 text-center">
-            ※ 상세 변동 스케줄 및 주간 공지는 네이버 팬카페를 통해 공지됩니다.
-          </p>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- COVERS SECTION -->
-    <section class="mb-12">
-      <h2 class="text-center font-fredoka text-xs font-extrabold tracking-[4px] text-darkPurple/60 uppercase mb-2">PLAYLIST</h2>
-      <h3 class="text-center text-2xl font-black text-darkPurple mb-8">노래 커버 및 다시보기</h3>
+    <!-- PLAYLIST VOD (하이앤드 플레이어 섹션) -->
+    <section class="mb-12 text-center">
+      <div class="text-xs font-bold tracking-[6px] text-themePurple uppercase mb-3 font-montserrat">ARCHIVE</div>
+      <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
-      <div class="max-w-2xl mx-auto">
-        <div class="polaroid-frame">
-          <div class="aspect-video w-full rounded-lg overflow-hidden bg-black border-2 border-darkPurple">
-            <!-- ⚠️ SOOP VOD ID값 또는 유튜브 주소값 변경 가능 -->
+      <div class="max-w-3xl mx-auto">
+        <!-- 불필요한 레이아웃 테두리를 걷어내고 프레임리스 글래스모피즘 효과 적용 -->
+        <div class="p-4 bg-white/40 border border-line backdrop-blur-sm rounded-[32px] shadow-2xl shadow-themePurple/10">
+          <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black">
+            <!-- ⚠️ 재생하려는 SOOP VOD ID 또는 유튜브 ID 입력 -->
             <iframe src="https://vod.sooplive.com/player/000000000/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
-          </div>
-          <div class="text-center font-fredoka font-bold text-sm text-darkPurple/60 mt-4 tracking-wider">
-            SERU ON AIR VOD FRAME
           </div>
         </div>
       </div>
@@ -336,8 +241,9 @@
 
   </main>
 
-  <footer class="text-center py-12 text-darkPurple/50 text-xs font-bold border-t-4 border-dashed border-darkPurple/20">
-    <p class="font-fredoka">© 2026 SERU 💜 CHARGING STATION</p>
+  <!-- 깔끔하고 세련된 미니멀 하단 푸터 -->
+  <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
+    <p class="font-montserrat tracking-wider">© 2026 SERU. ALL RIGHTS RESERVED.</p>
   </footer>
 
 </body>
