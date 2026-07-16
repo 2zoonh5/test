@@ -10,9 +10,9 @@
   
   <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 완벽한 디자인 조화를 위한 Pretendard 기본 폰트 적용 -->
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <!-- 고급 세리프(명조) Noto Serif KR 및 Montserrat 폰트 불러오기 -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
@@ -21,7 +21,7 @@
           colors: {
             bg: '#F9F8FC',         
             themePurple: '#DAD1FE', 
-            textPurple: '#8C7AE6',   /* 고급 딥 라벤더 퍼플 */
+            textPurple: '#8C7AE6',   /* 선명하고 고급스러운 딥 라벤더 퍼플 */
             brandDark: '#1E1B2C',    
             brandSub: '#6E6B7B',     
             line: 'rgba(218, 209, 254, 0.4)', 
@@ -30,7 +30,6 @@
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
-            serifKr: ['Noto Serif KR', 'serif'], /* 세련된 하이엔드 세리프 폰트 */
             montserrat: ['Montserrat', 'sans-serif'],
           }
         }
@@ -51,18 +50,18 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 입체적인 프리미엄 쉐도우 카드 ---- */
+    /* ---- 깔끔하고 정갈한 카드 스타일 ---- */
     .premium-card {
       background: #FFFFFF;
       border: 1px solid rgba(218, 209, 254, 0.4);
-      border-radius: 28px;
-      box-shadow: 0 4px 30px rgba(30, 27, 44, 0.02);
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(30, 27, 44, 0.02);
+      transition: all 0.3s ease;
     }
     .premium-card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-4px);
       border-color: #DAD1FE;
-      box-shadow: 0 24px 48px rgba(184, 168, 255, 0.12);
+      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.1);
     }
 
     /* ---- 상단 내비게이션 플로팅 바 ---- */
@@ -72,7 +71,7 @@
       color: #6E6B7B;
       padding: 8px 24px;
       border-radius: 99px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s ease;
     }
     .nav-link:hover {
       color: #1E1B2C;
@@ -81,19 +80,10 @@
     .nav-link.active {
       color: #1E1B2C;
       background: #DAD1FE;
-      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.45);
+      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 프로필 3D 패럴랙스 틸트 효과 ---- */
-    .tilt-container {
-      perspective: 1000px;
-    }
-    .tilt-element {
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out;
-    }
-
-    /* ---- 물결 모양의 미세한 보랏빛 글로우 안개 효과 ---- */
+    /* ---- 은은한 배경 그라데이션 ---- */
     .bg-glow-radial {
       position: absolute;
       width: 700px; height: 700px;
@@ -103,11 +93,6 @@
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: -1;
-    }
-
-    /* 1.5초 동안 아주 자연스럽고 차분하게 변하는 게이지 모션 */
-    .stat-bar {
-      transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
   </style>
 </head>
@@ -134,12 +119,11 @@
 
     <!-- HERO SECTION -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-28">
-      <!-- 왼쪽: 3D 마우스 감지 패럴랙스 아바타 -->
-      <div class="md:col-span-5 flex justify-center tilt-container">
-        <div class="relative group tilt-element" id="avatarTilt">
-          <!-- 부유하는 듯한 아웃라인 링 -->
+      <!-- 왼쪽: 프로필 원형 아바타 (깔끔하게 호버 스케일 업만 탑재) -->
+      <div class="md:col-span-5 flex justify-center">
+        <div class="relative group">
           <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
-          <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl transition-all duration-300">
+          <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl">
             <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover select-none">
           </div>
         </div>
@@ -153,8 +137,7 @@
         </div>
         
         <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
-          <!-- 명품 패션/코스메틱 브랜드 무드의 초고급 세리프 한글 폰트 적용 -->
-          <span class="font-serifKr font-black tracking-wide mr-3 text-brandDark">세르</span> 
+          <span class="font-sans font-bold text-brandDark mr-2">세르</span> 
           <span class="font-light text-textPurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
         </h1>
         
@@ -164,7 +147,7 @@
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 정밀한 균형과 다이내믹 피드백의 바로가기 버튼 세트 -->
+        <!-- 크기가 정밀하게 통일되고 고급스러운 애니메이션이 더해진 외부 연동 버튼 세트 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,70,32,0.15)] hover:shadow-[0_12px_24px_rgba(30,70,32,0.25)]">
@@ -228,51 +211,47 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (인위적인 변화 제거, 현실적인 버츄얼 스탯 시트 구현) -->
-      <div class="premium-card p-8 group/statCard">
-        <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-6 font-montserrat">STATUS ANALYSIS</div>
-        <h3 class="text-xl font-bold text-brandDark mb-6">세르 버츄얼 스탯</h3>
-        
-        <div class="space-y-5">
-          <!-- 체력 (HP) -->
-          <div>
-            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
-              <span class="text-brandDark">체력 (HP)</span>
-              <span class="text-brandSub font-montserrat font-medium">15 / 100 <span class="text-red-500 font-bold">(방전 주의)</span></span>
+      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (게이지바 없이, 완전히 깔끔하게 텍스트로 나열된 정보형 위젯) -->
+      <div class="premium-card p-8 flex flex-col justify-between">
+        <div>
+          <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
+          <h3 class="text-2xl font-bold text-brandDark mb-6">세르 관찰 프로필</h3>
+          
+          <div class="space-y-4">
+            <!-- 쫌 귀여움 -->
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">🧸</span>
+              <div>
+                <h4 class="text-sm font-bold text-brandDark">쫌 귀여움</h4>
+                <p class="text-[11px] text-brandSub">지나칠 수 없는 세르 고유의 패시브 특성</p>
+              </div>
             </div>
-            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="statHp" class="stat-bar h-full bg-red-500 rounded-full" style="width: 15%"></div>
+            
+            <!-- 에너지가 빨리 바닥남 -->
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">🔋</span>
+              <div>
+                <h4 class="text-sm font-bold text-brandDark">급속 방전 체력</h4>
+                <p class="text-[11px] text-brandSub">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
+              </div>
             </div>
-          </div>
-          <!-- 귀여움 수치 (AMP) -->
-          <div>
-            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
-              <span class="text-brandDark">귀여움 지수 (AMP)</span>
-              <span class="text-textPurple font-montserrat font-medium">999% (MAX)</span>
-            </div>
-            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="statCute" class="stat-bar h-full bg-textPurple rounded-full" style="width: 100%"></div>
-            </div>
-          </div>
-          <!-- 라이브 퍼포먼스 (ATK) -->
-          <div>
-            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
-              <span class="text-brandDark">보컬 & 방송 능력 (ATK)</span>
-              <span class="text-brandSub font-montserrat font-medium">95 / 100</span>
-            </div>
-            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="statAtk" class="stat-bar h-full bg-brandDark rounded-full" style="width: 95%"></div>
+
+            <!-- 표독한가? -->
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">😼</span>
+              <div>
+                <h4 class="text-sm font-bold text-brandDark">표?독?한?가?</h4>
+                <p class="text-[11px] text-brandSub">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
+              </div>
             </div>
           </div>
-          <!-- 표독함 저항력 (DEF) -->
-          <div>
-            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
-              <span class="text-brandDark">표독함 지수 (DEF)</span>
-              <span class="text-brandSub font-montserrat font-medium">10 / 100 <span class="text-textPurple/80 font-bold">(온순)</span></span>
-            </div>
-            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="statDef" class="stat-bar h-full bg-[#DAD1FE] rounded-full" style="width: 10%"></div>
-            </div>
+        </div>
+
+        <!-- 특기: 귀엽기 라인 분리 표기 -->
+        <div class="border-t border-line/60 mt-6 pt-5">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
+            <span class="font-bold text-brandDark bg-textPurple/10 px-3 py-1.5 rounded-full">귀엽기 ⭐</span>
           </div>
         </div>
       </div>
@@ -297,52 +276,6 @@
   <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
     <p class="font-montserrat tracking-wider">© 2026 SERU. ALL RIGHTS RESERVED.</p>
   </footer>
-
-  <script>
-    // ---- 1. 프로필 아바타 3D 패럴랙스 틸트 ----
-    const card = document.getElementById('avatarTilt');
-    card.addEventListener('mousemove', (e) => {
-      const { left, top, width, height } = card.getBoundingClientRect();
-      const x = e.clientX - left - width / 2;
-      const y = e.clientY - top - height / 2;
-      
-      const rotateX = -(y / (height / 2)) * 15;
-      const rotateY = (x / (width / 2)) * 15;
-      
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-
-    // ---- 2. 세련된 상호작용형 스탯 바 제어 ----
-    const hpBar = document.getElementById('statHp');
-    const cuteBar = document.getElementById('statCute');
-    const atkBar = document.getElementById('statAtk');
-    const defBar = document.getElementById('statDef');
-
-    // 마우스를 카드 위에 올렸을 때 현실적으로 스탯이 채워지거나 줄어드는 모션만 부드럽게 구현
-    const statCard = document.querySelector('.group\\/statCard');
-    
-    statCard.addEventListener('mouseenter', () => {
-      // 마우스를 올리면 체력은 조금 더 회복되고, 스탯들이 우아하게 흔들리는 고급스러운 반응
-      hpBar.style.width = "40%";
-      hpBar.style.backgroundColor = "#E67E22"; // 주황빛 회복 단계
-      
-      defBar.style.width = "30%";
-      defBar.style.backgroundColor = "#8C7AE6"; // 살짝 경계하는 스탯으로 보정
-    });
-
-    statCard.addEventListener('mouseleave', () => {
-      // 마우스가 떠나면 평상시 실제 스탯 상태로 복원
-      hpBar.style.width = "15%";
-      hpBar.style.backgroundColor = "#EF4444"; // 다시 붉은색 방전 경고 상태로 복귀
-      
-      defBar.style.width = "10%";
-      defBar.style.backgroundColor = "#DAD1FE";
-    });
-  </script>
 
 </body>
 </html>
