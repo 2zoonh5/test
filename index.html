@@ -11,8 +11,8 @@
   <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <!-- 세련되고 정갈한 고운돋움(한글) 및 Montserrat(영문) 폰트 불러오기 -->
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- 세련되면서 트렌디한 라운드 고딕 계열의 '싱글데이(Single Day)'와 프리미엄 영문 'Montserrat' 탑재 -->
+  <link href="https://fonts.googleapis.com/css2?family=Single+Day&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
@@ -21,7 +21,7 @@
           colors: {
             bg: '#F9F8FC',         
             themePurple: '#DAD1FE', 
-            textPurple: '#8C7AE6',   /* 가독성을 높이기 위해 더 진해진 고급 딥 라벤더 퍼플 */
+            textPurple: '#8C7AE6',   /* 고급 딥 라벤더 퍼플 */
             brandDark: '#1E1B2C',    
             brandSub: '#6E6B7B',     
             line: 'rgba(218, 209, 254, 0.4)', 
@@ -30,7 +30,7 @@
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
-            gowun: ['Gowun Dodum', 'sans-serif'], /* 세르 전용 귀여운 고급 한글 서체 */
+            seruFont: ['Single Day', 'sans-serif'], /* 세르님 전용 귀여운 하이엔드 폰트 */
             montserrat: ['Montserrat', 'sans-serif'],
           }
         }
@@ -43,7 +43,6 @@
       background-color: #F9F8FC;
       color: #1E1B2C;
       letter-spacing: -0.02em;
-      overflow-x: hidden;
     }
     html { scroll-behavior: smooth; }
     
@@ -106,29 +105,13 @@
       z-index: -1;
     }
 
-    /* ---- 마우스 커서 졸졸 따라다니는 안개 효과 ---- */
-    .cursor-glow {
-      position: fixed;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(140, 122, 230, 0.08) 0%, rgba(140, 122, 230, 0) 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out;
-    }
-    
-    /* 게이지바의 트랜지션을 위한 클래스 */
+    /* 1.2초 동안 쫀득하고 우아하게 흘러가는 게이지 바 트랜지션 효과 */
     .stat-bar {
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
   </style>
 </head>
 <body class="relative min-h-screen font-sans pb-32">
-
-  <!-- 마우스를 따라다니는 영롱한 보랏빛 안개 커서 -->
-  <div class="cursor-glow" id="cursorGlow"></div>
 
   <div class="bg-glow-radial"></div>
 
@@ -170,8 +153,8 @@
         </div>
         
         <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
-          <!-- 한글 폰트에만 Gowun Dodum(고운 돋움) 감성 서체 적용 -->
-          <span class="font-gowun mr-1">세르</span> 
+          <!-- 한글 전용 감성 폰트 (Gowun 돋움 대비 훨씬 세련되고 동글동글한 매력 서체) -->
+          <span class="font-seruFont text-[2.6rem] md:text-[3.4rem] mr-2 text-brandDark">세르</span> 
           <span class="font-light text-textPurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
         </h1>
         
@@ -245,50 +228,50 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (마우스 오버 시 게이지가 춤추는 인터랙티브 대시보드) -->
+      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (알잘딱 모션/컬러 변경 대폭 업그레이드) -->
       <div class="premium-card p-8 group/statCard">
         <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-6 font-montserrat">IDENTITY PROFILE</div>
         <h3 class="text-xl font-bold text-brandDark mb-6">세르 핵심 스탯</h3>
         
         <div class="space-y-5">
-          <!-- 스탯 1: 마우스 오버 시 0% -> 100% 가득 참 -->
+          <!-- 스탯 1: 마우스 오버 시 0% -> 100% 가득 참 (귀여운 연분홍빛) -->
           <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">기본 귀여움 패시브</span>
-              <span class="text-textPurple">999% (MAX)</span>
+              <span id="statText1" class="text-brandSub transition-colors duration-500">대기 중.. 🧸</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="stat1" class="stat-bar h-full bg-textPurple rounded-full" style="width: 0%"></div>
+              <div id="stat1" class="stat-bar h-full bg-[#E5E0F9] rounded-full" style="width: 0%"></div>
             </div>
           </div>
-          <!-- 스탯 2: 마우스 오버 시 85% -> 15% 방전됨 -->
+          <!-- 스탯 2: 마우스 오버 시 85% -> 15% 방전됨 (위급 경고등 체리블랙 컬러로 전환) -->
           <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">에너지 방전도</span>
-              <span class="text-brandSub">초고속 방전 🔋</span>
+              <span id="statText2" class="text-brandSub transition-colors duration-500">충전 상태 🔋</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
               <div id="stat2" class="stat-bar h-full bg-textPurple rounded-full" style="width: 85%"></div>
             </div>
           </div>
-          <!-- 스탯 3: 마우스 오버 시 0% -> 95% 가득 참 -->
+          <!-- 스탯 3: 마우스 오버 시 0% -> 95% 가득 참 (아이덴티티 라벤더 퍼플로 쫀득하게 차오름) -->
           <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">보유 특기</span>
-              <span class="text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
+              <span id="statText3" class="text-brandSub transition-colors duration-500">특기 준비 중 ⭐</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="stat3" class="stat-bar h-full bg-textPurple rounded-full" style="width: 0%"></div>
+              <div id="stat3" class="stat-bar h-full bg-[#E5E0F9] rounded-full" style="width: 0%"></div>
             </div>
           </div>
-          <!-- 스탯 4: 마우스 오버 시 15% -> 90% 매콤세르 상승 -->
+          <!-- 스탯 4: 마우스 오버 시 10% -> 90% 매콤세르 상승 (매콤하고 정열적인 체리 버건디 레드로 차오름) -->
           <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">표?독?함 검증</span>
-              <span class="text-textPurple font-semibold">진실은 라이브에서 😼</span>
+              <span id="statText4" class="text-brandSub transition-colors duration-500">온순한 상태 😼</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div id="stat4" class="stat-bar h-full bg-brandDark rounded-full" style="width: 15%"></div>
+              <div id="stat4" class="stat-bar h-full bg-[#DAD1FE] rounded-full" style="width: 10%"></div>
             </div>
           </div>
         </div>
@@ -316,30 +299,7 @@
   </footer>
 
   <script>
-    // ---- 1. 마우스 보랏빛 안개 효과 (완전 작동 수정) ----
-    const glow = document.getElementById('cursorGlow');
-    let cursorX = 0, cursorY = 0; // 마우스 실제 좌표
-    let glowX = 0, glowY = 0;     // 안개가 따라가는 스무스 좌표
-
-    // 마우스가 화면 움직일 때만 작동하도록 활성화
-    window.addEventListener('mousemove', (e) => {
-      cursorX = e.clientX;
-      cursorY = e.clientY;
-    });
-
-    // 프레임 단위로 좌표 추격 연산 실행 (딜레이를 주어 쫀득하고 고급지게 따라옴)
-    function animateGlow() {
-      const delay = 0.08; // 추격 속도 (작을수록 스무스함)
-      glowX += (cursorX - glowX) * delay;
-      glowY += (cursorY - glowY) * delay;
-      
-      // 스크롤 높이를 반영하여 고정 위치 조정
-      glow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
-      requestAnimationFrame(animateGlow);
-    }
-    animateGlow();
-
-    // ---- 2. 프로필 아바타 3D 패럴랙스 틸트 ----
+    // ---- 1. 프로필 아바타 3D 패럴랙스 틸트 ----
     const card = document.getElementById('avatarTilt');
     card.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
@@ -356,35 +316,77 @@
       card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
     });
 
-    // ---- 3. 스탯 게이지 바 다이내믹 호버 제어 ----
+    // ---- 2. 알잘딱 스탯 게이지 바 다이내믹 호버 제어 ----
     const s1 = document.getElementById('stat1');
     const s2 = document.getElementById('stat2');
     const s3 = document.getElementById('stat3');
     const s4 = document.getElementById('stat4');
 
-    // 초기 로딩 애니메이션 실행 (등장 시 스무스하게 채워짐)
-    setTimeout(() => {
-      s1.style.width = "100%";
-      s2.style.width = "85%";
-      s3.style.width = "95%";
-      s4.style.width = "15%";
-    }, 300);
+    const t1 = document.getElementById('statText1');
+    const t2 = document.getElementById('statText2');
+    const t3 = document.getElementById('statText3');
+    const t4 = document.getElementById('statText4');
 
-    // 스탯 카드 전체에 마우스 올렸을 때의 변화 이벤트
+    // 첫 페이지 로딩 시 기본 정량 수치 노출 (라벤더 톤)
+    function setInitialStats() {
+      // 1. 귀여움 (기본 30% -> 마우스 오버 시 100% 상승)
+      s1.style.width = "35%";
+      s1.style.backgroundColor = "#E5E0F9";
+      t1.textContent = "쫌 귀여움 🧸";
+      t1.style.color = "#6E6B7B";
+
+      // 2. 에너지 방전도 (기본 85% 완충상태 -> 마우스 오버 시 15% 방전)
+      s2.style.width = "85%";
+      s2.style.backgroundColor = "#8C7AE6";
+      t2.textContent = "에너지 충전됨 🔋";
+      t2.style.color = "#6E6B7B";
+
+      // 3. 특기 (기본 25% 준비 중 -> 마우스 오버 시 95% 만발)
+      s3.style.width = "25%";
+      s3.style.backgroundColor = "#E5E0F9";
+      t3.textContent = "숨쉬기 모드 💤";
+      t3.style.color = "#6E6B7B";
+
+      // 4. 표독함 검증 (기본 10% 온순 -> 마우스 오버 시 90% 매콤세르 폭주)
+      s4.style.width = "10%";
+      s4.style.backgroundColor = "#DAD1FE";
+      t4.textContent = "온순한 상태 😼";
+      t4.style.color = "#6E6B7B";
+    }
+
+    // 초기 상태 설정 실행
+    setTimeout(setInitialStats, 100);
+
+    // 스탯 영역 마우스 이벤트 바인딩
     const statCard = document.querySelector('.group\\/statCard');
+    
     statCard.addEventListener('mouseenter', () => {
-      s1.style.width = "0%";   // 귀여움 충전대기 모드
-      s2.style.width = "15%";  // 충전 안 해주면 순식간에 15% 방전!
-      s3.style.width = "0%";   // 특기 숨기기
-      s4.style.width = "90%";  // 마우스 대면 표독 게이지 90% 돌파!
+      // 1. 귀여움 상승 (사랑스러운 살구 연분홍빛)
+      s1.style.width = "100%";
+      s1.style.backgroundColor = "#FBBF24"; /* 빛나는 골드 컬러로 귀여움 대폭발 */
+      t1.textContent = "귀여움 한도초과! 999% 💖";
+      t1.style.color = "#D97706";
+
+      // 2. 방전도 급속 하락 (붉은 위험 신호로 전환)
+      s2.style.width = "15%";
+      s2.style.backgroundColor = "#EF4444"; 
+      t2.textContent = "초고속 방전 완료! 15% ⚠️";
+      t2.style.color = "#EF4444";
+
+      // 3. 보유 특기 가득 채워짐 (아이덴티티 딥퍼플)
+      s3.style.width = "95%";
+      s3.style.backgroundColor = "#8C7AE6";
+      t3.textContent = "숨쉬듯 귀여움 시전 중 ⭐";
+      t3.style.color = "#8C7AE6";
+
+      // 4. 표독함 정열의 체리레드로 수직 상승
+      s4.style.width = "90%";
+      s4.style.backgroundColor = "#9F1239"; /* 체리 버건디 레드 */
+      t4.textContent = "매콤세르 등장! 90% 🌶️";
+      t4.style.color = "#9F1239";
     });
 
-    statCard.addEventListener('mouseleave', () => {
-      s1.style.width = "100%";
-      s2.style.width = "85%";
-      s3.style.width = "95%";
-      s4.style.width = "15%";
-    });
+    statCard.addEventListener('mouseleave', setInitialStats);
   </script>
 
 </body>
