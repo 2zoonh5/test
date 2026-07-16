@@ -53,14 +53,14 @@
     .premium-card {
       background: #FFFFFF;
       border: 1px solid rgba(218, 209, 254, 0.4);
-      border-radius: 24px;
+      border-radius: 28px;
       box-shadow: 0 4px 24px rgba(30, 27, 44, 0.02);
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .premium-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-8px);
       border-color: #DAD1FE;
-      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(184, 168, 255, 0.12);
     }
 
     /* ---- 상단 내비게이션 플로팅 바 ---- */
@@ -80,6 +80,15 @@
       color: #1E1B2C;
       background: #DAD1FE;
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
+    }
+
+    /* ---- 프로필 3D 패럴랙스 틸트 효과를 위한 스타일 ---- */
+    .tilt-container {
+      perspective: 1000px;
+    }
+    .tilt-element {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
     }
 
     /* ---- 은은한 배경 그라데이션 ---- */
@@ -118,9 +127,9 @@
 
     <!-- HERO SECTION -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-28">
-      <!-- 왼쪽: 프로필 원형 아바타 (깔끔하게 호버 스케일 업만 탑재) -->
-      <div class="md:col-span-5 flex justify-center">
-        <div class="relative group">
+      <!-- 왼쪽: 프로필 원형 아바타 (3D 틸트 효과 탑재) -->
+      <div class="md:col-span-5 flex justify-center tilt-container">
+        <div class="relative group tilt-element" id="avatarTilt">
           <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
           <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl">
             <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover select-none">
@@ -135,7 +144,6 @@
           <span>SOOP STREAMER</span>
         </div>
         
-        <!-- 수평 라인 정렬 수정: items-baseline으로 아래쪽 높이를 완벽하게 통일 -->
         <h1 class="flex items-baseline justify-center md:justify-start gap-3 mb-6">
           <span class="font-sans font-extrabold text-[2.5rem] md:text-[3rem] text-brandDark leading-none">세르</span> 
           <span class="font-medium text-textPurple text-xl md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
@@ -147,7 +155,7 @@
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 크기가 정밀하게 통일되고 고급스러운 애니메이션이 더해진 외부 연동 버튼 세트 -->
+        <!-- 버튼 세트 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,70,32,0.15)] hover:shadow-[0_12px_24px_rgba(30,70,32,0.25)]">
@@ -171,7 +179,7 @@
       </div>
     </section>
 
-    <!-- INFO CARDS (폰트 크기 및 정렬 비율 보완) -->
+    <!-- INFO CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
       <div class="premium-card py-7 px-6 text-center">
         <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Birthday</div>
@@ -194,7 +202,7 @@
 
     <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      <!-- 왼쪽 카드: 해또 FANDOM (줄 띄어쓰기 수정을 통해 훨씬 깔끔해진 레이아웃) -->
+      <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
@@ -217,16 +225,16 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 매력 프로필 (어감 및 가독성 업그레이드) -->
-      <div class="premium-card p-8 flex flex-col justify-between">
+      <!-- 오른쪽 카드: 세르의 매력 프로필 -->
+      <div class="premium-card p-8 flex flex-col justify-between group/charm">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
           <h3 class="text-2xl font-bold text-brandDark mb-6">세르의 매력 프로필</h3>
           
           <div class="space-y-4">
             <!-- 쫌 귀여움 -->
-            <div class="flex items-center gap-3">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">🧸</span>
+            <div class="flex items-center gap-3 group">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🧸</span>
               <div>
                 <h4 class="text-sm font-bold text-brandDark">쫌 귀여움</h4>
                 <p class="text-[11px] text-brandSub">지나칠 수 없는 세르 고유의 패시브 특성</p>
@@ -234,8 +242,8 @@
             </div>
             
             <!-- 에너지가 빨리 바닥남 -->
-            <div class="flex items-center gap-3">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">🔋</span>
+            <div class="flex items-center gap-3 group">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🔋</span>
               <div>
                 <h4 class="text-sm font-bold text-brandDark">체력</h4>
                 <p class="text-[11px] text-brandSub">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
@@ -243,8 +251,8 @@
             </div>
 
             <!-- 표독한가? -->
-            <div class="flex items-center gap-3">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">😼</span>
+            <div class="flex items-center gap-3 group">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">😼</span>
               <div>
                 <h4 class="text-sm font-bold text-brandDark">표?독?한?가?</h4>
                 <p class="text-[11px] text-brandSub">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
@@ -257,7 +265,7 @@
         <div class="border-t border-line/60 mt-6 pt-5">
           <div class="flex justify-between items-center text-xs">
             <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
-            <span class="font-bold text-brandDark bg-textPurple/10 px-3 py-1.5 rounded-full">귀엽기 ⭐</span>
+            <span class="font-bold text-brandDark bg-textPurple/10 px-3 py-1.5 rounded-full transition-all duration-300 group-hover/charm:bg-textPurple/25">귀엽기 ⭐</span>
           </div>
         </div>
       </div>
@@ -282,6 +290,25 @@
   <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
     <p class="font-montserrat tracking-wider">© 2026 SERU. ALL RIGHTS RESERVED.</p>
   </footer>
+
+  <script>
+    // ---- 프로필 아바타 3D 패럴랙스 틸트 (완벽 구현) ----
+    const card = document.getElementById('avatarTilt');
+    card.addEventListener('mousemove', (e) => {
+      const { left, top, width, height } = card.getBoundingClientRect();
+      const x = e.clientX - left - width / 2;
+      const y = e.clientY - top - height / 2;
+      
+      const rotateX = -(y / (height / 2)) * 15;
+      const rotateY = (x / (width / 2)) * 15;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  </script>
 
 </body>
 </html>
