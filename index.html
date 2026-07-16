@@ -23,7 +23,7 @@
             brandDark: '#1E1B2C',    
             brandSub: '#6E6B7B',     
             line: 'rgba(218, 209, 254, 0.4)', 
-            naverGreen: '#1E4620', // 고급스러운 포레스트 그린 테마
+            naverGreen: '#1E4620', 
             naverGreenHover: '#153317',
           },
           fontFamily: {
@@ -48,45 +48,45 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 럭셔리 소프트 카드 스타일 (인터랙션 고급화) ---- */
+    /* ---- 선명한 하이엔드 카드 스타일 (흐림 최소화, 또렷한 입체감) ---- */
     .premium-card {
       background: #FFFFFF;
-      border: 1px solid rgba(218, 209, 254, 0.5);
+      border: 1px solid rgba(218, 209, 254, 0.4);
       border-radius: 24px;
-      box-shadow: 0 8px 30px rgba(218, 209, 254, 0.08);
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(30, 27, 44, 0.03);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .premium-card:hover {
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 20px 40px rgba(184, 168, 255, 0.14);
-      border-color: rgba(184, 168, 255, 0.55);
+      transform: translateY(-6px);
+      border-color: #DAD1FE; /* 선명해지는 라벤더 보더 */
+      box-shadow: 0 16px 36px rgba(30, 27, 44, 0.08); /* 깔끔하고 선명한 어두운 그림자 */
     }
 
-    /* ---- 상단 내비게이션 바 디자인 (인터랙션 고급화) ---- */
+    /* ---- 정교한 상단 내비게이션 바 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
       color: #6E6B7B;
       padding: 8px 22px;
       border-radius: 99px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .nav-link:hover {
       color: #1E1B2C;
-      background: rgba(218, 209, 254, 0.3);
+      background: rgba(218, 209, 254, 0.35);
     }
     .nav-link.active {
       color: #1E1B2C;
       background: #DAD1FE;
-      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
+      box-shadow: 0 2px 10px rgba(218, 209, 254, 0.3);
     }
 
-    /* ---- 고급스러운 백그라운드 블러 그라데이션 ---- */
+    /* ---- 은은하고 정돈된 백그라운드 블러 그라데이션 ---- */
     .bg-glow-radial {
       position: absolute;
       width: 600px; height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(218,209,254,0.4) 0%, rgba(249,248,252,0) 70%);
+      background: radial-gradient(circle, rgba(218,209,254,0.3) 0%, rgba(249,248,252,0) 70%);
       top: -10%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
@@ -143,11 +143,11 @@
           숲 스트리머 세르입니다.
         </p>
 
-        <!-- 크기가 통일되고 고급스러운 애니메이션이 더해진 외부 연동 버튼 세트 -->
+        <!-- 크기가 정밀하게 통일된 럭셔리 버튼 인터랙션 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-          <!-- 프리미엄 네이버 카페 버튼 -->
+          <!-- 포레스트 그린 네이버 카페 버튼 (정적 어두운 그림자 물리 피드백) -->
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-naverGreen/10 hover:shadow-xl hover:shadow-naverGreen/20">
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,70,32,0.15)] hover:shadow-[0_12px_24px_rgba(30,70,32,0.25)]">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -155,9 +155,9 @@
             </svg>
             공식 팬카페 바로가기
           </a>
-          <!-- 프리미엄 숲 방송국 버튼 -->
+          <!-- 미드나잇 딥 퍼플 숲 방송국 버튼 (정적 어두운 그림자 물리 피드백) -->
           <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brandDark/10 hover:shadow-xl hover:shadow-brandDark/20">
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-brandDark text-white hover:bg-[#151320] rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,27,44,0.15)] hover:shadow-[0_12px_24px_rgba(30,27,44,0.25)]">
             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -235,13 +235,13 @@
       </div>
     </section>
 
-    <!-- PLAYLIST VOD -->
+    <!-- PLAYLIST VOD (흐림 효과 없는 플랫 프레임리스 구조) -->
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-themePurple uppercase mb-3 font-montserrat">ARCHIVE</div>
       <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <div class="p-4 bg-white/40 border border-line backdrop-blur-sm rounded-[32px] shadow-2xl shadow-themePurple/10 hover:shadow-themePurple/15 transition-all duration-500">
+        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
           <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black shadow-inner">
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
