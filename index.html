@@ -11,7 +11,8 @@
   <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- 세련되고 정갈한 고운돋움(한글) 및 Montserrat(영문) 폰트 불러오기 -->
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script>
     tailwind.config = {
@@ -20,6 +21,7 @@
           colors: {
             bg: '#F9F8FC',         
             themePurple: '#DAD1FE', 
+            textPurple: '#8C7AE6',   /* 가독성을 높이기 위해 더 진해진 고급 딥 라벤더 퍼플 */
             brandDark: '#1E1B2C',    
             brandSub: '#6E6B7B',     
             line: 'rgba(218, 209, 254, 0.4)', 
@@ -28,6 +30,7 @@
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
+            gowun: ['Gowun Dodum', 'sans-serif'], /* 세르 전용 귀여운 고급 한글 서체 */
             montserrat: ['Montserrat', 'sans-serif'],
           }
         }
@@ -82,7 +85,7 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.45);
     }
 
-    /* ---- 프로필 3D 패럴랙스 틸트 효과를 위한 스타일 ---- */
+    /* ---- 프로필 3D 패럴랙스 틸트 효과 ---- */
     .tilt-container {
       perspective: 1000px;
     }
@@ -103,21 +106,22 @@
       z-index: -1;
     }
 
-    /* ---- 마우스 커서 글로우 효과용 구조 ---- */
+    /* ---- 마우스 커서 졸졸 따라다니는 안개 효과 ---- */
     .cursor-glow {
       position: fixed;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(218, 209, 254, 0.15) 0%, rgba(218, 209, 254, 0) 70%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(140, 122, 230, 0.08) 0%, rgba(140, 122, 230, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
-      transform: translate(-50%, -50%);
       z-index: 9999;
-      transition: left 0.1s ease-out, top 0.1s ease-out;
-      display: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease-out;
     }
-    @media (min-width: 1024px) {
-      .cursor-glow { display: block; }
+    
+    /* 게이지바의 트랜지션을 위한 클래스 */
+    .stat-bar {
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
@@ -132,7 +136,7 @@
   <div class="sticky top-4 z-50 px-6 max-w-4xl mx-auto">
     <header class="bg-white/70 backdrop-blur-lg border border-line/50 h-20 rounded-full px-8 flex items-center justify-between shadow-lg shadow-brandDark/5">
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
-        SERU<span class="text-themePurple">.</span>
+        SERU<span class="text-textPurple">.</span>
       </div>
       <nav class="flex gap-1">
         <a href="#" class="nav-link active">프로필</a>
@@ -161,12 +165,14 @@
       <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
         <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-brandSub uppercase mb-4 justify-center md:justify-start font-montserrat">
           <span>SINCE 2025. 11. 22</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-themePurple"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-textPurple"></span>
           <span>SOOP STREAMER</span>
         </div>
         
         <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
-          세르 <span class="font-light text-themePurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
+          <!-- 한글 폰트에만 Gowun Dodum(고운 돋움) 감성 서체 적용 -->
+          <span class="font-gowun mr-1">세르</span> 
+          <span class="font-light text-textPurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
         </h1>
         
         <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
@@ -212,7 +218,7 @@
       <div class="premium-card p-6 text-center">
         <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Live Time</div>
         <div class="text-base font-bold text-brandDark">저녁 19 : 00</div>
-        <p class="text-[10px] text-themePurple font-semibold mt-1">오전 게릴라 방송 포함</p>
+        <p class="text-[10px] text-textPurple font-semibold mt-1">오전 게릴라 방송 포함</p>
       </div>
       <div class="premium-card p-6 text-center">
         <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Off-Day</div>
@@ -225,7 +231,7 @@
       <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
-          <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
+          <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
           <h3 class="text-2xl font-bold text-brandDark mb-4">해또 <span class="font-light text-brandSub text-sm font-montserrat">haetto</span></h3>
           <p class="text-sm text-brandSub leading-relaxed">
             항상 반짝이는 조개를 소중하게 품고 다니는, 리본 달린 보라색 케이프를 두른 귀여운 연보라색 해달입니다. 취미는 밤하늘 보기와 노래 듣기이며, 세르의 곁을 든든하게 지켜주는 해달 요정들입니다.
@@ -239,50 +245,50 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (고급스러운 프로그레스 바 대시보드로 개편) -->
-      <div class="premium-card p-8">
-        <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-6 font-montserrat">IDENTITY PROFILE</div>
+      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (마우스 오버 시 게이지가 춤추는 인터랙티브 대시보드) -->
+      <div class="premium-card p-8 group/statCard">
+        <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-6 font-montserrat">IDENTITY PROFILE</div>
         <h3 class="text-xl font-bold text-brandDark mb-6">세르 핵심 스탯</h3>
         
         <div class="space-y-5">
-          <!-- 스탯 1 -->
-          <div>
+          <!-- 스탯 1: 마우스 오버 시 0% -> 100% 가득 참 -->
+          <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">기본 귀여움 패시브</span>
-              <span class="text-themePurple">999% (MAX)</span>
+              <span class="text-textPurple">999% (MAX)</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div class="h-full bg-themePurple rounded-full" style="width: 100%"></div>
+              <div id="stat1" class="stat-bar h-full bg-textPurple rounded-full" style="width: 0%"></div>
             </div>
           </div>
-          <!-- 스탯 2 -->
-          <div>
+          <!-- 스탯 2: 마우스 오버 시 85% -> 15% 방전됨 -->
+          <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">에너지 방전도</span>
               <span class="text-brandSub">초고속 방전 🔋</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div class="h-full bg-themePurple rounded-full" style="width: 85%"></div>
+              <div id="stat2" class="stat-bar h-full bg-textPurple rounded-full" style="width: 85%"></div>
             </div>
           </div>
-          <!-- 스탯 3 -->
-          <div>
+          <!-- 스탯 3: 마우스 오버 시 0% -> 95% 가득 참 -->
+          <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">보유 특기</span>
               <span class="text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div class="h-full bg-themePurple rounded-full" style="width: 95%"></div>
+              <div id="stat3" class="stat-bar h-full bg-textPurple rounded-full" style="width: 0%"></div>
             </div>
           </div>
-          <!-- 스탯 4 -->
-          <div>
+          <!-- 스탯 4: 마우스 오버 시 15% -> 90% 매콤세르 상승 -->
+          <div class="group/statItem">
             <div class="flex justify-between items-center text-xs font-bold mb-1.5">
               <span class="text-brandDark">표?독?함 검증</span>
-              <span class="text-themePurple font-semibold">진실은 라이브에서 😼</span>
+              <span class="text-textPurple font-semibold">진실은 라이브에서 😼</span>
             </div>
             <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
-              <div class="h-full bg-brandDark rounded-full animate-pulse" style="width: 15%"></div>
+              <div id="stat4" class="stat-bar h-full bg-brandDark rounded-full" style="width: 15%"></div>
             </div>
           </div>
         </div>
@@ -291,11 +297,11 @@
 
     <!-- PLAYLIST VOD -->
     <section class="mb-12 text-center">
-      <div class="text-xs font-bold tracking-[6px] text-themePurple uppercase mb-3 font-montserrat">ARCHIVE</div>
+      <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
       <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-xl transition-all duration-300">
+        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
           <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black shadow-inner">
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
@@ -310,22 +316,36 @@
   </footer>
 
   <script>
-    // ---- 치트키 1: 마우스 무브먼트 연보라 안개 효과 스크립트 ----
+    // ---- 1. 마우스 보랏빛 안개 효과 (완전 작동 수정) ----
     const glow = document.getElementById('cursorGlow');
+    let cursorX = 0, cursorY = 0; // 마우스 실제 좌표
+    let glowX = 0, glowY = 0;     // 안개가 따라가는 스무스 좌표
+
+    // 마우스가 화면 움직일 때만 작동하도록 활성화
     window.addEventListener('mousemove', (e) => {
-      // 마우스가 부드럽게 지연되어 쫓아가게끔 좌표 설정
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
+      cursorX = e.clientX;
+      cursorY = e.clientY;
     });
 
-    // ---- 치트키 2: 프로필 아바타 3D 패럴랙스 틸트(Tilt) 스크립트 ----
+    // 프레임 단위로 좌표 추격 연산 실행 (딜레이를 주어 쫀득하고 고급지게 따라옴)
+    function animateGlow() {
+      const delay = 0.08; // 추격 속도 (작을수록 스무스함)
+      glowX += (cursorX - glowX) * delay;
+      glowY += (cursorY - glowY) * delay;
+      
+      // 스크롤 높이를 반영하여 고정 위치 조정
+      glow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    // ---- 2. 프로필 아바타 3D 패럴랙스 틸트 ----
     const card = document.getElementById('avatarTilt');
     card.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
       const x = e.clientX - left - width / 2;
       const y = e.clientY - top - height / 2;
       
-      // 회전 한계선 민감도 설정 (기본 15도)
       const rotateX = -(y / (height / 2)) * 15;
       const rotateY = (x / (width / 2)) * 15;
       
@@ -333,8 +353,37 @@
     });
 
     card.addEventListener('mouseleave', () => {
-      // 마우스가 떠나면 원래 각도로 초기화
       card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+
+    // ---- 3. 스탯 게이지 바 다이내믹 호버 제어 ----
+    const s1 = document.getElementById('stat1');
+    const s2 = document.getElementById('stat2');
+    const s3 = document.getElementById('stat3');
+    const s4 = document.getElementById('stat4');
+
+    // 초기 로딩 애니메이션 실행 (등장 시 스무스하게 채워짐)
+    setTimeout(() => {
+      s1.style.width = "100%";
+      s2.style.width = "85%";
+      s3.style.width = "95%";
+      s4.style.width = "15%";
+    }, 300);
+
+    // 스탯 카드 전체에 마우스 올렸을 때의 변화 이벤트
+    const statCard = document.querySelector('.group\\/statCard');
+    statCard.addEventListener('mouseenter', () => {
+      s1.style.width = "0%";   // 귀여움 충전대기 모드
+      s2.style.width = "15%";  // 충전 안 해주면 순식간에 15% 방전!
+      s3.style.width = "0%";   // 특기 숨기기
+      s4.style.width = "90%";  // 마우스 대면 표독 게이지 90% 돌파!
+    });
+
+    statCard.addEventListener('mouseleave', () => {
+      s1.style.width = "100%";
+      s2.style.width = "85%";
+      s3.style.width = "95%";
+      s4.style.width = "15%";
     });
   </script>
 
