@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>세르 💜</title>
+  <title>SERU PROFILE</title>
   
   <!-- 투명한 보라색 하트 이모지 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
@@ -23,6 +23,8 @@
             brandDark: '#1E1B2C',    
             brandSub: '#6E6B7B',     
             line: 'rgba(218, 209, 254, 0.4)', 
+            naverGreen: '#1E4620', // 고급스러운 포레스트 그린 테마
+            naverGreenHover: '#153317',
           },
           fontFamily: {
             sans: ['Pretendard', 'sans-serif'],
@@ -46,26 +48,28 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
+    /* ---- 럭셔리 소프트 카드 스타일 (인터랙션 고급화) ---- */
     .premium-card {
       background: #FFFFFF;
       border: 1px solid rgba(218, 209, 254, 0.5);
       border-radius: 24px;
-      box-shadow: 0 8px 30px rgba(218, 209, 254, 0.12);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 30px rgba(218, 209, 254, 0.08);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .premium-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(184, 168, 255, 0.18);
-      border-color: rgba(184, 168, 255, 0.6);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(184, 168, 255, 0.14);
+      border-color: rgba(184, 168, 255, 0.55);
     }
 
+    /* ---- 상단 내비게이션 바 디자인 (인터랙션 고급화) ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
       color: #6E6B7B;
-      padding: 8px 20px;
+      padding: 8px 22px;
       border-radius: 99px;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .nav-link:hover {
       color: #1E1B2C;
@@ -74,8 +78,10 @@
     .nav-link.active {
       color: #1E1B2C;
       background: #DAD1FE;
+      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
+    /* ---- 고급스러운 백그라운드 블러 그라데이션 ---- */
     .bg-glow-radial {
       position: absolute;
       width: 600px; height: 600px;
@@ -132,13 +138,16 @@
         </h1>
         
         <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
-          연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는 숲 라이브 스트리머 세르입니다.
+          연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
+          <br />
+          숲 스트리머 세르입니다.
         </p>
 
-        <!-- 세련된 구조로 개편된 바로가기 버튼 세트 (요청 아이콘 삽입 완료) -->
+        <!-- 크기가 통일되고 고급스러운 애니메이션이 더해진 외부 연동 버튼 세트 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-          <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all shadow-lg shadow-brandDark/10">
-            <!-- 요청하신 외부링크 아이콘 (정교한 SVG 렌더링) -->
+          <!-- 프리미엄 네이버 카페 버튼 -->
+          <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-naverGreen/10 hover:shadow-xl hover:shadow-naverGreen/20">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -146,8 +155,10 @@
             </svg>
             공식 팬카페 바로가기
           </a>
-          <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-brandDark hover:bg-[#FAF9FF] border border-line rounded-full text-xs font-bold tracking-wider transition-all shadow-sm">
-            <svg class="w-4 h-4 text-brandDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- 프리미엄 숲 방송국 버튼 -->
+          <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-brandDark text-white hover:bg-brandDark/90 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brandDark/10 hover:shadow-xl hover:shadow-brandDark/20">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -181,7 +192,7 @@
 
     <!-- FANDOM INFO WIDGET -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      <!-- 왼쪽 카드: 해또 FANDOM (설정화 반영 신규 스토리) -->
+      <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
           <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
@@ -209,16 +220,16 @@
             <span class="text-xs text-brandSub">쫌 귀여움 🧸</span>
           </div>
           <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
-            <span class="text-sm font-semibold text-brandDark">에너지 방전도</span>
+            <span class="text-sm font-semibold text-brandDark">체력</span>
             <span class="text-xs text-brandSub">방전 속도 매우 빠름 🔋</span>
           </div>
           <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
-            <span class="text-sm font-semibold text-brandDark">표?독?함 검증</span>
-            <span class="text-xs text-themePurple font-bold">진실은 방송에서 확인 😼</span>
-          </div>
-          <div class="flex items-center justify-between">
             <span class="text-sm font-semibold text-brandDark">보유 특기</span>
             <span class="text-xs text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-brandDark">표?독?함 검증</span>
+            <span class="text-xs text-themePurple font-bold">진실은 방송에서 확인 😼</span>
           </div>
         </div>
       </div>
@@ -230,8 +241,8 @@
       <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <div class="p-4 bg-white/40 border border-line backdrop-blur-sm rounded-[32px] shadow-2xl shadow-themePurple/10">
-          <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black">
+        <div class="p-4 bg-white/40 border border-line backdrop-blur-sm rounded-[32px] shadow-2xl shadow-themePurple/10 hover:shadow-themePurple/15 transition-all duration-500">
+          <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black shadow-inner">
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
         </div>
