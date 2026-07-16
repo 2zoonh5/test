@@ -10,7 +10,6 @@
   
   <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 완벽한 디자인 조화를 위한 Pretendard 기본 폰트 적용 -->
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
@@ -136,9 +135,10 @@
           <span>SOOP STREAMER</span>
         </div>
         
-        <h1 class="text-4xl md:text-5xl font-extrabold text-brandDark mb-6 tracking-tight">
-          <span class="font-sans font-bold text-brandDark mr-2">세르</span> 
-          <span class="font-light text-textPurple text-2xl md:text-3xl align-top font-montserrat">SERU</span>
+        <!-- 수평 라인 정렬 수정: items-baseline으로 아래쪽 높이를 완벽하게 통일 -->
+        <h1 class="flex items-baseline justify-center md:justify-start gap-3 mb-6">
+          <span class="font-sans font-extrabold text-[2.5rem] md:text-[3rem] text-brandDark leading-none">세르</span> 
+          <span class="font-medium text-textPurple text-xl md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
         </h1>
         
         <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
@@ -171,36 +171,42 @@
       </div>
     </section>
 
-    <!-- INFO CARDS -->
+    <!-- INFO CARDS (폰트 크기 및 정렬 비율 보완) -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-      <div class="premium-card p-6 text-center">
-        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Birthday</div>
-        <div class="text-base font-bold text-brandDark">06 . 08</div>
+      <div class="premium-card py-7 px-6 text-center">
+        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Birthday</div>
+        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat">06 . 08</div>
       </div>
-      <div class="premium-card p-6 text-center">
-        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">MBTI</div>
-        <div class="text-base font-bold text-brandDark tracking-wider">I 🤍 FP</div>
+      <div class="premium-card py-7 px-6 text-center">
+        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">MBTI</div>
+        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat tracking-wider">I 🤍 FP</div>
       </div>
-      <div class="premium-card p-6 text-center">
-        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Live Time</div>
-        <div class="text-base font-bold text-brandDark">저녁 19 : 00</div>
-        <p class="text-[10px] text-textPurple font-semibold mt-1">오전 게릴라 방송 포함</p>
+      <div class="premium-card py-7 px-6 text-center">
+        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Live Time</div>
+        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat">19 : 00</div>
+        <p class="text-[10px] text-brandSub font-semibold mt-1">오전 게릴라 방송 포함</p>
       </div>
-      <div class="premium-card p-6 text-center">
-        <div class="text-[10px] font-bold tracking-widest text-brandSub uppercase mb-2 font-montserrat">Off-Day</div>
-        <div class="text-base font-bold text-brandDark">매주 일요일</div>
+      <div class="premium-card py-7 px-6 text-center">
+        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Off-Day</div>
+        <div class="text-[1.125rem] font-semibold text-brandDark">매주 일요일</div>
       </div>
     </section>
 
     <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      <!-- 왼쪽 카드: 해또 FANDOM -->
+      <!-- 왼쪽 카드: 해또 FANDOM (줄 띄어쓰기 수정을 통해 훨씬 깔끔해진 레이아웃) -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
           <h3 class="text-2xl font-bold text-brandDark mb-4">해또 <span class="font-light text-brandSub text-sm font-montserrat">haetto</span></h3>
           <p class="text-sm text-brandSub leading-relaxed">
-            항상 반짝이는 조개를 소중하게 품고 다니는, 리본 달린 보라색 케이프를 두른 귀여운 연보라색 해달입니다. 취미는 밤하늘 보기와 노래 듣기이며, 세르의 곁을 든든하게 지켜주는 해달 요정들입니다.
+            항상 반짝이는 조개를 소중하게 품고 다니는,
+            <br />
+            리본 달린 보라색 케이프를 두른 귀여운 연보라색 해달입니다.
+            <br /><br />
+            취미는 밤하늘 보기와 노래 듣기이며,
+            <br />
+            세르의 곁을 든든하게 지켜주는 해달 요정들입니다.
           </p>
         </div>
         <div class="border-t border-line/60 mt-8 pt-6">
@@ -211,11 +217,11 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (게이지바 없이, 완전히 깔끔하게 텍스트로 나열된 정보형 위젯) -->
+      <!-- 오른쪽 카드: 세르의 매력 프로필 (어감 및 가독성 업그레이드) -->
       <div class="premium-card p-8 flex flex-col justify-between">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
-          <h3 class="text-2xl font-bold text-brandDark mb-6">세르 관찰 프로필</h3>
+          <h3 class="text-2xl font-bold text-brandDark mb-6">세르의 매력 프로필</h3>
           
           <div class="space-y-4">
             <!-- 쫌 귀여움 -->
@@ -231,7 +237,7 @@
             <div class="flex items-center gap-3">
               <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base">🔋</span>
               <div>
-                <h4 class="text-sm font-bold text-brandDark">급속 방전 체력</h4>
+                <h4 class="text-sm font-bold text-brandDark">체력</h4>
                 <p class="text-[11px] text-brandSub">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
               </div>
             </div>
