@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU PROFILE</title>
+  <title>SERU PROFILE 💜</title>
   
   <!-- 투명한 보라색 하트 이모지 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
@@ -40,6 +40,7 @@
       background-color: #F9F8FC;
       color: #1E1B2C;
       letter-spacing: -0.02em;
+      overflow-x: hidden;
     }
     html { scroll-behavior: smooth; }
     
@@ -48,59 +49,88 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 선명한 하이엔드 카드 스타일 (흐림 최소화, 또렷한 입체감) ---- */
+    /* ---- 입체적인 프리미엄 쉐도우 카드 ---- */
     .premium-card {
       background: #FFFFFF;
       border: 1px solid rgba(218, 209, 254, 0.4);
-      border-radius: 24px;
-      box-shadow: 0 4px 20px rgba(30, 27, 44, 0.03);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 28px;
+      box-shadow: 0 4px 30px rgba(30, 27, 44, 0.02);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .premium-card:hover {
-      transform: translateY(-6px);
-      border-color: #DAD1FE; /* 선명해지는 라벤더 보더 */
-      box-shadow: 0 16px 36px rgba(30, 27, 44, 0.08); /* 깔끔하고 선명한 어두운 그림자 */
+      transform: translateY(-8px);
+      border-color: #DAD1FE;
+      box-shadow: 0 24px 48px rgba(184, 168, 255, 0.12);
     }
 
-    /* ---- 정교한 상단 내비게이션 바 ---- */
+    /* ---- 상단 내비게이션 플로팅 바 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
       color: #6E6B7B;
-      padding: 8px 22px;
+      padding: 8px 24px;
       border-radius: 99px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .nav-link:hover {
       color: #1E1B2C;
-      background: rgba(218, 209, 254, 0.35);
+      background: rgba(218, 209, 254, 0.4);
     }
     .nav-link.active {
       color: #1E1B2C;
       background: #DAD1FE;
-      box-shadow: 0 2px 10px rgba(218, 209, 254, 0.3);
+      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.45);
     }
 
-    /* ---- 은은하고 정돈된 백그라운드 블러 그라데이션 ---- */
+    /* ---- 프로필 3D 패럴랙스 틸트 효과를 위한 스타일 ---- */
+    .tilt-container {
+      perspective: 1000px;
+    }
+    .tilt-element {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+    }
+
+    /* ---- 물결 모양의 미세한 보랏빛 글로우 안개 효과 ---- */
     .bg-glow-radial {
       position: absolute;
-      width: 600px; height: 600px;
+      width: 700px; height: 700px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(218,209,254,0.3) 0%, rgba(249,248,252,0) 70%);
-      top: -10%; left: 50%;
+      top: -15%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: -1;
+    }
+
+    /* ---- 마우스 커서 글로우 효과용 구조 ---- */
+    .cursor-glow {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(218, 209, 254, 0.15) 0%, rgba(218, 209, 254, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: left 0.1s ease-out, top 0.1s ease-out;
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .cursor-glow { display: block; }
     }
   </style>
 </head>
 <body class="relative min-h-screen font-sans pb-32">
 
+  <!-- 마우스를 따라다니는 영롱한 보랏빛 안개 커서 -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
   <div class="bg-glow-radial"></div>
 
-  <!-- HEADER & NAVIGATION -->
-  <header class="sticky top-0 z-50 bg-[#F9F8FC]/80 backdrop-blur-md border-b border-line/60">
-    <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
+  <!-- FLOATING HEADER & NAVIGATION -->
+  <div class="sticky top-4 z-50 px-6 max-w-4xl mx-auto">
+    <header class="bg-white/70 backdrop-blur-lg border border-line/50 h-20 rounded-full px-8 flex items-center justify-between shadow-lg shadow-brandDark/5">
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
         SERU<span class="text-themePurple">.</span>
       </div>
@@ -110,18 +140,20 @@
         <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-link" target="_blank">노래책</a>
         <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-link" target="_blank">업보</a>
       </nav>
-    </div>
-  </header>
+    </header>
+  </div>
 
-  <main class="max-w-4xl mx-auto px-6 mt-16">
+  <main class="max-w-4xl mx-auto px-6 mt-20">
 
     <!-- HERO SECTION -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-24">
-      <div class="md:col-span-5 flex justify-center">
-        <div class="relative group">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-28">
+      <!-- 왼쪽: 3D 마우스 감지 패럴랙스 아바타 -->
+      <div class="md:col-span-5 flex justify-center tilt-container">
+        <div class="relative group tilt-element" id="avatarTilt">
+          <!-- 부유하는 듯한 아웃라인 링 -->
           <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
-          <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-xl">
-            <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover">
+          <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl transition-all duration-300">
+            <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover select-none">
           </div>
         </div>
       </div>
@@ -140,12 +172,11 @@
         <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
           연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
           <br />
-          숲 스트리머 세르입니다.
+          숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 크기가 정밀하게 통일된 럭셔리 버튼 인터랙션 -->
+        <!-- 정밀한 균형과 다이내믹 피드백의 바로가기 버튼 세트 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-          <!-- 포레스트 그린 네이버 카페 버튼 (정적 어두운 그림자 물리 피드백) -->
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,70,32,0.15)] hover:shadow-[0_12px_24px_rgba(30,70,32,0.25)]">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -155,7 +186,6 @@
             </svg>
             공식 팬카페 바로가기
           </a>
-          <!-- 미드나잇 딥 퍼플 숲 방송국 버튼 (정적 어두운 그림자 물리 피드백) -->
           <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-brandDark text-white hover:bg-[#151320] rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,27,44,0.15)] hover:shadow-[0_12px_24px_rgba(30,27,44,0.25)]">
             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -190,7 +220,7 @@
       </div>
     </section>
 
-    <!-- FANDOM INFO WIDGET -->
+    <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
       <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between">
@@ -209,39 +239,63 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 -->
+      <!-- 오른쪽 카드: 세르의 아이덴티티 성향 (고급스러운 프로그레스 바 대시보드로 개편) -->
       <div class="premium-card p-8">
         <div class="text-xs font-bold tracking-widest text-themePurple uppercase mb-6 font-montserrat">IDENTITY PROFILE</div>
-        <h3 class="text-xl font-bold text-brandDark mb-6">세르 관찰 특징</h3>
+        <h3 class="text-xl font-bold text-brandDark mb-6">세르 핵심 스탯</h3>
         
-        <div class="space-y-4">
-          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
-            <span class="text-sm font-semibold text-brandDark">기본 패시브</span>
-            <span class="text-xs text-brandSub">쫌 귀여움 🧸</span>
+        <div class="space-y-5">
+          <!-- 스탯 1 -->
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+              <span class="text-brandDark">기본 귀여움 패시브</span>
+              <span class="text-themePurple">999% (MAX)</span>
+            </div>
+            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
+              <div class="h-full bg-themePurple rounded-full" style="width: 100%"></div>
+            </div>
           </div>
-          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
-            <span class="text-sm font-semibold text-brandDark">체력</span>
-            <span class="text-xs text-brandSub">방전 속도 매우 빠름 🔋</span>
+          <!-- 스탯 2 -->
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+              <span class="text-brandDark">에너지 방전도</span>
+              <span class="text-brandSub">초고속 방전 🔋</span>
+            </div>
+            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
+              <div class="h-full bg-themePurple rounded-full" style="width: 85%"></div>
+            </div>
           </div>
-          <div class="flex items-center justify-between pb-3.5 border-b border-line/30">
-            <span class="text-sm font-semibold text-brandDark">보유 특기</span>
-            <span class="text-xs text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
+          <!-- 스탯 3 -->
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+              <span class="text-brandDark">보유 특기</span>
+              <span class="text-brandSub">숨쉬듯이 귀엽기 ⭐</span>
+            </div>
+            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
+              <div class="h-full bg-themePurple rounded-full" style="width: 95%"></div>
+            </div>
           </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-semibold text-brandDark">표?독?함 검증</span>
-            <span class="text-xs text-themePurple font-bold">진실은 방송에서 확인 😼</span>
+          <!-- 스탯 4 -->
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+              <span class="text-brandDark">표?독?함 검증</span>
+              <span class="text-themePurple font-semibold">진실은 라이브에서 😼</span>
+            </div>
+            <div class="w-full h-1.5 bg-[#F0EDF5] rounded-full overflow-hidden">
+              <div class="h-full bg-brandDark rounded-full animate-pulse" style="width: 15%"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PLAYLIST VOD (흐림 효과 없는 플랫 프레임리스 구조) -->
+    <!-- PLAYLIST VOD -->
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-themePurple uppercase mb-3 font-montserrat">ARCHIVE</div>
       <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
+        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-xl transition-all duration-300">
           <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black shadow-inner">
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
@@ -254,6 +308,35 @@
   <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
     <p class="font-montserrat tracking-wider">© 2026 SERU. ALL RIGHTS RESERVED.</p>
   </footer>
+
+  <script>
+    // ---- 치트키 1: 마우스 무브먼트 연보라 안개 효과 스크립트 ----
+    const glow = document.getElementById('cursorGlow');
+    window.addEventListener('mousemove', (e) => {
+      // 마우스가 부드럽게 지연되어 쫓아가게끔 좌표 설정
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // ---- 치트키 2: 프로필 아바타 3D 패럴랙스 틸트(Tilt) 스크립트 ----
+    const card = document.getElementById('avatarTilt');
+    card.addEventListener('mousemove', (e) => {
+      const { left, top, width, height } = card.getBoundingClientRect();
+      const x = e.clientX - left - width / 2;
+      const y = e.clientY - top - height / 2;
+      
+      // 회전 한계선 민감도 설정 (기본 15도)
+      const rotateX = -(y / (height / 2)) * 15;
+      const rotateY = (x / (width / 2)) * 15;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      // 마우스가 떠나면 원래 각도로 초기화
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  </script>
 
 </body>
 </html>
