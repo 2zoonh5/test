@@ -203,23 +203,25 @@
     <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
       
-    <!-- 왼쪽 카드: 해또 FANDOM (정밀 비율 조정 완료) -->
+      <!-- 왼쪽 카드: 해또 FANDOM (테두리를 없애고 내추럴 매칭 형태로 전면 리빌딩) -->
       <div class="premium-card p-8 flex flex-col justify-between group/fandom">
         <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
           
-          <!-- 해또 프로필 이미지 박스 (크기를 균형 있게 축소) -->
+          <!-- 해또 프로필 이미지 박스 (테두리 및 배경 삭제, 내추럴 투명 프레임 적용) -->
           <div class="sm:col-span-4 flex justify-center tilt-container">
-            <div class="relative group/haettoImg tilt-element w-24 h-24 sm:w-28 sm:h-28 max-w-[110px] bg-slate-50 border border-line/50 rounded-full overflow-hidden flex items-center justify-center p-2.5 shadow-inner" id="haettoTilt">
-              <img src="./haetto_pf.png" alt="해또 프로필" class="max-w-full max-h-full object-contain select-none">
+            <div class="relative group/haettoImg tilt-element w-24 h-24 sm:w-26 sm:h-28 overflow-hidden flex items-center justify-center select-none" id="haettoTilt">
+              <img src="./haetto_pf.png" alt="해또 프로필" class="max-w-full max-h-full object-contain">
             </div>
           </div>
 
-          <!-- 해또 프로필 텍스트 본문 (끊김 없는 자연스러운 문단 연결) -->
+          <!-- 해또 프로필 텍스트 본문 (정밀 문단 레이아웃 보정) -->
           <div class="sm:col-span-8 text-center sm:text-left">
             <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">FANDOM BRANDING</div>
-            <h3 class="text-2xl font-bold text-brandDark mb-3">해또 <span class="font-light text-brandSub text-sm font-montserrat">haetto</span></h3>
-            <p class="text-[13px] text-brandSub leading-relaxed font-medium">
-              항상 반짝이는 조개를 소중하게 품고 다니는, 리본 달린 보라색 케이프가 어울리는 해달 요정입니다. 취미는 밤하늘 보기와 노래 듣기이며, 세르의 곁을 든든하게 지켜주는 소중한 동반자입니다.
+            <h3 class="text-2xl font-bold text-brandDark pb-1.5 border-b border-line/40 inline-block sm:block">
+              해또 <span class="font-light text-brandSub text-sm font-montserrat ml-1">haetto</span>
+            </h3>
+            <p class="text-[13px] text-brandSub leading-relaxed font-medium mt-3">
+              항상 반짝이는 조개를 소중하게 품고 다니며 리본이 달린 보라색 케이프가 잘 어울리는 해달 요정입니다. 취미는 밤하늘 보기와 노래 듣기이며, 세르의 곁을 언제나 든든하게 지켜주는 소중한 동반자입니다.
             </p>
           </div>
         </div>
@@ -316,7 +318,7 @@
       card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
     });
 
-    // ---- 해또 프로필 아바타 3D 패럴랙스 틸트 (추가 완료) ----
+    // ---- 해또 프로필 아바타 3D 패럴랙스 틸트 ----
     const haettoCard = document.getElementById('haettoTilt');
     haettoCard.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = haettoCard.getBoundingClientRect();
