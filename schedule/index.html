@@ -73,9 +73,11 @@
       box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
     }
 
+    /* 💡 세로선이 테두리를 뚫고 나오지 못하도록 border-collapse 제거 */
     .cal-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       table-layout: fixed;
     }
 
@@ -91,13 +93,20 @@
     .cal-table th:last-child { color: #7BA0D4; }
 
     .cal-table td {
-      border: 1px solid rgba(218, 209, 254, 0.35);
+      border-top: 1px solid rgba(218, 209, 254, 0.35);
+      border-left: 1px solid rgba(218, 209, 254, 0.35);
       vertical-align: top;
       height: 110px;
       padding: 6px 0;
       position: relative;
       transition: background 0.2s ease;
       overflow: hidden;
+    }
+    .cal-table tr td:last-child {
+      border-right: 1px solid rgba(218, 209, 254, 0.35);
+    }
+    .cal-table tr:last-child td {
+      border-bottom: 1px solid rgba(218, 209, 254, 0.35);
     }
 
     .cal-table td.has-event {
@@ -111,7 +120,7 @@
       background: rgba(249, 248, 252, 0.4);
     }
 
-    /* 날짜 숫자의 Y축 수평 위치 완전 고정 */
+    /* 수평 고정용 날짜 상자 */
     .day-num-box {
       padding: 0 8px;
       height: 28px;
@@ -141,11 +150,11 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 💡 세로선 완전 차단 + 말줄임표(...) 정상화 일정 바 ---- */
+    /* ---- 일정 바 스타일 ---- */
     .event-bar-wrapper {
       margin-top: 2px;
       margin-bottom: 4px;
-      height: 26px;
+      height: 25px;
       position: relative;
       width: 100%;
     }
@@ -155,43 +164,58 @@
       font-size: 0.725rem;
       font-weight: 700;
       color: #1E1B2C;
-      line-height: 26px; /* Y축 중앙 정렬 */
+      line-height: 25px;
       padding: 0 8px;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis; /* 💡 말줄임표 ... 완벽 출력 */
+      text-overflow: ellipsis;
       position: absolute;
       top: 0; bottom: 0;
       pointer-events: none;
       box-sizing: border-box;
-      z-index: 20; /* 선보다 확연히 높은 레이어 */
+      z-index: 10;
     }
 
-    /* 💡 -3px로 확실하게 세로 경계선 위를 덮어 가림 */
     .event-bar.is-single {
       left: 6px; right: 6px;
       border-radius: 6px;
     }
     .event-bar.is-start {
-      left: 6px; 
-      right: -3px; /* 오른쪽 세로선 완전 가림 */
+      left: 6px; right: 0;
       border-top-left-radius: 6px;
       border-bottom-left-radius: 6px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
     .event-bar.is-middle {
-      left: -3px; 
-      right: -3px; /* 양쪽 세로선 완전 가림 */
+      left: 0; right: 0;
       border-radius: 0;
     }
     .event-bar.is-end {
-      left: -3px; /* 왼쪽 세로선 완전 가림 */
-      right: 6px;  /* 오른쪽 안쪽 여백 유지 */
+      left: 0; right: 6px;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border-top-right-radius: 6px;
       border-bottom-right-radius: 6px;
+    }
+
+    /* ---- 둥근 뱃지 공통 스타일 ---- */
+    .legend-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1E1B2C;
+      border: 1px solid rgba(30, 27, 44, 0.05);
+    }
+    .legend-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: currentColor;
     }
 
     /* ---- Mobile List View ---- */
@@ -230,7 +254,6 @@
     .list-event-info { flex: 1; min-width: 0; }
     .list-event-title { font-size: .95rem; font-weight: 700; color: #1E1B2C; }
     .list-event-time { font-size: .8rem; color: #6E6B7B; margin-top: 2px; }
-    .list-event-badge { font-size: .75rem; padding: 4px 12px; border-radius: 999px; font-weight: 600; flex-shrink: 0; }
 
     .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
     .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
@@ -266,24 +289,6 @@
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
-    
-    .legend-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #1E1B2C;
-      border: 1px solid rgba(30, 27, 44, 0.05);
-    }
-    .legend-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: currentColor;
-    }
   </style>
 </head>
 <body class="bg-bg min-h-screen font-sans pb-32">
@@ -305,7 +310,7 @@
 
   <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
     
-    <!-- ✦ SECTION TITLE ✦ -->
+    <!-- SECTION TITLE -->
     <section class="text-center mb-10">
       <div class="inline-flex flex-col items-center">
         <span class="text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
@@ -380,14 +385,15 @@
     </section>
   </main>
 
-  <!-- Event Modal -->  
+  <!-- 💡 뱃지 디자인과 통일된 모달 팝업 창 -->  
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between pb-4 border-b border-line/40 mb-6">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-themePurple/20" id="modalBadgeBg">
-          <div id="modalColor" class="w-2 h-2 rounded-full"></div>
-          <span id="modalType" class="text-xs font-bold text-brandDark tracking-wider font-montserrat uppercase"></span>
-        </div>
+        <!-- 상단 뱃지와 완전히 동일한 디자인 형태 -->
+        <span class="legend-badge" id="modalBadge">
+          <span class="legend-badge-dot" id="modalBadgeDot"></span>
+          <span id="modalType"></span>
+        </span>
         <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold text-sm">✕</button>
       </div>
 
@@ -400,6 +406,7 @@
         </div>
         <div id="modalTimeContainer" class="flex items-center gap-3 border-t border-line/30 pt-2">
           <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">TIME</span>
+          <!-- 💡 '시작' 텍스트 제거 및 시간만 출력 -->
           <span id="modalTime" class="text-xs font-semibold text-brandDark font-montserrat"></span>
         </div>
       </div>
@@ -428,6 +435,15 @@
       'collab':     '#C3F0E6',
       'tournament': '#C2E0FF',
       'other':      '#FFE3C5'
+    };
+
+    const TYPE_DOT_COLORS = {
+      'broadcast':  '#8C7AE6',
+      'off':        '#6E6B7B',
+      'event':      '#E56B98',
+      'collab':     '#2DB89B',
+      'tournament': '#4A90E2',
+      'other':      '#E28D3B'
     };
 
     const TYPE_LABELS = {
@@ -471,6 +487,7 @@
       return ds >= startDate && ds <= targetEnd;
     }
 
+    // 💡 세로선을 테두리 레벨에서 물리적으로 제거하는 핵심 렌더링 로직
     function renderCalendar() {
       const body = document.getElementById('calBody');
       body.innerHTML = '';
@@ -501,7 +518,6 @@
           const isToday = (ds === todayStr);
           if (isToday) td.classList.add('today');
 
-          // 오늘 날짜 하이라이트 동그라미
           let numDiv = document.createElement('div');
           numDiv.className = 'day-num-box';
           if (isToday) {
@@ -526,6 +542,11 @@
             const isEnd = (ds === endStr);
             const isSingle = (startStr === endStr);
 
+            // 💡 이어지는 날짜인 경우(isStart 또는 isMiddle), 셀 오른쪽 세로선 자체를 삭제!
+            if (!isEnd && !isSingle && c < 6) {
+              td.style.borderRight = 'none';
+            }
+
             const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
 
             let barWrap = document.createElement('div');
@@ -547,7 +568,6 @@
             bar.className = barClass;
             bar.style.backgroundColor = cColor;
             
-            // 💡 무조건 전체 일정 시작일에만 순수 제목 한 번 출력
             if (isStart) {
               bar.textContent = ev.title;
             }
@@ -602,6 +622,7 @@
 
         dayEv.forEach(ev => {
           const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+          const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
           const l = TYPE_LABELS[ev.event_type] || ev.event_type;
           const t = ev.event_time ? ev.event_time.slice(0,5) : '';
           html += `
@@ -611,7 +632,9 @@
                 <div class="list-event-title">${ev.title}</div>
                 ${t ? `<div class="list-event-time">${t}</div>` : ''}
               </div>
-              <span class="list-event-badge" style="background:${c}25;color:#1E1B2C">${l}</span>
+              <span class="legend-badge" style="background:${c}55;">
+                <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+              </span>
             </div>`;
         });
         html += `</div>`;
@@ -634,6 +657,7 @@
       }, 100);
     }
 
+    // 💡 다가오는 일정 우측 뱃지 스타일 적용
     function renderUpcoming() {
       const list = document.getElementById('upcomingList');
       const now = new Date();
@@ -660,6 +684,7 @@
       
       list.innerHTML = up.map(ev => {
         const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+        const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
         const l = TYPE_LABELS[ev.event_type] || ev.event_type;
         const t = ev.event_time ? ev.event_time.slice(0,5) : '';
         
@@ -681,15 +706,20 @@
                 ${t ? `<span>· ${t}</span>` : ''}
               </div>
             </div>
-            <span class="text-xs font-bold px-3 py-1.5 rounded-full shrink-0 font-sans" style="background:${c}30; color:#1E1B2C">${l}</span>
+            <!-- 상단 뱃지와 동일한 또렷한 둥근 뱃지 -->
+            <span class="legend-badge shrink-0" style="background:${c}55;">
+              <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+            </span>
           </div>`;
       }).join('');
     }
 
+    // 💡 모달 팝업 상단 뱃지 디자인 통일 & 시간 단독 출력
     function showEvent(id) {
       const ev = schedules.find(s => s.id === id);
       if (!ev) return;
       const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+      const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
       const l = TYPE_LABELS[ev.event_type] || ev.event_type;
       
       const startD = new Date(ev.event_date + 'T00:00:00');
@@ -700,15 +730,19 @@
         dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
       }
       
-      document.getElementById('modalColor').style.background = c;
-      document.getElementById('modalBadgeBg').style.background = `${c}40`;
+      // 모달 상단 뱃지 스타일 적용
+      const modalBadge = document.getElementById('modalBadge');
+      modalBadge.style.background = `${c}55`;
+      document.getElementById('modalBadgeDot').style.color = dotC;
       document.getElementById('modalType').textContent = l;
+
       document.getElementById('modalTitle').textContent = ev.title;
       document.getElementById('modalDate').textContent = dateDisplay;
       
       const timeContainer = document.getElementById('modalTimeContainer');
       if (ev.event_time) {
-        document.getElementById('modalTime').textContent = ev.event_time.slice(0, 5) + ' 시작';
+        // 💡 '시작' 텍스트 제거하고 순수 시간만 표기
+        document.getElementById('modalTime').textContent = ev.event_time.slice(0, 5);
         timeContainer.style.display = 'flex';
       } else {
         timeContainer.style.display = 'none';
