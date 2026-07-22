@@ -248,7 +248,7 @@
         </button>
       </div>
       
-      <!-- 둥근 알약 뱃지 스타일로 보완된 Legend -->
+      <!-- 둥근 알약 뱃지 스타일의 Legend -->
       <div class="flex flex-wrap items-center justify-center gap-2.5 mb-4 desktop-only">
         <span class="legend-badge" style="background:#D1C4FF33;">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
@@ -284,14 +284,14 @@
       <div id="listBody"></div>
     </section>
 
-    <!-- 깔끔하고 세련된 UPCOMING SCHEDULES 섹션 -->
+    <!-- 세련된 UPCOMING SCHEDULES 섹션 (예정된 일정) -->
     <section class="mt-16 pt-10 border-t border-line/40 desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
           <div class="text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1.5">UPCOMING SCHEDULES</div>
-          <h3 class="text-2xl font-bold text-brandDark tracking-tight">다가오는 대표 일정</h3>
+          <h3 class="text-2xl font-bold text-brandDark tracking-tight">예정된 일정</h3>
         </div>
-        <p class="text-xs font-medium text-brandSub">예정된 주요 방송 및 행사 일정입니다</p>
+        <p class="text-xs font-medium text-brandSub">방송 및 예정된 활동 일정입니다</p>
       </div>
       <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
@@ -386,6 +386,12 @@
       renderUpcoming();
     }
 
+    // 날짜 간 포함 여부 확인 함수 (연속 기간 체크용)
+    function isDateInRange(targetDs, startDate, endDate) {
+      if (!endDate) return targetDs === startDate;
+      return targetDs >= startDate && targetDs <= endDate;
+    }
+
     function renderCalendar() {
       const body = document.getElementById('calBody');
       body.innerHTML = '';
@@ -399,13 +405,18 @@
         const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
         const isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
         const isPast = (currentYear < today.getFullYear()) || (currentYear === today.getFullYear() && currentMonth < today.getMonth()) || (currentYear === today.getFullYear() && currentMonth === today.getMonth() && d < today.getDate());
-        const dayEv = schedules.filter(s => s.event_date === ds);
+        
+        // 하루 일정 및 연속 일정(end_date) 모두 포함
+        const dayEv = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
         let evH = '';
         dayEv.forEach(ev => {
           const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
           const t = ev.event_time ? ev.event_time.slice(0,2).replace(/^0/,'')+'시 ' : '';
-          evH += `<div class="cal-event" style="background:${c}" onclick="showEvent('${ev.id}')" title="${ev.title}">${t}${ev.title}</div>`;
+          
+          // 💡 title="..." 속성을 완전히 제거하여 커서 툴팁 안 뜨게 처리
+          evH += `<div class="cal-event" style="background:${c}" onclick="showEvent('${ev.id}')">${t}${ev.title}</div>`;
         });
+        
         let cellClass = 'cal-cell';
         if (isToday) cellClass += ' today';
         if (isPast) cellClass += ' past';
@@ -424,7 +435,7 @@
 
       for (let d = 1; d <= daysInMonth; d++) {
         const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const dayEv = schedules.filter(s => s.event_date === ds);
+        const dayEv = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
         if (dayEv.length === 0) continue;
 
         const date = new Date(currentYear, currentMonth, d);
@@ -484,7 +495,7 @@
       }, 100);
     }
 
-    // 분 단위까지 현재 시각 지나간 일정 정밀 제어
+    // 💡 기간 일정(시작일 ~ 종료일) 표기를 지원하는 UPCOMING SCHEDULES
     function renderUpcoming() {
       const list = document.getElementById('upcomingList');
       const now = new Date();
@@ -492,11 +503,12 @@
       const up = schedules.filter(s => {
         if (!s.event_date) return false;
         
+        const targetEnd = s.end_date || s.event_date;
         let eventDateTime;
-        if (s.event_time) {
-          eventDateTime = new Date(`${s.event_date}T${s.event_time}`);
+        if (s.event_time && s.event_date === targetEnd) {
+          eventDateTime = new Date(`${targetEnd}T${s.event_time}`);
         } else {
-          eventDateTime = new Date(`${s.event_date}T23:59:59`);
+          eventDateTime = new Date(`${targetEnd}T23:59:59`);
         }
         
         return eventDateTime >= now;
@@ -505,7 +517,7 @@
       if (!up.length) { 
         list.innerHTML = `
           <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-line/30">
-            <p class="text-sm font-semibold text-brandSub">예정되어 있는 다가오는 일정이 없습니다.</p>
+            <p class="text-sm font-semibold text-brandSub">예정되어 있는 일정이 없습니다.</p>
           </div>`; 
         return; 
       }
@@ -514,8 +526,15 @@
         const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
         const l = TYPE_LABELS[ev.event_type] || ev.event_type;
         const t = ev.event_time ? ev.event_time.slice(0,5) : '';
-        const dd = new Date(ev.event_date + 'T00:00:00');
-        const ds = `${dd.getMonth()+1}월 ${dd.getDate()}일 (${DAYS[dd.getDay()]})`;
+        
+        const startD = new Date(ev.event_date + 'T00:00:00');
+        let dateDisplay = `${startD.getMonth()+1}/${startD.getDate()} (${DAYS[startD.getDay()]})`;
+        
+        // 종료일(end_date)이 지정되어 연속 일정인 경우: 7/22 (수) ~ 7/26 (일) 형태 표기
+        if (ev.end_date && ev.end_date !== ev.event_date) {
+          const endD = new Date(ev.end_date + 'T00:00:00');
+          dateDisplay += ` ~ ${endD.getMonth()+1}/${endD.getDate()} (${DAYS[endD.getDay()]})`;
+        }
         
         return `
           <div class="group relative flex items-center justify-between p-5 bg-white rounded-2xl border border-line/40 hover:border-textPurple/50 hover:shadow-lg hover:shadow-themePurple/10 transition-all duration-300 cursor-pointer overflow-hidden" onclick="showEvent('${ev.id}')">
@@ -523,7 +542,7 @@
             <div class="pl-2 flex-1 min-w-0 pr-3">
               <div class="font-bold text-brandDark text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
               <div class="flex items-center gap-2.5 text-xs font-semibold text-brandSub mt-1.5 font-montserrat">
-                <span>${ds}</span>
+                <span>${dateDisplay}</span>
                 ${t ? `<span>· ${t}</span>` : ''}
               </div>
             </div>
@@ -537,14 +556,20 @@
       if (!ev) return;
       const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
       const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-      const dd = new Date(ev.event_date + 'T00:00:00');
-      const ds = `${currentYear}년 ${dd.getMonth()+1}월 ${dd.getDate()}일 (${DAYS[dd.getDay()]})`;
+      
+      const startD = new Date(ev.event_date + 'T00:00:00');
+      let dateDisplay = `${currentYear}년 ${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
+      
+      if (ev.end_date && ev.end_date !== ev.event_date) {
+        const endD = new Date(ev.end_date + 'T00:00:00');
+        dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
+      }
       
       document.getElementById('modalColor').style.background = c;
       document.getElementById('modalBadgeBg').style.background = `${c}40`;
       document.getElementById('modalType').textContent = l;
       document.getElementById('modalTitle').textContent = ev.title;
-      document.getElementById('modalDate').textContent = ds;
+      document.getElementById('modalDate').textContent = dateDisplay;
       
       const timeContainer = document.getElementById('modalTimeContainer');
       if (ev.event_time) {
