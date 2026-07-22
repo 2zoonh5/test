@@ -44,7 +44,7 @@
       --line: rgba(218, 209, 254, 0.4);
     }
 
-    body.dark {
+    .dark {
       --bg: #0F0D15;
       --card-bg: #181524;
       --input-bg: #120F1D;
@@ -60,21 +60,16 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* 💡 다크모드 시 달력 / 시계 아이콘 흰색 강제 변경 (body, html 이중 지정) */
-    body.dark input[type="date"],
-    body.dark input[type="time"],
-    body.dark select,
-    html.dark input[type="date"],
-    html.dark input[type="time"],
-    html.dark select {
+    /* 💡 다크모드 전용: 달력/시계 아이콘 및 브라우저 팝업 피커 완벽 흰색 반전 */
+    .dark input[type="date"],
+    .dark input[type="time"],
+    .dark select {
       color-scheme: dark !important;
     }
 
-    body.dark input[type="date"]::-webkit-calendar-picker-indicator,
-    body.dark input[type="time"]::-webkit-calendar-picker-indicator,
-    html.dark input[type="date"]::-webkit-calendar-picker-indicator,
-    html.dark input[type="time"]::-webkit-calendar-picker-indicator {
-      filter: invert(1) !important;
+    .dark input[type="date"]::-webkit-calendar-picker-indicator,
+    .dark input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(100) !important;
       cursor: pointer;
       opacity: 0.9;
     }
@@ -242,14 +237,15 @@
     const toggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
+    /* 💡 핵심: html과 body 둘 다 dark 클래스를 확실하게 부여 */
     function applyTheme(isDark) {
       if (isDark) {
-        document.body.classList.add('dark');
         document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
         themeIcon.textContent = '☀️';
       } else {
-        document.body.classList.remove('dark');
         document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
         themeIcon.textContent = '🌙';
       }
     }
