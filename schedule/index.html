@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SERU SCHEDULE</title>
   
-  <!-- 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
-  <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -46,9 +44,7 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #F9F8FC; }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 플로팅 네비게이션 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -67,7 +63,7 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 달력 메인 컨테이너 ---- */
+    /* ---- 달력 카드 및 셀 스타일 ---- */
     .calendar-card {
       background: #ffffff;
       border: 1px solid rgba(218, 209, 254, 0.5);
@@ -94,15 +90,15 @@
     .cal-table th:last-child { color: #7BA0D4; }
 
     .cal-table td {
-      border: 1px solid rgba(218, 209, 254, 0.4);
+      border: 1px solid rgba(218, 209, 254, 0.35);
       vertical-align: top;
       height: 110px;
       padding: 6px 0;
       position: relative;
       transition: background 0.2s ease;
+      overflow: hidden; /* 💡 글자나 바가 셀 밖으로 넘치지 못하게 고정 */
     }
 
-    /* 호버 시 은은한 배경색만 (테두리 없음) */
     .cal-table td.has-event {
       cursor: pointer;
     }
@@ -131,35 +127,53 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 주 단위 통 바(Bar) 레이아웃 ---- */
-    .week-row-container {
+    /* ---- 하루 단위 일정 바 (말줄임표 ... 및 세로선 은폐 적용) ---- */
+    .event-bar-wrapper {
+      margin-bottom: 4px;
+      height: 25px;
       position: relative;
+      width: 100%;
     }
-
-    .event-layer {
-      position: absolute;
-      top: 32px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .span-bar {
-      position: absolute;
-      height: 26px;
-      font-size: 0.75rem;
+    
+    .event-bar {
+      height: 100%;
+      font-size: 0.725rem;
       font-weight: 700;
       color: #1E1B2C;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
+      display: block;
+      line-height: 25px;
+      padding: 0 8px;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
-      box-sizing: border-box;
+      text-overflow: ellipsis; /* 💡 긴 글자는 깔끔하게 ... 으로 표시 */
+      position: absolute;
+      top: 0; bottom: 0;
       pointer-events: none;
+      box-sizing: border-box;
+    }
+
+    /* 세로 경계선 완전 덮기 */
+    .event-bar.is-single {
+      left: 4px; right: 4px;
+      border-radius: 6px;
+    }
+    .event-bar.is-start {
+      left: 4px; right: -1px;
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .event-bar.is-middle {
+      left: -1px; right: -1px;
+      border-radius: 0;
+    }
+    .event-bar.is-end {
+      left: -1px; right: 4px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
     }
 
     /* ---- Mobile List View ---- */
@@ -211,7 +225,7 @@
       .mobile-only { display: block; }
     }
 
-    /* ---- Premium Modal ---- */
+    /* ---- Modal ---- */
     .modal-backdrop { 
       position: fixed; inset: 0; z-index: 100; 
       background: rgba(30, 27, 44, 0.35); 
@@ -273,15 +287,12 @@
 
   <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
     
-    <!-- ✦ 모던하게 고급 재디자인된 PAGE TITLE ✦ -->
+    <!-- ✦ 세련되고 고급스러운 SECTION TITLE ✦ -->
     <section class="text-center mb-10">
       <div class="inline-flex flex-col items-center">
-        <h1 class="text-3xl font-extrabold text-brandDark font-montserrat tracking-[0.25em] uppercase">SCHEDULE</h1>
-        <div class="flex items-center gap-3 mt-2">
-          <div class="w-8 h-[1px] bg-textPurple/40"></div>
-          <span class="text-xs font-bold text-textPurple tracking-widest font-sans">방송 일정</span>
-          <div class="w-8 h-[1px] bg-textPurple/40"></div>
-        </div>
+        <span class="text-[11px] font-bold tracking-[0.3em] text-textPurple uppercase font-montserrat mb-1">BROADCAST</span>
+        <h1 class="text-3xl font-extrabold text-brandDark font-montserrat tracking-[0.2em] uppercase">SCHEDULE</h1>
+        <div class="w-10 h-0.5 bg-gradient-to-r from-transparent via-textPurple/50 to-transparent mt-2 rounded-full"></div>
       </div>
     </section>
 
@@ -320,7 +331,7 @@
       </div>
     </section>
 
-    <!-- Desktop: Continuous Multi-Day Seamless Calendar -->
+    <!-- Desktop: Calendar Grid -->
     <section class="desktop-only mb-16">
       <div class="calendar-card">
         <table class="cal-table">
@@ -329,9 +340,8 @@
               <th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th>
             </tr>
           </thead>
+          <tbody id="calBody"></tbody>
         </table>
-        <!-- 주 단위 렌더링 컨테이너 -->
-        <div id="calBodyWrapper"></div>
       </div>
     </section>
 
@@ -443,10 +453,9 @@
       return ds >= startDate && ds <= targetEnd;
     }
 
-    // 💡 세로줄 완벽 제거 & 통째로 이어지는 멀티데이 전용 렌더링 엔진
     function renderCalendar() {
-      const wrapper = document.getElementById('calBodyWrapper');
-      wrapper.innerHTML = '';
+      const body = document.getElementById('calBody');
+      body.innerHTML = '';
 
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
       const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
@@ -458,15 +467,7 @@
       let rows = Math.ceil(totalCells / 7);
 
       for (let r = 0; r < rows; r++) {
-        let rowContainer = document.createElement('div');
-        rowContainer.className = 'week-row-container';
-
-        let table = document.createElement('table');
-        table.className = 'cal-table';
-        let tbody = document.createElement('tbody');
         let tr = document.createElement('tr');
-
-        let weekDates = [];
 
         for (let c = 0; c < 7; c++) {
           let td = document.createElement('td');
@@ -475,13 +476,10 @@
           if (cellIndex < firstDay || currentDay > daysInMonth) {
             td.className = 'empty-cell';
             tr.appendChild(td);
-            weekDates.push(null);
             continue;
           }
 
           const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
-          weekDates.push(ds);
-
           if (ds === todayStr) td.classList.add('today');
 
           let numDiv = document.createElement('div');
@@ -490,87 +488,55 @@
           td.appendChild(numDiv);
 
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
+
           if (dayEvList.length > 0) {
             td.classList.add('has-event');
             td.onclick = () => showEvent(dayEvList[0].id);
           }
 
+          dayEvList.forEach(ev => {
+            const startStr = ev.event_date;
+            const endStr = ev.end_date || ev.event_date;
+
+            const isStart = (ds === startStr);
+            const isEnd = (ds === endStr);
+            const isSingle = (startStr === endStr);
+
+            const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+            const t = (ev.event_time && isStart) ? ev.event_time.slice(0,2).replace(/^0/,'')+'시 ' : '';
+
+            let barWrap = document.createElement('div');
+            barWrap.className = 'event-bar-wrapper';
+
+            let bar = document.createElement('div');
+            let barClass = 'event-bar';
+
+            if (isSingle) {
+              barClass += ' is-single';
+            } else if (isStart) {
+              barClass += ' is-start';
+            } else if (isEnd) {
+              barClass += ' is-end';
+            } else {
+              barClass += ' is-middle';
+            }
+
+            bar.className = barClass;
+            bar.style.backgroundColor = cColor;
+            
+            // 시작하는 날에만 글자 출력
+            if (isStart) {
+              bar.textContent = `${t}${ev.title}`;
+            }
+
+            barWrap.appendChild(bar);
+            td.appendChild(barWrap);
+          });
+
           currentDay++;
           tr.appendChild(td);
         }
-
-        tbody.appendChild(tr);
-        table.appendChild(tbody);
-        rowContainer.appendChild(table);
-
-        // 💡 주 단위 연결 바(Span Bar) 오버레이 생성 (세로줄 완전 엄폐)
-        let eventLayer = document.createElement('div');
-        eventLayer.className = 'event-layer';
-
-        // 이번 주에 해당하는 일정만 추출
-        let weekStartDs = weekDates.find(d => d !== null);
-        let weekEndDs = [...weekDates].reverse().find(d => d !== null);
-
-        if (weekStartDs && weekEndDs) {
-          let weekEvs = schedules.filter(s => {
-            const eEnd = s.end_date || s.event_date;
-            return !(s.event_date > weekEndDs || eEnd < weekStartDs);
-          });
-
-          let topOffset = 0;
-          weekEvs.forEach(ev => {
-            const startDs = ev.event_date;
-            const endDs = ev.end_date || ev.event_date;
-
-            // 주 내 시작 인덱스와 끝 인덱스 계산
-            let startCol = weekDates.findIndex(d => d && d >= startDs);
-            if (startCol === -1) startCol = 0;
-
-            let endCol = 6;
-            for (let i = 6; i >= 0; i--) {
-              if (weekDates[i] && weekDates[i] <= endDs) {
-                endCol = i;
-                break;
-              }
-            }
-
-            if (startCol <= endCol) {
-              let bar = document.createElement('div');
-              bar.className = 'span-bar';
-
-              // 세로줄을 가리기 위해 양옆으로 1px씩 넘치게 확장
-              const leftPercent = (startCol / 7) * 100;
-              const widthPercent = ((endCol - startCol + 1) / 7) * 100;
-
-              bar.style.left = `calc(${leftPercent}% + ${startCol === 0 ? 0 : -1}px)`;
-              bar.style.width = `calc(${widthPercent}% + ${(startCol === 0 ? 0 : 1) + (endCol === 6 ? 0 : 1)}px)`;
-              bar.style.top = `${topOffset}px`;
-
-              const isTrueStart = (startDs >= weekStartDs && startDs <= weekEndDs);
-              const isTrueEnd = (endDs >= weekStartDs && endDs <= weekEndDs);
-
-              // 모서리 둥글기 제어
-              let borderL = isTrueStart ? '6px' : '0px';
-              let borderR = isTrueEnd ? '6px' : '0px';
-              bar.style.borderRadius = `${borderL} ${borderR} ${borderR} ${borderL}`;
-
-              const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-              bar.style.backgroundColor = cColor;
-
-              // 글자는 무조건 일정의 진짜 시작일에만 표기
-              if (isTrueStart) {
-                const t = ev.event_time ? ev.event_time.slice(0,2).replace(/^0/,'')+'시 ' : '';
-                bar.textContent = `${t}${ev.title}`;
-              }
-
-              eventLayer.appendChild(bar);
-              topOffset += 30; // 다음 일정 아래 배치
-            }
-          });
-        }
-
-        rowContainer.appendChild(eventLayer);
-        wrapper.appendChild(rowContainer);
+        body.appendChild(tr);
       }
     }
 
