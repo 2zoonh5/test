@@ -257,7 +257,7 @@
       background: #ffffff; 
       border-radius: 28px; 
       padding: 32px; 
-      max-width: 500px; 
+      max-width: 480px; 
       width: 100%; 
       max-height: 85vh;
       overflow-y: auto;
@@ -357,19 +357,16 @@
     </section>
   </main>
 
-  <!-- 💡 해당 날짜의 모든 일정을 출력하는 모달 팝업 -->
+  <!-- 💡 기존 모달 디자인 완전 복원 + 다중 일정 스택 지원 모달 -->
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between pb-4 border-b border-line/40 mb-6">
-        <div>
-          <div class="text-[10px] font-bold text-textPurple tracking-widest font-montserrat uppercase mb-0.5">SCHEDULE DETAILS</div>
-          <h3 id="modalHeaderDate" class="text-xl font-bold text-brandDark tracking-tight"></h3>
-        </div>
+        <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">SCHEDULE DETAILS</div>
         <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold text-sm">✕</button>
       </div>
 
-      <!-- 일정 카드 리스트가 삽입될 컨테이너 -->
-      <div id="modalEventList" class="space-y-4"></div>
+      <!-- 원본 톤앤매너 완벽 보존형 일정 스택 영역 -->
+      <div id="modalEventList" class="space-y-8"></div>
     </div>
   </div>
 
@@ -508,10 +505,9 @@
 
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
-          // 💡 날짜 전체 클릭 시 그 날의 모든 일정 목록 모달 출력
           if (dayEvList.length > 0) {
             td.classList.add('has-event');
-            td.onclick = () => showDayEvents(ds, dayEvList);
+            td.onclick = () => showDayEvents(dayEvList);
           }
 
           dayEvList.forEach(ev => {
@@ -687,47 +683,52 @@
       }).join('');
     }
 
-    // 💡 날짜 내의 모든 일정을 순서대로 카드 형태 생성해 모달에 노출
-    function showDayEvents(dateStr, eventList) {
-      const d = new Date(dateStr + 'T00:00:00');
-      document.getElementById('modalHeaderDate').textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${DAYS[d.getDay()]})`;
-
+    // 💡 원본 모달 스타일 100% 보존 + 여러 개 등록된 경우 스택으로 이어서 출력하는 엔진
+    function showDayEvents(eventList) {
       const listContainer = document.getElementById('modalEventList');
       
-      listContainer.innerHTML = eventList.map(ev => {
+      listContainer.innerHTML = eventList.map((ev, index) => {
         const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
         const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
         const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-        const t = ev.event_time ? ev.event_time.slice(0, 5) : null;
         
         const startD = new Date(ev.event_date + 'T00:00:00');
-        let dateRangeText = `${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
+        let dateDisplay = `${currentYear}년 ${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
+        
         if (ev.end_date && ev.end_date !== ev.event_date) {
           const endD = new Date(ev.end_date + 'T00:00:00');
-          dateRangeText += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
+          dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
         }
 
+        const borderClass = (index < eventList.length - 1) ? 'pb-8 border-b border-line/50' : '';
+
         return `
-          <div class="bg-[#F9F8FC] border border-line/60 rounded-2xl p-5 relative overflow-hidden">
-            <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
-            <div class="flex items-center justify-between mb-3">
+          <div class="${borderClass}">
+            <div class="mb-4">
               <span class="legend-badge" style="background:${c}55;">
                 <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
               </span>
-              ${t ? `<span class="text-xs font-bold text-brandDark font-montserrat bg-white px-2.5 py-1 rounded-lg border border-line/40">${t}</span>` : ''}
             </div>
 
-            <h4 class="text-lg font-bold text-brandDark mb-2 tracking-tight">${ev.title}</h4>
+            <h3 class="text-2xl font-bold text-brandDark leading-snug mb-5 tracking-tight">${ev.title}</h3>
             
-            <div class="text-[11px] font-semibold text-brandSub font-montserrat mb-3">
-              <span>📅 ${dateRangeText}</span>
+            <div class="bg-[#F9F8FC] border border-line/50 rounded-2xl p-4 mb-6 space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">DATE</span>
+                <span class="text-xs font-bold text-brandDark">${dateDisplay}</span>
+              </div>
+              ${ev.event_time ? `
+                <div class="flex items-center gap-3 border-t border-line/30 pt-2">
+                  <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">TIME</span>
+                  <span class="text-xs font-semibold text-brandDark font-montserrat">${ev.event_time.slice(0, 5)}</span>
+                </div>
+              ` : ''}
             </div>
 
-            ${ev.description ? `
-              <div class="text-xs font-medium text-brandDark leading-relaxed bg-white p-3.5 rounded-xl border border-line/40 whitespace-pre-line">
-                ${ev.description}
-              </div>
-            ` : ''}
+            <div>
+              <div class="text-[10px] font-bold text-brandSub uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
+              <div class="text-sm font-medium text-brandDark leading-relaxed bg-white p-4 rounded-2xl border border-line/40 min-h-[80px] whitespace-pre-line">${ev.description || '상세 내용 설명이 등록되어 있지 않습니다.'}</div>
+            </div>
           </div>
         `;
       }).join('');
@@ -737,7 +738,7 @@
 
     function showSingleEvent(id) {
       const ev = schedules.find(s => s.id === id);
-      if (ev) showDayEvents(ev.event_date, [ev]);
+      if (ev) showDayEvents([ev]);
     }
 
     function closeModal(e) {
