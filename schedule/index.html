@@ -281,11 +281,12 @@
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
         SERU<span class="text-textPurple">.</span>
       </div>
+      <!-- 💡 DB 링크 동적 연동을 위해 id 지정 -->
       <nav class="flex gap-1">
         <a href="../" class="nav-link">프로필</a>
         <a href="#" class="nav-link active">일정</a>
-        <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-link" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-link" target="_blank">업보</a>
+        <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+        <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
       </nav>
     </header>
   </div>
@@ -437,7 +438,29 @@
       const n = new Date();
       currentYear = n.getFullYear();
       currentMonth = n.getMonth();
+      loadSettings(); // 💡 최신 메뉴 링크 불러오기
       loadMonth();
+    }
+
+    // 💡 Supabase DB에서 노래책/업보 최신 링크 가져와 연결하기
+    async function loadSettings() {
+      try {
+        const { data, error } = await supabaseClient.from('settings').select('*');
+        if (error || !data) return;
+        
+        data.forEach(item => {
+          if (item.key === 'musicbook_url' && item.value) {
+            const el = document.getElementById('navMusicbook');
+            if (el) el.href = item.value;
+          }
+          if (item.key === 'karma_url' && item.value) {
+            const el = document.getElementById('navKarma');
+            if (el) el.href = item.value;
+          }
+        });
+      } catch (err) {
+        console.error('Settings load error:', err);
+      }
     }
 
     async function loadMonth() {
