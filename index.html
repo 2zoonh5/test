@@ -434,24 +434,42 @@
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
 
+    // 랜덤 클릭 이펙트에 사용될 이미지 리스트 (루트 기준 경로)
+    const popImages = [
+      './fx_shell.png',
+      './fx_haetto.png',
+      './fx_seru.png'
+    ];
+
     document.addEventListener('click', (e) => {
+      // 버튼, 링크, 입력창 등 클릭 가능한 요소는 팝업 제외
       if (e.target.closest('button, a, input, textarea, iframe')) return;
-      
-      const count = 5;
+
+      const count = 6; // 클릭 시 튀어나올 이미지 개수
       for (let i = 0; i < count; i++) {
-        const star = document.createElement('span');
-        star.className = 'fxpop';
-        star.textContent = '✨';
-        star.style.left = `${e.clientX}px`;
-        star.style.top = `${e.clientY}px`;
-        
+        const img = document.createElement('img');
+        img.className = 'fxpop';
+
+        // 배열에서 랜덤하게 하나 선택
+        const randomSrc = popImages[Math.floor(Math.random() * popImages.length)];
+        img.src = randomSrc;
+
+        // 화면에 보여질 화면 내 표시 크기 (px)
+        img.style.width = '28px';
+        img.style.height = '28px';
+        img.style.objectFit = 'contain';
+
+        img.style.left = `${e.clientX}px`;
+        img.style.top = `${e.clientY}px`;
+
+        // 튀어나가는 360도 각도 및 거리 계산
         const angle = Math.random() * Math.PI * 2;
-        const dist = 30 + Math.random() * 45;
-        star.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
-        star.style.setProperty('--dy', `${Math.sin(angle) * dist - 20}px`);
-        
-        document.body.appendChild(star);
-        setTimeout(() => star.remove(), 700);
+        const dist = 35 + Math.random() * 45;
+        img.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        img.style.setProperty('--dy', `${Math.sin(angle) * dist - 25}px`);
+
+        document.body.appendChild(img);
+        setTimeout(() => img.remove(), 700);
       }
     });
 
