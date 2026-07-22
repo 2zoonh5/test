@@ -154,7 +154,8 @@
 
     .bg-glow-radial {
       position: absolute;
-      width: 700px; height: 700px;
+      width: min(700px, 100vw);
+      height: min(700px, 100vw);
       border-radius: 50%;
       background: radial-gradient(circle, rgba(218,209,254,0.25) 0%, rgba(249,248,252,0) 70%);
       top: -15%; left: 50%;
@@ -187,7 +188,7 @@
     }
   </style>
 </head>
-<body class="relative min-h-screen font-sans pb-32">
+<body class="relative min-h-screen font-sans pb-32 overflow-x-hidden">
 
   <div class="bg-glow-radial"></div>
 
@@ -244,10 +245,10 @@
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 바로가기 버튼 세트 -->
-        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+       <!-- 바로가기 버튼 세트 -->
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
+             class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -257,7 +258,7 @@
           </a>
           <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
              style="background-color: var(--soop-bg); color: var(--soop-text);"
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md border border-[var(--line)]">
+             class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md border border-[var(--line)]">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
