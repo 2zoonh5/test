@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU SCHEDULE</title>
+  <title>SERU SCHEDULE 💜</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
@@ -14,15 +14,16 @@
   
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: { 
         extend: {
           colors: { 
-            bg: '#F9F8FC', 
-            themePurple: '#DAD1FE', 
+            bg: 'var(--bg)', 
+            themePurple: 'var(--theme-purple)', 
             textPurple: '#8C7AE6',
-            brandDark: '#1E1B2C', 
-            brandSub: '#6E6B7B', 
-            line: 'rgba(218, 209, 254, 0.4)' 
+            brandDark: 'var(--brand-dark)', 
+            brandSub: 'var(--brand-sub)', 
+            line: 'var(--line)' 
           },
           fontFamily: { 
             sans: ['Pretendard', 'sans-serif'], 
@@ -34,37 +35,63 @@
   </script>
   
   <style>
+    /* 💡 테마 변수 체계화 (라이트 / 다크모드) */
+    :root {
+      --bg: #F9F8FC;
+      --card-bg: #FFFFFF;
+      --theme-purple: #DAD1FE;
+      --brand-dark: #1E1B2C;
+      --brand-sub: #6E6B7B;
+      --line: rgba(218, 209, 254, 0.4);
+      --header-bg: rgba(255, 255, 255, 0.75);
+      --modal-bg: #FFFFFF;
+      --modal-sub-bg: #F9F8FC;
+    }
+
+    body.dark {
+      --bg: #0F0D15;
+      --card-bg: #181524;
+      --theme-purple: #3A3258;
+      --brand-dark: #F1EDF8;
+      --brand-sub: #A39EB2;
+      --line: rgba(140, 122, 230, 0.25);
+      --header-bg: rgba(24, 21, 36, 0.75);
+      --modal-bg: #181524;
+      --modal-sub-bg: #120F1D;
+    }
+
     body {
-      background-color: #F9F8FC;
-      color: #1E1B2C;
+      background-color: var(--bg);
+      color: var(--brand-dark);
       letter-spacing: -0.02em;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     html { scroll-behavior: smooth; }
     
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #F9F8FC; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
 
     .nav-link {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #6E6B7B;
-        padding: 8px 24px;
-        border-radius: 99px;
-        transition: all 0.3s ease;
-        white-space: nowrap; /* 글자가 절대 밑으로 줄바꿈되지 않도록 방지 */
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--brand-sub);
+      padding: 8px 20px;
+      border-radius: 99px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
     }
 
-    /* 📱 화면 폭이 640px 이하인 모바일 기기 반응형 설정 */
     @media (max-width: 640px) {
       .nav-link {
-         font-size: 0.775rem; /* 글자 크기 살짝 축소 */
-         padding: 6px 10px;   /* 좌우 여백을 10px로 축소 */
+        font-size: 0.775rem;
+        padding: 6px 10px;
       }
     }
+
     .nav-link:hover {
-      color: #1E1B2C;
-      background: rgba(218, 209, 254, 0.4);
+      color: var(--brand-dark);
+      background: rgba(218, 209, 254, 0.3);
     }
     .nav-link.active {
       color: #1E1B2C;
@@ -73,8 +100,8 @@
     }
 
     .calendar-card {
-      background: #ffffff;
-      border: 1px solid rgba(218, 209, 254, 0.5);
+      background: var(--card-bg);
+      border: 1px solid var(--line);
       border-radius: 28px;
       padding: 28px;
       box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
@@ -90,7 +117,7 @@
       text-align: center;
       font-size: 0.8125rem;
       font-weight: 700;
-      color: #6E6B7B;
+      color: var(--brand-sub);
       padding-bottom: 16px;
       font-family: 'Montserrat', sans-serif;
     }
@@ -98,7 +125,7 @@
     .cal-table th:last-child { color: #7BA0D4; }
 
     .cal-table td {
-      border: 1px solid rgba(218, 209, 254, 0.35);
+      border: 1px solid var(--line);
       vertical-align: top;
       height: 110px;
       padding: 6px 0;
@@ -107,23 +134,17 @@
       overflow: hidden;
     }
 
-    .cal-table td.has-event {
-      cursor: pointer;
-    }
-    .cal-table td.has-event:hover {
-      background: rgba(218, 209, 254, 0.25);
-    }
+    .cal-table td.has-event { cursor: pointer; }
+    .cal-table td.has-event:hover { background: rgba(218, 209, 254, 0.25); }
 
-    .cal-table td.empty-cell {
-      background: rgba(249, 248, 252, 0.4);
-    }
+    .cal-table td.empty-cell { background: rgba(249, 248, 252, 0.04); }
 
     .day-num-box {
       padding: 0 8px;
       height: 28px;
       font-size: 0.875rem;
       font-weight: 700;
-      color: #1E1B2C;
+      color: var(--brand-dark);
       font-family: 'Montserrat', sans-serif;
       pointer-events: none;
       display: flex;
@@ -171,23 +192,10 @@
       z-index: 10;
     }
 
-    .event-bar.is-single {
-      left: 4px; right: 4px;
-      border-radius: 6px;
-    }
-    .event-bar.is-start {
-      left: 4px; right: 0;
-      border-top-left-radius: 6px;
-      border-bottom-left-radius: 6px;
-    }
-    .event-bar.is-middle {
-      left: 0; right: 0;
-    }
-    .event-bar.is-end {
-      left: 0; right: 4px;
-      border-top-right-radius: 6px;
-      border-bottom-right-radius: 6px;
-    }
+    .event-bar.is-single { left: 4px; right: 4px; border-radius: 6px; }
+    .event-bar.is-start { left: 4px; right: 0; border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+    .event-bar.is-middle { left: 0; right: 0; }
+    .event-bar.is-end { left: 0; right: 4px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
 
     .legend-badge {
       display: inline-flex;
@@ -197,8 +205,8 @@
       border-radius: 99px;
       font-size: 0.75rem;
       font-weight: 600;
-      color: #1E1B2C;
-      border: 1px solid rgba(30, 27, 44, 0.05);
+      color: var(--brand-dark);
+      border: 1px solid var(--line);
     }
     .legend-badge-dot {
       width: 6px;
@@ -207,6 +215,7 @@
       background-color: currentColor;
     }
 
+    /* ---- Mobile List View ---- */
     .list-date-group { margin-bottom: 20px; }
     .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
     .list-day-num { 
@@ -215,10 +224,10 @@
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      background: #ffffff; 
-      border: 1px solid rgba(218, 209, 254, 0.4); 
+      background: var(--card-bg); 
+      border: 1px solid var(--line); 
       font-weight: 700; font-size: 1.1rem; 
-      color: #1E1B2C;
+      color: var(--brand-dark);
       font-family: 'Montserrat', sans-serif;
     }
     .list-day-num.today { background: #8C7AE6; color: #ffffff; border-color: #8C7AE6; }
@@ -227,9 +236,9 @@
     .list-event-item { 
       display: flex; align-items: center; gap: 16px; 
       padding: 16px; 
-      background: #ffffff; 
+      background: var(--card-bg); 
       border-radius: 16px; 
-      border: 1px solid rgba(218, 209, 254, 0.3); 
+      border: 1px solid var(--line); 
       margin-bottom: 8px; 
       transition: all 0.2s ease; 
       cursor: pointer;
@@ -240,12 +249,12 @@
     }
     .list-event-bar { width: 4px; height: 36px; border-radius: 99px; flex-shrink: 0; }
     .list-event-info { flex: 1; min-width: 0; }
-    .list-event-title { font-size: .95rem; font-weight: 700; color: #1E1B2C; }
-    .list-event-time { font-size: .8rem; color: #6E6B7B; margin-top: 2px; }
+    .list-event-title { font-size: .95rem; font-weight: 700; color: var(--brand-dark); }
+    .list-event-time { font-size: .8rem; color: var(--brand-sub); margin-top: 2px; }
 
     .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
     .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
-    .today-divider span { font-size: .75rem; font-weight: 700; color: #6E6B7B; white-space: nowrap; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
+    .today-divider span { font-size: .75rem; font-weight: 700; color: var(--brand-sub); white-space: nowrap; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
 
     .desktop-only { display: block; }
     .mobile-only { display: none; }
@@ -254,53 +263,79 @@
       .mobile-only { display: block; }
     }
 
+    /* 💡 모달 박스 스크롤 깔끔하게 잘라내기 */
     .modal-backdrop { 
       position: fixed; inset: 0; z-index: 100; 
-      background: rgba(30, 27, 44, 0.35); 
+      background: rgba(30, 27, 44, 0.45); 
       display: none; align-items: center; justify-content: center; 
       backdrop-filter: blur(10px); 
       padding: 20px;
     }
     .modal-backdrop.open { display: flex; }
 
-    /* 💡 overflow: hidden 으로 둥근 테두리 바깥으로 스크롤바가 안 튀어나가게 잘라냄 */
     .modal-content { 
-      background: #ffffff; 
+      background: var(--modal-bg); 
       border-radius: 28px; 
       max-width: 480px; 
       width: 100%; 
       max-height: 80vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* 둥근 테두리 마스킹 */
-      border: 1px solid rgba(218, 209, 254, 0.6); 
-      box-shadow: 0 24px 60px rgba(30, 27, 44, 0.18); 
+      overflow: hidden; 
+      border: 1px solid var(--line); 
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); 
       animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    /* 💡 내부 스크롤바를 둥근 테두리 안쪽으로 슬림하게 스타일링 */
+
     #modalEventList::-webkit-scrollbar { width: 4px; }
     #modalEventList::-webkit-scrollbar-track { background: transparent; }
     #modalEventList::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     #modalEventList::-webkit-scrollbar-thumb:hover { background: #8C7AE6; }
+
     @keyframes modalFadeIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
+
+    /* 💡 클릭 별빛 이펙트 스타일 */
+    .fxpop {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 16px;
+      user-select: none;
+      animation: fxpop 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+    @keyframes fxpop {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(1.4) rotate(45deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
-<body class="bg-bg min-h-screen font-sans pb-32">
+<body class="bg-[var(--bg)] min-h-screen font-sans pb-32">
 
-  <div class="sticky top-4 z-50 px-6 max-w-4xl mx-auto">
-    <header class="bg-white/70 backdrop-blur-lg border border-line/50 h-20 rounded-full px-8 flex items-center justify-between shadow-lg shadow-brandDark/5">
-      <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
+  <!-- FLOATING HEADER & NAVIGATION -->
+  <div class="sticky top-4 z-50 px-4 md:px-6 max-w-4xl mx-auto">
+    <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-20 rounded-full px-4 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
+      <div class="font-montserrat text-xl font-bold tracking-wider text-[var(--brand-dark)]">
         SERU<span class="text-textPurple">.</span>
       </div>
-      <nav class="flex gap-1">
-        <a href="../" class="nav-link">프로필</a>
-        <a href="#" class="nav-link active">일정</a>
-        <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
-      </nav>
+      
+      <div class="flex items-center gap-1 md:gap-2">
+        <nav class="flex gap-0.5 md:gap-1">
+          <a href="../" class="nav-link">프로필</a>
+          <a href="#" class="nav-link active">일정</a>
+          <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+          <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
+        </nav>
+
+        <!-- 💡 다크모드 토글 스위치 -->
+        <button id="themeToggle" class="w-9 h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-sm ml-1 hover:border-textPurple transition shadow-sm" aria-label="다크모드 토글">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
     </header>
   </div>
 
@@ -308,22 +343,24 @@
     <section class="text-center mb-10">
       <div class="inline-flex flex-col items-center">
         <span class="text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
-        <h1 class="text-3xl font-extrabold text-brandDark tracking-tight font-sans">방송 일정</h1>
+        <h1 class="text-3xl font-extrabold text-[var(--brand-dark)] tracking-tight font-sans">방송 일정</h1>
         <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-textPurple/40 to-transparent mt-2.5 rounded-full"></div>
       </div>
     </section>
 
+    <!-- 월 선택 네비게이션 -->
     <section class="pb-6">
       <div class="flex items-center justify-between mb-8 max-w-xs mx-auto">
-        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-themePurple/20 transition shadow-sm">
+        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <h2 id="calMonth" class="text-xl font-bold text-brandDark font-montserrat tracking-tight"></h2>
-        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-themePurple/20 transition shadow-sm">
+        <h2 id="calMonth" class="text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight"></h2>
+        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
       
+      <!-- 유형별 뱃지 범례 -->
       <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
         <span class="legend-badge" style="background:#D1C4FF33;">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
@@ -346,6 +383,7 @@
       </div>
     </section>
 
+    <!-- Desktop: 달력 그리드 -->
     <section class="desktop-only mb-16">
       <div class="calendar-card">
         <table class="cal-table">
@@ -359,38 +397,36 @@
       </div>
     </section>
 
+    <!-- Mobile: 카드 리스트 뷰 -->
     <section class="mobile-only mb-12">
       <div id="listBody"></div>
     </section>
 
-    <section class="mt-16 pt-10 border-t border-line/40 desktop-only">
+    <!-- UPCOMING SCHEDULES -->
+    <section class="mt-16 pt-10 border-t border-[var(--line)] desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
           <div class="text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
-          <h3 class="text-2xl font-bold text-brandDark tracking-tight">다가오는 일정</h3>
+          <h3 class="text-2xl font-bold text-[var(--brand-dark)] tracking-tight">다가오는 일정</h3>
         </div>
       </div>
       <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
   </main>
 
-  <!-- 💡 고정 헤더 + 내부 스크롤 영역으로 분리된 모달 구조 -->
+  <!-- 💡 고정 헤더 + 독립 스크롤 분리 모달 구조 -->
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      
-      <!-- 상단 고정 헤더 (스크롤되지 않고 상단에 딱 붙어있음) -->
-      <div class="flex items-center justify-between p-6 pb-4 border-b border-line/40 shrink-0 bg-white z-10">
+      <div class="flex items-center justify-between p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
         <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">SCHEDULE DETAILS</div>
-        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold text-sm">✕</button>
+        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[var(--modal-sub-bg)] hover:bg-themePurple/30 text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition flex items-center justify-center font-bold text-sm">✕</button>
       </div>
 
-      <!-- 내부 독립 스크롤 컨텐츠 영역 (이 안에서만 둥글게 스크롤됨) -->
       <div id="modalEventList" class="p-6 overflow-y-auto space-y-8 flex-1"></div>
-
     </div>
   </div>
 
-  <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40 select-none">
+  <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold border-t border-[var(--line)] select-none">
     <p class="font-montserrat tracking-wider">
       © 2026 
       <span onclick="location.href='../admin/'" class="cursor-default">SERU.</span> 
@@ -431,6 +467,54 @@
       'other':      '기타'
     };
 
+    /* ---- 1. 다크모드 엔진 ---- */
+    const toggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
+        themeIcon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+      }
+    }
+
+    if (localStorage.getItem('seru_theme') === 'dark') {
+      applyTheme(true);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = !document.body.classList.contains('dark');
+      applyTheme(isDark);
+      localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
+    });
+
+    /* ---- 2. 별빛(✨) 클릭 이펙트 ---- */
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, input, textarea, iframe, td, .list-event-item')) return;
+      
+      const count = 5;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('span');
+        star.className = 'fxpop';
+        star.textContent = '✨';
+        star.style.left = `${e.clientX}px`;
+        star.style.top = `${e.clientY}px`;
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 45;
+        star.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        star.style.setProperty('--dy', `${Math.sin(angle) * dist - 20}px`);
+        
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 700);
+      }
+    });
+
     function init() {
       const n = new Date();
       currentYear = n.getFullYear();
@@ -459,17 +543,15 @@
       }
     }
 
-    // 💡 핵심: 기간 일정을 최우선으로 배치하는 정렬 알고리즘
+    // 💡 기간 일정을 항상 상단으로 정렬하는 알고리즘
     function sortSchedules(list) {
       return list.sort((a, b) => {
         const aIsMulti = a.end_date && a.end_date !== a.event_date;
         const bIsMulti = b.end_date && b.end_date !== b.event_date;
 
-        // 1. 기간 일정(end_date가 있는 일정)을 항상 상단 배치
         if (aIsMulti && !bIsMulti) return -1;
         if (!aIsMulti && bIsMulti) return 1;
 
-        // 2. 기간 일정끼리는 기간이 긴 순서(또는 시작일) 순 정렬
         if (aIsMulti && bIsMulti) {
           const aDuration = new Date(a.end_date) - new Date(a.event_date);
           const bDuration = new Date(b.end_date) - new Date(b.event_date);
@@ -477,7 +559,6 @@
           return a.event_date.localeCompare(b.event_date);
         }
 
-        // 3. 단일 일정끼리는 시간(event_time)순 정렬
         const timeA = a.event_time || '99:99';
         const timeB = b.event_time || '99:99';
         return timeA.localeCompare(timeB);
@@ -496,7 +577,6 @@
           .or(`event_date.gte.${s},end_date.gte.${s}`);
         if (error) throw error;
         
-        // 정렬 엔진 통과
         schedules = sortSchedules(data || []);
       } catch(err) { console.error(err); schedules = []; }
       
@@ -549,7 +629,6 @@
           }
           td.appendChild(numDiv);
 
-          // 정렬 규칙이 적용된 해당 일자의 일정 목록
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
           if (dayEvList.length > 0) {
@@ -660,11 +739,11 @@
 
       if (!todayInserted && isCurrentMonth) {
         html += `<div class="today-divider" id="todayAnchor"><span>TODAY</span></div>`;
-        html += '<div class="text-center py-12 text-brandSub text-sm font-semibold">예정된 방송 일정이 없습니다.</div>';
+        html += '<div class="text-center py-12 text-[var(--brand-sub)] text-sm font-semibold">예정된 방송 일정이 없습니다.</div>';
       }
 
       if (!html) {
-        html = '<div class="text-center py-16 text-brandSub text-sm font-semibold">이번 달에 등록된 일정이 존재하지 않습니다.</div>';
+        html = '<div class="text-center py-16 text-[var(--brand-sub)] text-sm font-semibold">이번 달에 등록된 일정이 존재하지 않습니다.</div>';
       }
 
       body.innerHTML = html;
@@ -693,8 +772,8 @@
       
       if (!up.length) { 
         list.innerHTML = `
-          <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-line/30">
-            <p class="text-sm font-semibold text-brandSub">예정되어 있는 일정이 없습니다.</p>
+          <div class="col-span-2 text-center py-12 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)]">
+            <p class="text-sm font-semibold text-[var(--brand-sub)]">예정되어 있는 일정이 없습니다.</p>
           </div>`; 
         return; 
       }
@@ -714,11 +793,11 @@
         }
         
         return `
-          <div class="group relative flex items-center justify-between p-5 bg-white rounded-2xl border border-line/40 hover:border-textPurple/50 hover:shadow-lg hover:shadow-themePurple/10 transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
+          <div class="group relative flex items-center justify-between p-5 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] hover:border-textPurple/50 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
             <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
             <div class="pl-2 flex-1 min-w-0 pr-3">
-              <div class="font-bold text-brandDark text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
-              <div class="flex items-center gap-2.5 text-xs font-semibold text-brandSub mt-1.5 font-montserrat">
+              <div class="font-bold text-[var(--brand-dark)] text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
+              <div class="flex items-center gap-2.5 text-xs font-semibold text-[var(--brand-sub)] mt-1.5 font-montserrat">
                 <span>${dateDisplay}</span>
                 ${t ? `<span>· ${t}</span>` : ''}
               </div>
@@ -746,7 +825,7 @@
           dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
         }
 
-        const borderClass = (index < eventList.length - 1) ? 'pb-8 border-b border-line/50' : '';
+        const borderClass = (index < eventList.length - 1) ? 'pb-8 border-b border-[var(--line)]' : '';
         const hasDesc = ev.description && ev.description.trim() !== '';
 
         return `
@@ -757,25 +836,25 @@
               </span>
             </div>
 
-            <h3 class="text-2xl font-bold text-brandDark leading-snug mb-5 tracking-tight">${ev.title}</h3>
+            <h3 class="text-2xl font-bold text-[var(--brand-dark)] leading-snug mb-5 tracking-tight">${ev.title}</h3>
             
-            <div class="bg-[#F9F8FC] border border-line/50 rounded-2xl p-4 ${hasDesc ? 'mb-6' : 'mb-2'} space-y-2">
+            <div class="bg-[var(--modal-sub-bg)] border border-[var(--line)] rounded-2xl p-4 ${hasDesc ? 'mb-6' : 'mb-2'} space-y-2">
               <div class="flex items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">DATE</span>
-                <span class="text-xs font-bold text-brandDark">${dateDisplay}</span>
+                <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">DATE</span>
+                <span class="text-xs font-bold text-[var(--brand-dark)]">${dateDisplay}</span>
               </div>
               ${ev.event_time ? `
-                <div class="flex items-center gap-3 border-t border-line/30 pt-2">
-                  <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">TIME</span>
-                  <span class="text-xs font-semibold text-brandDark font-montserrat">${ev.event_time.slice(0, 5)}</span>
+                <div class="flex items-center gap-3 border-t border-[var(--line)] pt-2">
+                  <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">TIME</span>
+                  <span class="text-xs font-semibold text-[var(--brand-dark)] font-montserrat">${ev.event_time.slice(0, 5)}</span>
                 </div>
               ` : ''}
             </div>
 
             ${hasDesc ? `
               <div>
-                <div class="text-[10px] font-bold text-brandSub uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
-                <div class="text-sm font-medium text-brandDark leading-relaxed bg-white p-4 rounded-2xl border border-line/40 min-h-[80px] whitespace-pre-line">${ev.description}</div>
+                <div class="text-[10px] font-bold text-[var(--brand-sub)] uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
+                <div class="text-sm font-medium text-[var(--brand-dark)] leading-relaxed bg-[var(--card-bg)] p-4 rounded-2xl border border-[var(--line)] min-h-[80px] whitespace-pre-line">${ev.description}</div>
               </div>
             ` : ''}
           </div>
