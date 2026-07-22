@@ -340,6 +340,23 @@
       haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
     });
   </script>
-
+<script src="js/supabase-config.js"></script>
+<script>
+  async function loadMainSettings() {
+    try {
+      const { data } = await supabaseClient.from('settings').select('*');
+      if (!data) return;
+      data.forEach(item => {
+        if (item.key === 'musicbook_url' && item.value) {
+          document.querySelectorAll('a[href*="musicbook"]').forEach(a => a.href = item.value);
+        }
+        if (item.key === 'karma_url' && item.value) {
+          document.querySelectorAll('a[href*="spreadsheets"]').forEach(a => a.href = item.value);
+        }
+      });
+    } catch (err) { console.error(err); }
+  }
+  loadMainSettings();
+</script>
 </body>
 </html>
