@@ -12,13 +12,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            bg: '#F9F8FC',         
+            bg: '#F9F8FC',          
             themePurple: '#DAD1FE', 
             textPurple: '#8C7AE6',   /* 선명하고 고급스러운 딥 라벤더 퍼플 */
             brandDark: '#1E1B2C',    
@@ -114,11 +115,12 @@
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
         SERU<span class="text-textPurple">.</span>
       </div>
+      <!-- 💡 고유 ID 부여로 링크 교체 안정성 보장 -->
       <nav class="flex gap-1">
         <a href="./" class="nav-link active">프로필</a>
         <a href="./schedule" class="nav-link">일정</a>
-        <a href="https://meloming.com/channel/yourseru/musicbook" class="nav-link" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" class="nav-link" target="_blank">업보</a>
+        <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+        <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
       </nav>
     </header>
   </div>
@@ -203,13 +205,12 @@
     <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
       
-      <!-- 왼쪽 카드: 해또 FANDOM (정밀한 대칭과 가독성을 극대화한 내추럴 소개 보드) -->
+      <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between group/fandom">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
           
           <div class="flex items-center gap-5 pb-5 border-b border-line/30 mb-5">
-            <!-- 3D 패럴랙스 틸트 일체형 투명 해또 일러스트 구역 -->
             <div class="w-16 h-16 shrink-0 flex items-center justify-center tilt-container select-none">
               <img src="./haetto_pf.png" alt="해또 프로필" id="haettoTilt" class="w-full h-full object-contain tilt-element filter drop-shadow-[0_4px_10px_rgba(140,122,230,0.12)]">
             </div>
@@ -219,7 +220,6 @@
             </div>
           </div>
           
-          <!-- 끊김 없이 수려한 줄 간격을 확보한 에세이형 공식 소개글 -->
           <div class="text-[13px] text-brandSub font-medium tracking-tight px-1 py-1">
             <p class="leading-relaxed mb-4">
               항상 반짝이는 하얀 조개를 손에 소중하게 품고 다니며, 예쁜 리본이 달린 보라색 케이프가 가장 잘 어울리는 귀여운 연보라색 해달 요정입니다.
@@ -230,7 +230,6 @@
           </div>
         </div>
         
-        <!-- 하단 팬닉 표기 구역 -->
         <div class="border-t border-line/60 mt-6 pt-5">
           <div class="flex justify-between items-center text-xs">
             <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">Fan Nickname</span>
@@ -246,7 +245,6 @@
           <h3 class="text-2xl font-bold text-brandDark mb-6">세르의 매력 프로필</h3>
           
           <div class="space-y-4">
-            <!-- 쫌 귀여움 -->
             <div class="flex items-center gap-3 group">
               <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🧸</span>
               <div>
@@ -255,7 +253,6 @@
               </div>
             </div>
             
-            <!-- 에너지가 빨리 바닥남 -->
             <div class="flex items-center gap-3 group">
               <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🔋</span>
               <div>
@@ -264,7 +261,6 @@
               </div>
             </div>
 
-            <!-- 표독한가? -->
             <div class="flex items-center gap-3 group">
               <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">😼</span>
               <div>
@@ -275,7 +271,6 @@
           </div>
         </div>
 
-        <!-- 특기: 귀엽기 라인 분리 표기 -->
         <div class="border-t border-line/60 mt-6 pt-5">
           <div class="flex justify-between items-center text-xs">
             <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
@@ -340,23 +335,27 @@
       haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
     });
   </script>
-<script src="js/supabase-config.js"></script>
-<script>
-  async function loadMainSettings() {
-    try {
-      const { data } = await supabaseClient.from('settings').select('*');
-      if (!data) return;
-      data.forEach(item => {
-        if (item.key === 'musicbook_url' && item.value) {
-          document.querySelectorAll('a[href*="musicbook"]').forEach(a => a.href = item.value);
-        }
-        if (item.key === 'karma_url' && item.value) {
-          document.querySelectorAll('a[href*="spreadsheets"]').forEach(a => a.href = item.value);
-        }
-      });
-    } catch (err) { console.error(err); }
-  }
-  loadMainSettings();
-</script>
+
+  <!-- Supabase DB 연동 스크립트 (완벽한 ID 매칭 로직) -->
+  <script src="js/supabase-config.js"></script>
+  <script>
+    async function loadMainSettings() {
+      try {
+        const { data } = await supabaseClient.from('settings').select('*');
+        if (!data) return;
+        data.forEach(item => {
+          if (item.key === 'musicbook_url' && item.value) {
+            const el = document.getElementById('navMusicbook');
+            if (el) el.href = item.value;
+          }
+          if (item.key === 'karma_url' && item.value) {
+            const el = document.getElementById('navKarma');
+            if (el) el.href = item.value;
+          }
+        });
+      } catch (err) { console.error('Main Settings Error:', err); }
+    }
+    loadMainSettings();
+  </script>
 </body>
 </html>
