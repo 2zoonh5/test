@@ -60,16 +60,21 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* 💡 다크모드 시 브라우저 기본 날짜/시간 피커 팝업 및 아이콘 하얗게 변경 */
+    /* 💡 다크모드 시 달력 / 시계 아이콘 흰색 강제 변경 (body, html 이중 지정) */
+    body.dark input[type="date"],
+    body.dark input[type="time"],
+    body.dark select,
     html.dark input[type="date"],
     html.dark input[type="time"],
     html.dark select {
       color-scheme: dark !important;
     }
 
+    body.dark input[type="date"]::-webkit-calendar-picker-indicator,
+    body.dark input[type="time"]::-webkit-calendar-picker-indicator,
     html.dark input[type="date"]::-webkit-calendar-picker-indicator,
     html.dark input[type="time"]::-webkit-calendar-picker-indicator {
-      filter: invert(1) brightness(2) !important;
+      filter: invert(1) !important;
       cursor: pointer;
       opacity: 0.9;
     }
