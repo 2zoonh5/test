@@ -111,7 +111,7 @@
       background: rgba(249, 248, 252, 0.4);
     }
 
-    /* 💡 완벽한 수평 맞춤을 위한 날짜 영역 고정 높이 처리 */
+    /* 날짜 숫자의 Y축 수평 위치 완전 고정 */
     .day-num-box {
       padding: 0 8px;
       height: 28px;
@@ -141,11 +141,11 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 깔끔하게 연결되는 일정 바 (여백 & 완벽 수평 보장) ---- */
+    /* ---- 💡 세로선 완전 차단 + 말줄임표(...) 정상화 일정 바 ---- */
     .event-bar-wrapper {
       margin-top: 2px;
       margin-bottom: 4px;
-      height: 25px;
+      height: 26px;
       position: relative;
       width: 100%;
     }
@@ -155,37 +155,39 @@
       font-size: 0.725rem;
       font-weight: 700;
       color: #1E1B2C;
-      display: flex;
-      align-items: center;
+      line-height: 26px; /* Y축 중앙 정렬 */
       padding: 0 8px;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis; /* 💡 말줄임표 ... 완벽 출력 */
       position: absolute;
       top: 0; bottom: 0;
       pointer-events: none;
       box-sizing: border-box;
-      z-index: 10;
+      z-index: 20; /* 선보다 확연히 높은 레이어 */
     }
 
-    /* 💡 세로선을 은폐하면서 끝부분에 두 번째 사진처럼 은은한 여백 부여 */
+    /* 💡 -3px로 확실하게 세로 경계선 위를 덮어 가림 */
     .event-bar.is-single {
       left: 6px; right: 6px;
       border-radius: 6px;
     }
     .event-bar.is-start {
-      left: 6px; right: -1px;
+      left: 6px; 
+      right: -3px; /* 오른쪽 세로선 완전 가림 */
       border-top-left-radius: 6px;
       border-bottom-left-radius: 6px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
     .event-bar.is-middle {
-      left: -1px; right: -1px;
+      left: -3px; 
+      right: -3px; /* 양쪽 세로선 완전 가림 */
       border-radius: 0;
     }
     .event-bar.is-end {
-      left: -1px; right: 6px; /* 💡 오른쪽 안쪽 여백 확보 */
+      left: -3px; /* 왼쪽 세로선 완전 가림 */
+      right: 6px;  /* 오른쪽 안쪽 여백 유지 */
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border-top-right-radius: 6px;
@@ -303,7 +305,7 @@
 
   <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
     
-    <!-- ✦ 세련되게 재디자인된 브랜딩 SECTION TITLE ✦ -->
+    <!-- ✦ SECTION TITLE ✦ -->
     <section class="text-center mb-10">
       <div class="inline-flex flex-col items-center">
         <span class="text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
@@ -499,7 +501,7 @@
           const isToday = (ds === todayStr);
           if (isToday) td.classList.add('today');
 
-          // 정동그라미 오늘 배지 생성
+          // 오늘 날짜 하이라이트 동그라미
           let numDiv = document.createElement('div');
           numDiv.className = 'day-num-box';
           if (isToday) {
@@ -545,7 +547,7 @@
             bar.className = barClass;
             bar.style.backgroundColor = cColor;
             
-            // 💡 시간에 관련된 텍스트 출력 로직 완전히 삭제 -> 순수 제목만 표시
+            // 💡 무조건 전체 일정 시작일에만 순수 제목 한 번 출력
             if (isStart) {
               bar.textContent = ev.title;
             }
