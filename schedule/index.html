@@ -11,7 +11,7 @@
   <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
@@ -48,7 +48,7 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- index.html과 100% 일치하도록 보완된 플로팅 네비게이션 링크 ---- */
+    /* ---- index.html과 100% 일치하는 플로팅 네비게이션 링크 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -173,10 +173,29 @@
       .mobile-only { display: block; }
     }
 
-    /* ---- Modal ---- */
-    .modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(30, 27, 44, 0.2); display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+    /* ---- 가독성을 대폭 끌어올린 Premium Modal ---- */
+    .modal-backdrop { 
+      position: fixed; inset: 0; z-index: 100; 
+      background: rgba(30, 27, 44, 0.35); 
+      display: none; align-items: center; justify-content: center; 
+      backdrop-filter: blur(10px); 
+      padding: 20px;
+    }
     .modal-backdrop.open { display: flex; }
-    .modal-content { background: #ffffff; border-radius: 28px; padding: 32px; max-width: 440px; width: 90%; border: 1px solid rgba(218, 209, 254, 0.5); box-shadow: 0 24px 60px rgba(30, 27, 44, 0.15); }
+    .modal-content { 
+      background: #ffffff; 
+      border-radius: 28px; 
+      padding: 32px; 
+      max-width: 460px; 
+      width: 100%; 
+      border: 1px solid rgba(218, 209, 254, 0.6); 
+      box-shadow: 0 24px 60px rgba(30, 27, 44, 0.18); 
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
     .legend-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
   </style>
 </head>
@@ -210,7 +229,7 @@
         </button>
       </div>
       
-      <!-- Legend (새로운 색상 팔레트로 업데이트) -->
+      <!-- Legend -->
       <div class="flex flex-wrap items-center justify-center gap-6 mb-4 desktop-only">
         <div class="flex items-center gap-2.5"><div class="legend-dot" style="background:#D1C4FF"></div><span class="text-xs font-semibold text-brandSub">방송</span></div>
         <div class="flex items-center gap-2.5"><div class="legend-dot" style="background:#E2E0E8"></div><span class="text-xs font-semibold text-brandSub">휴방</span></div>
@@ -222,7 +241,7 @@
     </section>
 
     <!-- Desktop: Calendar Grid -->
-    <section class="desktop-only mb-12">
+    <section class="desktop-only mb-16">
       <div class="cal-grid mb-3">
         <div class="cal-header">SUN</div><div class="cal-header">MON</div><div class="cal-header">TUE</div><div class="cal-header">WED</div><div class="cal-header">THU</div><div class="cal-header">FRI</div><div class="cal-header">SAT</div>
       </div>
@@ -230,33 +249,57 @@
     </section>
 
     <!-- Mobile: List View -->
-    <section class="mobile-only mb-8">
+    <section class="mobile-only mb-12">
       <div id="listBody"></div>
     </section>
 
-    <!-- Upcoming (desktop only) -->
-    <section class="mt-12 desktop-only">
-      <h3 class="text-lg font-bold text-brandDark mb-6 tracking-tight">이후 예정된 일정</h3>
+    <!-- 고급스럽게 감성 개편된 UPCOMING SCHEDULES 섹션 -->
+    <section class="mt-16 pt-8 border-t border-line/40 desktop-only">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <div class="text-[11px] font-extrabold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
+          <h3 class="text-2xl font-bold text-brandDark tracking-tight">다가오는 대표 일정 💜</h3>
+        </div>
+        <p class="text-xs font-medium text-brandSub">세르와 함께할 예정된 시간들을 확인해보세요</p>
+      </div>
       <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
   </main>
 
-  <!-- Modal -->  
+  <!-- High-Readability Event Modal -->  
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="flex items-start justify-between mb-6">
-        <div class="flex items-center gap-2">
-          <div id="modalColor" class="w-3.5 h-3.5 rounded-full"></div>
-          <span id="modalType" class="text-xs font-bold text-brandSub uppercase tracking-wider font-montserrat"></span>
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-line/40 mb-5">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-themePurple/20" id="modalBadgeBg">
+          <div id="modalColor" class="w-2.5 h-2.5 rounded-full"></div>
+          <span id="modalType" class="text-xs font-bold text-brandDark tracking-wider font-montserrat uppercase"></span>
         </div>
-        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="text-brandSub hover:text-brandDark transition">✕</button>
+        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold">✕</button>
       </div>
-      <h3 id="modalTitle" class="text-xl font-bold text-brandDark mb-3"></h3>
-      <div class="space-y-1 mb-6">
-        <p id="modalDate" class="text-xs font-semibold text-brandSub"></p>
-        <p id="modalTime" class="text-xs font-semibold text-brandSub font-montserrat"></p>
+
+      <!-- Modal Body -->
+      <h3 id="modalTitle" class="text-2xl font-bold text-brandDark leading-snug mb-4"></h3>
+      
+      <!-- Date & Time Box -->
+      <div class="bg-[#F9F8FC] border border-line/50 rounded-2xl p-4 mb-5 space-y-2">
+        <div class="flex items-center gap-2.5 text-xs font-bold text-brandDark">
+          <span class="text-base">📅</span>
+          <span id="modalDate"></span>
+        </div>
+        <div id="modalTimeContainer" class="flex items-center gap-2.5 text-xs font-semibold text-brandSub">
+          <span class="text-base">⏰</span>
+          <span id="modalTime" class="font-montserrat"></span>
+        </div>
       </div>
-      <p id="modalDesc" class="text-sm text-brandSub leading-relaxed bg-[#F9F8FC] p-4 rounded-xl border border-line/30"></p>
+
+      <!-- Description Box -->
+      <div>
+        <div class="text-[11px] font-bold text-brandSub uppercase tracking-wider font-montserrat mb-2">DETAILS</div>
+        <div id="modalDesc" class="text-sm font-medium text-brandDark leading-relaxed bg-white p-4 rounded-2xl border border-line/40 min-h-[90px] whitespace-pre-line"></div>
+      </div>
+
     </div>
   </div>
 
@@ -270,7 +313,6 @@
     let schedules = [];
     const DAYS = ['일','월','화','수','목','금','토'];
     
-    // 💡 개편된 카테고리별 색상값 (TYPE_COLORS)
     const TYPE_COLORS = {
       'broadcast':  '#D1C4FF', // 방송 (파스텔 퍼플)
       'off':        '#E2E0E8', // 휴방 (쿨그레이)
@@ -411,14 +453,31 @@
       }, 100);
     }
 
+    // 💡 지나간 시간(분 단위까지) 정밀 필터링 적용된 UPCOMING 로직
     function renderUpcoming() {
       const list = document.getElementById('upcomingList');
-      const t2 = new Date();
-      const today2 = `${t2.getFullYear()}-${String(t2.getMonth()+1).padStart(2,'0')}-${String(t2.getDate()).padStart(2,'0')}`;
-      const up = schedules.filter(s => s.event_date >= today2).slice(0, 4);
+      const now = new Date();
+
+      // 현재 날짜 및 시간보다 이후인 일정만 정밀하게 필터링
+      const up = schedules.filter(s => {
+        if (!s.event_date) return false;
+        
+        let eventDateTime;
+        if (s.event_time) {
+          eventDateTime = new Date(`${s.event_date}T${s.event_time}`);
+        } else {
+          // 시간이 설정 안 되어 있으면 해당 날짜 23:59:59까지 노출
+          eventDateTime = new Date(`${s.event_date}T23:59:59`);
+        }
+        
+        return eventDateTime >= now;
+      }).slice(0, 4);
       
       if (!up.length) { 
-        list.innerHTML = '<p class="text-sm font-semibold text-brandSub/70">예정되어 있는 일정이 없습니다.</p>'; 
+        list.innerHTML = `
+          <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-line/30">
+            <p class="text-sm font-semibold text-brandSub">예정되어 있는 다가오는 일정이 없습니다. 💜</p>
+          </div>`; 
         return; 
       }
       
@@ -426,34 +485,48 @@
         const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
         const l = TYPE_LABELS[ev.event_type] || ev.event_type;
         const t = ev.event_time ? ev.event_time.slice(0,5) : '';
-        const dd = new Date(ev.event_date+'T00:00:00');
-        const ds = `${dd.getMonth()+1}/${dd.getDate()} (${DAYS[dd.getDay()]})`;
+        const dd = new Date(ev.event_date + 'T00:00:00');
+        const ds = `${dd.getMonth()+1}월 ${dd.getDate()}일 (${DAYS[dd.getDay()]})`;
         
         return `
-          <div class="flex items-center gap-4 p-5 bg-white rounded-2xl border border-line/45 hover:border-themePurple transition cursor-pointer" onclick="showEvent('${ev.id}')">
-            <div class="w-1.5 h-10 rounded-full flex-shrink-0" style="background:${c}"></div>
-            <div class="flex-1 min-w-0">
-              <div class="font-bold text-brandDark text-sm">${ev.title}</div>
-              <div class="text-xs font-semibold text-brandSub mt-1">${ds} ${t ? '· ' + t : ''}</div>
+          <div class="group relative flex items-center justify-between p-5 bg-white rounded-2xl border border-line/40 hover:border-textPurple/50 hover:shadow-lg hover:shadow-themePurple/10 transition-all duration-300 cursor-pointer overflow-hidden" onclick="showEvent('${ev.id}')">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
+            <div class="pl-2 flex-1 min-w-0 pr-3">
+              <div class="font-bold text-brandDark text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
+              <div class="flex items-center gap-2 text-xs font-semibold text-brandSub mt-1.5 font-montserrat">
+                <span>📅 ${ds}</span>
+                ${t ? `<span>· ⏰ ${t}</span>` : ''}
+              </div>
             </div>
-            <span class="text-xs font-bold px-3 py-1.5 rounded-full flex-shrink-0" style="background:${c}25;color:#1E1B2C">${l}</span>
+            <span class="text-xs font-bold px-3 py-1.5 rounded-full shrink-0 font-sans" style="background:${c}30; color:#1E1B2C">${l}</span>
           </div>`;
       }).join('');
     }
 
+    // 💡 가독성을 끌어올린 모달 출력 함수
     function showEvent(id) {
       const ev = schedules.find(s => s.id === id);
       if (!ev) return;
       const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
       const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-      const dd = new Date(ev.event_date+'T00:00:00');
+      const dd = new Date(ev.event_date + 'T00:00:00');
       const ds = `${currentYear}년 ${dd.getMonth()+1}월 ${dd.getDate()}일 (${DAYS[dd.getDay()]})`;
+      
       document.getElementById('modalColor').style.background = c;
+      document.getElementById('modalBadgeBg').style.background = `${c}40`;
       document.getElementById('modalType').textContent = l;
       document.getElementById('modalTitle').textContent = ev.title;
       document.getElementById('modalDate').textContent = ds;
-      document.getElementById('modalTime').textContent = ev.event_time ? ev.event_time.slice(0,5) : '';
-      document.getElementById('modalDesc').textContent = ev.description || '상세 일정 설명이 등록되어 있지 않습니다.';
+      
+      const timeContainer = document.getElementById('modalTimeContainer');
+      if (ev.event_time) {
+        document.getElementById('modalTime').textContent = ev.event_time.slice(0, 5) + ' 시작';
+        timeContainer.style.display = 'flex';
+      } else {
+        timeContainer.style.display = 'none';
+      }
+      
+      document.getElementById('modalDesc').textContent = ev.description || '상세 내용 설명이 등록되어 있지 않습니다.';
       document.getElementById('eventModal').classList.add('open');
     }
 
