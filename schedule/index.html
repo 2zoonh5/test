@@ -35,6 +35,37 @@
   </script>
   
   <style>
+    /* ==========================================
+       SERU CUSTOM CURSOR SETTINGS (SCHEDULE PAGE)
+       ========================================== */
+    html, body {
+      cursor: url('/cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+    }
+
+    /* 일반 클릭 요소 & 달력 날짜 셀 & 이벤트 리스트 아이템 */
+    button, [onclick], .nav-link, td.has-event, .list-event-item, #themeToggle {
+      cursor: url('/cursors/Cursor5_ser_select.cur'), pointer !important;
+    }
+
+    /* 외부 연결 링크 (새 탭) */
+    a[target="_blank"] {
+      cursor: url('/cursors/Cursor15_ser_link.cur'), pointer !important;
+    }
+
+    /* 도움말/범례 영역 */
+    .legend-badge {
+      cursor: url('/cursors/Cursor2_ser_helpsel.cur'), help !important;
+    }
+
+    /* 입력 및 비활성화 */
+    input, textarea {
+      cursor: url('/cursors/Cursor6_ser_text.cur'), text !important;
+    }
+    :disabled, .disabled {
+      cursor: url('/cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+    }
+    /* ========================================== */
+
     :root {
       --bg: #F9F8FC;
       --card-bg: #FFFFFF;
@@ -197,7 +228,6 @@
     .event-bar.is-middle { left: 0; right: 0; }
     .event-bar.is-end { left: 0; right: 4px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
 
-    /* 💡 다크모드 대응 범례 뱃지 고정 스타일 */
     .legend-badge {
       display: inline-flex;
       align-items: center;
@@ -356,7 +386,6 @@
         </button>
       </div>
       
-      <!-- 유형별 범례 뱃지 (선명한 색상 수정 완료) -->
       <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
         <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
