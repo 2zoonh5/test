@@ -34,6 +34,39 @@
   </script>
 
   <style>
+    /* ==========================================
+       SERU CUSTOM CURSOR SETTINGS (ADMIN PANEL)
+       ========================================== */
+    html, body {
+      cursor: url('/cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+    }
+
+    /* 관리자 버튼 및 클릭 요소 */
+    button, [onclick], select, #themeToggle {
+      cursor: url('/cursors/Cursor5_ser_select.cur'), pointer !important;
+    }
+
+    /* 메인 이동 링크 (이동 커서 매핑) */
+    a {
+      cursor: url('/cursors/Cursor15_ser_link.cur'), pointer !important;
+    }
+
+    /* 텍스트 입력창 & 폼 태그 */
+    input[type="text"], input[type="password"], input[type="url"], textarea {
+      cursor: url('/cursors/Cursor6_ser_text.cur'), text !important;
+    }
+
+    /* 날짜/시간 선택 커서 */
+    input[type="date"], input[type="time"] {
+      cursor: url('/cursors/Cursor5_ser_select.cur'), pointer !important;
+    }
+
+    /* 삭제 및 비활성화 버튼 */
+    :disabled, .disabled {
+      cursor: url('/cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+    }
+    /* ========================================== */
+
     :root {
       --bg: #F9F8FC;
       --card-bg: #FFFFFF;
@@ -60,7 +93,6 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* 💡 다크모드 전용: 달력/시계 아이콘 및 브라우저 팝업 피커 완벽 흰색 반전 */
     .dark input[type="date"],
     .dark input[type="time"],
     .dark select {
@@ -237,7 +269,6 @@
     const toggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
-    /* 💡 핵심: html과 body 둘 다 dark 클래스를 확실하게 부여 */
     function applyTheme(isDark) {
       if (isDark) {
         document.documentElement.classList.add('dark');
