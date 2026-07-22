@@ -48,7 +48,7 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- index.html과 100% 일치하는 플로팅 네비게이션 링크 ---- */
+    /* ---- 플로팅 네비게이션 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -67,18 +67,20 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 일정이 하나로 길게 이어지는 통합형 달력 컨테이너 ---- */
+    /* ---- 프리미엄 통합형 달력 카드 ---- */
     .calendar-card {
       background: #ffffff;
       border: 1px solid rgba(218, 209, 254, 0.5);
       border-radius: 28px;
       padding: 28px;
       box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
+      transition: all 0.3s ease;
     }
 
     .cal-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       table-layout: fixed;
     }
 
@@ -90,19 +92,32 @@
       padding-bottom: 16px;
       font-family: 'Montserrat', sans-serif;
     }
-    .cal-table th:first-child { color: #D4727A; } /* 일요일 */
-    .cal-table th:last-child { color: #7BA0D4; }  /* 토요일 */
+    .cal-table th:first-child { color: #D4727A; }
+    .cal-table th:last-child { color: #7BA0D4; }
 
     .cal-table td {
-      border: 1px solid rgba(218, 209, 254, 0.35);
+      border-top: 1px solid rgba(218, 209, 254, 0.35);
+      border-left: 1px solid rgba(218, 209, 254, 0.35);
       vertical-align: top;
       height: 110px;
       padding: 6px 0;
-      transition: background 0.2s;
+      position: relative;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
     }
+    .cal-table tr td:last-child {
+      border-right: 1px solid rgba(218, 209, 254, 0.35);
+    }
+    .cal-table tr:last-child td {
+      border-bottom: 1px solid rgba(218, 209, 254, 0.35);
+    }
+
+    /* 달력 셀 Hover 인터랙션 */
+    .cal-table td:not(.empty-cell):hover {
+      background: rgba(249, 248, 252, 0.8);
+    }
+
     .cal-table td.empty-cell {
-      background: rgba(249, 248, 252, 0.5);
-      border-color: rgba(218, 209, 254, 0.2);
+      background: rgba(249, 248, 252, 0.4);
     }
 
     .day-num-box {
@@ -121,10 +136,12 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 끊김없이 이어지는 일정 바(Bar) 스타일 ---- */
+    /* ---- 사이선 없이 완전하게 연결되는 일정 바(Bar) ---- */
     .event-bar-wrapper {
       margin-bottom: 4px;
-      height: 24px;
+      height: 25px;
+      position: relative;
+      z-index: 5;
     }
     .event-bar {
       height: 100%;
@@ -133,19 +150,44 @@
       color: #1E1B2C;
       display: flex;
       align-items: center;
-      padding: 0 8px;
+      padding: 0 10px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: opacity 0.2s;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: absolute;
+      top: 0; bottom: 0;
+      z-index: 10;
     }
-    .event-bar:hover { opacity: 0.85; }
 
-    /* 시작/중간/끝 모서리 제어 */
-    .event-bar.is-start { border-top-left-radius: 8px; border-bottom-left-radius: 8px; margin-left: 4px; }
-    .event-bar.is-end { border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-right: 4px; }
-    .event-bar.is-single { border-radius: 8px; margin: 0 4px; }
+    /* 연결을 위한 확장 위치 제어 (세로 구 구분선 완벽 커버) */
+    .event-bar.is-single {
+      left: 4px; right: 4px;
+      border-radius: 8px;
+    }
+    .event-bar.is-start {
+      left: 4px; right: -1px;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+    .event-bar.is-middle {
+      left: -1px; right: -1px;
+      border-radius: 0;
+    }
+    .event-bar.is-end {
+      left: -1px; right: 4px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    /* 일정 바 Hover 시 시그니처 퍼플 포인트 효과 */
+    .event-bar:hover {
+      z-index: 20;
+      transform: scaleY(1.08);
+      box-shadow: 0 4px 12px rgba(140, 122, 230, 0.25);
+      outline: 1.5px solid #8C7AE6;
+    }
 
     /* ---- Mobile List View ---- */
     .list-date-group { margin-bottom: 20px; }
@@ -176,8 +218,8 @@
       cursor: pointer;
     }
     .list-event-item:hover { 
-      border-color: #DAD1FE; 
-      box-shadow: 0 8px 20px rgba(218, 209, 254, 0.1); 
+      border-color: #8C7AE6; 
+      box-shadow: 0 8px 20px rgba(218, 209, 254, 0.15); 
     }
     .list-event-bar { width: 4px; height: 36px; border-radius: 99px; flex-shrink: 0; }
     .list-event-info { flex: 1; min-width: 0; }
@@ -256,26 +298,22 @@
     </header>
   </div>
 
-  <main class="max-w-4xl mx-auto px-6 mt-10 pb-24">
+  <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
     
-    <!-- ✦ PAGE TITLE SECTION (사진 속 타이틀 컨셉 반영) ✦ -->
-    <section class="text-center mb-10">
-      <div class="flex items-center justify-center gap-3 text-textPurple/60 text-xs font-montserrat tracking-[0.3em] uppercase mb-2">
-        <span>✦</span>
-        <span>S C H E D U L E</span>
-        <span>✦</span>
-      </div>
-      <h1 class="text-xs font-bold text-brandSub tracking-widest uppercase">방송 및 주요 일정 안내</h1>
+    <!-- 세련되고 고급스러운 SECTION TITLE -->
+    <section class="text-center mb-8">
+      <h1 class="text-2xl font-extrabold text-brandDark font-montserrat tracking-[0.25em] uppercase">SCHEDULE</h1>
+      <div class="w-8 h-0.5 bg-textPurple mx-auto mt-2 rounded-full opacity-60"></div>
     </section>
 
     <!-- Month Navigation -->
     <section class="pb-6">
-      <div class="flex items-center justify-between mb-8 max-w-sm mx-auto">
-        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
+      <div class="flex items-center justify-between mb-8 max-w-xs mx-auto">
+        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-themePurple/20 hover:border-themePurple transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <h2 id="calMonth" class="text-2xl font-extrabold text-brandDark font-montserrat tracking-tight"></h2>
-        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
+        <h2 id="calMonth" class="text-xl font-bold text-brandDark font-montserrat tracking-tight"></h2>
+        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-themePurple/20 hover:border-themePurple transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
@@ -303,7 +341,7 @@
       </div>
     </section>
 
-    <!-- Desktop: Integrated Continuous Calendar Grid -->
+    <!-- Desktop: Continuous Seamless Calendar -->
     <section class="desktop-only mb-16">
       <div class="calendar-card">
         <table class="cal-table">
@@ -322,14 +360,14 @@
       <div id="listBody"></div>
     </section>
 
-    <!-- UPCOMING SCHEDULES 섹션 (예정된 일정) -->
+    <!-- UPCOMING SCHEDULES (예정된 일정) -->
     <section class="mt-16 pt-10 border-t border-line/40 desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
-          <div class="text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1.5">UPCOMING SCHEDULES</div>
+          <div class="text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
           <h3 class="text-2xl font-bold text-brandDark tracking-tight">예정된 일정</h3>
         </div>
-        <p class="text-xs font-medium text-brandSub">방송 및 예정된 활동 일정입니다</p>
+        <p class="text-xs font-medium text-brandSub">방송 및 예정된 주요 활동 일정입니다</p>
       </div>
       <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
@@ -410,7 +448,6 @@
     async function loadMonth() {
       document.getElementById('calMonth').textContent = `${currentYear}년 ${currentMonth + 1}월`;
       
-      // 해당 월 포함 날짜 범위
       const s = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-01`;
       const e = new Date(currentYear, currentMonth+1, 0);
       const eStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(e.getDate()).padStart(2,'0')}`;
@@ -433,7 +470,7 @@
       return ds >= startDate && ds <= targetEnd;
     }
 
-    // 💡 날짜별이 아닌 주차(Week) 단위로 일정이 하나로 길게 이어지는 렌더링 로직
+    // 💡 사이선 없이 하나로 이어지는 완벽한 렌더링 로직
     function renderCalendar() {
       const body = document.getElementById('calBody');
       body.innerHTML = '';
@@ -463,21 +500,21 @@
           const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
           if (ds === todayStr) td.classList.add('today');
 
-          // 날짜 표시
+          // 날짜 숫자 표시
           let numDiv = document.createElement('div');
           numDiv.className = 'day-num-box';
           numDiv.innerHTML = `<span>${currentDay}</span>`;
           td.appendChild(numDiv);
 
-          // 해당 날짜에 들어갈 이벤트 추출 및 연속 바(Bar) 생성
+          // 날짜별 이벤트 추출
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
           dayEvList.forEach(ev => {
             const startStr = ev.event_date;
             const endStr = ev.end_date || ev.event_date;
 
-            const isStart = (ds === startStr) || (c === 0); // 시작일이거나 주 시작(일요일)
-            const isEnd = (ds === endStr) || (c === 6);    // 종료일이거나 주 끝(토요일)
+            const isStart = (ds === startStr) || (c === 0);
+            const isEnd = (ds === endStr) || (c === 6);
             const isSingle = (startStr === endStr);
 
             const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
@@ -491,15 +528,18 @@
 
             if (isSingle) {
               barClass += ' is-single';
+            } else if (isStart) {
+              barClass += ' is-start';
+            } else if (isEnd) {
+              barClass += ' is-end';
             } else {
-              if (isStart) barClass += ' is-start';
-              if (isEnd) barClass += ' is-end';
+              barClass += ' is-middle';
             }
 
             bar.className = barClass;
             bar.style.backgroundColor = cColor;
             
-            // 연결된 일정 중 시작하는 날 또는 주 첫째날에만 글자 표시
+            // 시작점이나 주 첫째 날일 때만 타이틀 텍스트 출력
             if (isStart || ds === startStr) {
               bar.textContent = `${t}${ev.title}`;
             }
