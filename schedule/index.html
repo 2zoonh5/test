@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SERU SCHEDULE</title>
   
-  <!-- 투명한 보라색 하트 파비콘 -->
+  <!-- 투명한 보라색 하트 이모지 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
   <!-- Tailwind CSS & Premium Fonts -->
@@ -48,7 +48,7 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
-    /* ---- 플로팅 네비 ---- */
+    /* ---- 플로팅 네비게이션 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -99,15 +99,18 @@
       height: 110px;
       padding: 6px 0;
       position: relative;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, outline 0.2s ease;
     }
 
-    /* 날짜 칸 전체에 호버 효과 및 클릭 커서 적용 */
+    /* 💡 훨씬 선명하고 또렷하게 수정된 호버(Hover) 효과 */
     .cal-table td.has-event {
       cursor: pointer;
     }
     .cal-table td.has-event:hover {
-      background: rgba(218, 209, 254, 0.15);
+      background: rgba(218, 209, 254, 0.38);
+      outline: 2px solid rgba(140, 122, 230, 0.4);
+      outline-offset: -2px;
+      z-index: 1;
     }
 
     .cal-table td.empty-cell {
@@ -122,6 +125,7 @@
       font-family: 'Montserrat', sans-serif;
       pointer-events: none;
     }
+    /* 오늘 날짜 하이라이트 배지 */
     .today .day-num-box span {
       background: #DAD1FE;
       color: #1E1B2C;
@@ -131,7 +135,7 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 사이선 완전히 덮는 이어지는 일정 바 ---- */
+    /* ---- 사이선 없는 이어지는 일정 바 ---- */
     .event-bar-wrapper {
       margin-bottom: 4px;
       height: 25px;
@@ -149,13 +153,13 @@
       padding: 0 10px;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis; /* 💡 짤림 시 ... 표시 */
       position: absolute;
       top: 0; bottom: 0;
-      pointer-events: none; /* 자체 호버/클릭 반응 제거 */
+      pointer-events: none;
     }
 
-    /* 경계선(테두리선)을 완전히 가리기 위해 오버랩 좌표 계산 */
+    /* 이어지는 상태에 따른 둥근 모서리 및 직사각형 연결 처리 */
     .event-bar.is-single {
       left: 4px; right: 4px;
       border-radius: 8px;
@@ -164,6 +168,8 @@
       left: 4px; right: -2px;
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
     .event-bar.is-middle {
       left: -2px; right: -2px;
@@ -171,6 +177,8 @@
     }
     .event-bar.is-end {
       left: -2px; right: 4px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
     }
@@ -494,7 +502,6 @@
           // 날짜별 이벤트 추출
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
-          // 일정이 있는 날짜는 셀 전체를 클릭 가능하게 만들고 이벤트 할당
           if (dayEvList.length > 0) {
             td.classList.add('has-event');
             td.onclick = () => showEvent(dayEvList[0].id);
@@ -504,8 +511,8 @@
             const startStr = ev.event_date;
             const endStr = ev.end_date || ev.event_date;
 
-            const isStart = (ds === startStr) || (c === 0);
-            const isEnd = (ds === endStr) || (c === 6);
+            const isStart = (ds === startStr);
+            const isEnd = (ds === endStr);
             const isSingle = (startStr === endStr);
 
             const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
@@ -530,8 +537,8 @@
             bar.className = barClass;
             bar.style.backgroundColor = cColor;
             
-            // 시작점이나 주 첫째 날일 때만 타이틀 텍스트 출력
-            if (isStart || ds === startStr) {
+            // 💡 무조건 전체 일정의 진짜 첫날(isStart)에만 타이틀 텍스트 한 번 표시
+            if (isStart) {
               bar.textContent = `${t}${ev.title}`;
             }
 
