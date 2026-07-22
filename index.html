@@ -296,10 +296,13 @@
 
   </main>
 
-  <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40">
-    <a href="./admin/" class="font-montserrat tracking-wider hover:opacity-80 transition-opacity cursor-default select-none">
-      © 2026 SERU. ALL RIGHTS RESERVED.
-    </a>
+  <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40 select-none">
+    <p class="font-montserrat tracking-wider">
+      © 2026 
+      <!-- 💡 URL 미리보기와 색상 변화 없이 클릭 시 바로 이동하는 완전 은폐 스크립트 -->
+      <span onclick="location.href='./admin/'" class="cursor-default">SERU.</span> 
+      ALL RIGHTS RESERVED.
+    </p>
   </footer>
 
   <script>
