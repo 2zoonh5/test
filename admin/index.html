@@ -60,21 +60,24 @@
 </head>
 <body class="bg-bg min-h-screen font-sans text-brandDark pb-20">
 
-  <!-- 로그인 인증 섹션 -->
-  <div id="loginView" class="min-h-screen flex items-center justify-center px-4">
-    <div class="bg-white border border-line/60 rounded-3xl p-8 max-w-sm w-full shadow-xl text-center">
-      <div class="w-12 h-12 bg-themePurple/30 text-textPurple rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 font-bold">🔒</div>
-      <h2 class="text-xl font-bold font-montserrat tracking-wider mb-1">SERU ADMIN</h2>
-      <p class="text-xs text-brandSub mb-6">스트리머 관리자 인증이 필요합니다</p>
-      
-      <form onsubmit="handleLogin(event)" class="space-y-4">
-        <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력" class="w-full h-12 px-4 rounded-xl border border-line focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
-        <button type="submit" class="w-full h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-sm rounded-xl transition shadow-md shadow-textPurple/20">로그인</button>
-      </form>
-    </div>
-  </div>
+<div id="loginView" class="min-h-screen flex flex-col items-center justify-center px-4 relative">
+  <a href="../" class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white border border-line/60 text-xs font-bold text-brandSub hover:text-brandDark hover:border-themePurple transition shadow-sm">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    메인으로 돌아가기
+  </a>
 
-  <!-- 관리자 메인 대시보드 -->
+  <div class="bg-white border border-line/60 rounded-3xl p-8 max-w-sm w-full shadow-xl text-center">
+    <div class="w-12 h-12 bg-themePurple/30 text-textPurple rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 font-bold">🔒</div>
+    <h2 class="text-xl font-bold font-montserrat tracking-wider mb-1">SERU ADMIN</h2>
+    <p class="text-xs text-brandSub mb-6">관리자 인증이 필요합니다</p>
+    
+    <form onsubmit="handleLogin(event)" class="space-y-4">
+      <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력" class="w-full h-12 px-4 rounded-xl border border-line focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
+      <button type="submit" class="w-full h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-sm rounded-xl transition shadow-md shadow-textPurple/20">로그인</button>
+    </form>
+  </div>
+</div>
+
   <div id="adminView" class="hidden max-w-3xl mx-auto px-6 pt-10">
     <div class="flex items-center justify-between pb-6 mb-8 border-b border-line/50">
       <div>
@@ -112,7 +115,7 @@
       <form onsubmit="saveSchedule(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-brandSub mb-1">일정 제목 *</label>
-          <input type="text" id="title" required placeholder="예: 배그 벽킬내기 합방" class="w-full h-11 px-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
+          <input type="text" id="title" required placeholder="예: 롤토체스 챌린저 켠왕" class="w-full h-11 px-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -121,7 +124,7 @@
             <input type="date" id="event_date" required class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
           </div>
           <div>
-            <label class="block text-xs font-bold text-brandSub mb-1">종료일 (선택, 기간일정)</label>
+            <label class="block text-xs font-bold text-brandSub mb-1">종료일 (선택)</label>
             <input type="date" id="end_date" class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
           </div>
           <div>
@@ -134,19 +137,19 @@
           <div>
             <label class="block text-xs font-bold text-brandSub mb-1">일정 유형 *</label>
             <select id="event_type" class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
-              <option value="broadcast">방송 (파스텔 퍼플)</option>
-              <option value="off">휴방 (쿨그레이)</option>
-              <option value="event">이벤트 (피치 핑크)</option>
-              <option value="collab">합방 (소프트 민트)</option>
-              <option value="tournament">대회 (파스텔 블루)</option>
-              <option value="other">기타 (살구 크림)</option>
+              <option value="broadcast">방송</option>
+              <option value="off">휴방</option>
+              <option value="event">이벤트</option>
+              <option value="collab">합방</option>
+              <option value="tournament">대회</option>
+              <option value="other">기타</option>
             </select>
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-brandSub mb-1">상세 내용 (선택)</label>
-          <textarea id="description" rows="3" placeholder="팝업 모달에 노출될 상세 설명 문구를 적어주세요." class="w-full p-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]"></textarea>
+          <textarea id="description" rows="3" placeholder="팝업창에 노출될 상세 설명 문구를 적어주세요." class="w-full p-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]"></textarea>
         </div>
 
         <button type="submit" class="w-full h-12 bg-brandDark hover:bg-black text-white font-bold text-sm rounded-xl transition shadow-lg">일정 등록하기</button>
@@ -175,9 +178,8 @@
 
   <script src="../js/supabase-config.js"></script>
   <script>
-    const ADMIN_PW = "seru1234"; // 관리자 비밀번호
+    const ADMIN_PW = "tpfmvmfhvlf"; // 관리자 비밀번호
 
-    /* ---- 커스텀 디자인 알림창 UI 엔진 ---- */
     function showAlert(title, msg, icon = "✨") {
       document.getElementById('modalIcon').textContent = icon;
       document.getElementById('modalTitleText').textContent = title;
@@ -211,7 +213,6 @@
       document.getElementById('customModal').classList.remove('open');
     }
 
-    /* ---- 로그인 및 초기 데이터 로드 ---- */
     function handleLogin(e) {
       e.preventDefault();
       const pw = document.getElementById('adminPassword').value;
@@ -225,7 +226,6 @@
       }
     }
 
-    /* ---- 노래책 & 업보 링크 로드 및 저장 ---- */
     async function loadLinks() {
       try {
         const { data, error } = await supabaseClient.from('settings').select('*');
@@ -248,13 +248,12 @@
           { key: 'musicbook_url', value: musicbook },
           { key: 'karma_url', value: karma }
         ]);
-        showAlert("저장 완료", "노래책 및 업보 링크가 성공적으로 수정되었습니다!", "🔗");
+        showAlert("저장 완료", "링크가 성공적으로 수정되었습니다.", "🔗");
       } catch (err) {
         showAlert("저장 실패", err.message, "⚠️");
       }
     }
 
-    /* ---- 일정 목록 조회 및 추가/삭제 ---- */
     async function loadAdminSchedules() {
       const list = document.getElementById('scheduleList');
       try {
@@ -296,7 +295,7 @@
         ]);
 
         if (error) throw error;
-        showAlert("등록 완료", "새로운 방송 일정이 등록되었습니다!", "📅");
+        showAlert("등록 완료", "새로운 방송 일정이 등록되었습니다.", "📅");
         e.target.reset();
         loadAdminSchedules();
       } catch (err) {
