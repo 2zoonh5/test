@@ -16,15 +16,16 @@
   
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            bg: '#F9F8FC',          
-            themePurple: '#DAD1FE', 
-            textPurple: '#8C7AE6',   /* 선명하고 고급스러운 딥 라벤더 퍼플 */
-            brandDark: '#1E1B2C',    
-            brandSub: '#6E6B7B',     
-            line: 'rgba(218, 209, 254, 0.4)', 
+            bg: 'var(--bg)',          
+            themePurple: 'var(--theme-purple)', 
+            textPurple: '#8C7AE6',   
+            brandDark: 'var(--brand-dark)',    
+            brandSub: 'var(--brand-sub)',     
+            line: 'var(--line)', 
             naverGreen: '#1E4620', 
             naverGreenHover: '#153317',
           },
@@ -38,22 +39,43 @@
   </script>
 
   <style>
+    /* 💡 테마 변수 체계화 (라이트 / 다크모드) */
+    :root {
+      --bg: #F9F8FC;
+      --card-bg: #FFFFFF;
+      --theme-purple: #DAD1FE;
+      --brand-dark: #1E1B2C;
+      --brand-sub: #6E6B7B;
+      --line: rgba(218, 209, 254, 0.4);
+      --header-bg: rgba(255, 255, 255, 0.75);
+    }
+
+    body.dark {
+      --bg: #0F0D15;
+      --card-bg: #181524;
+      --theme-purple: #3A3258;
+      --brand-dark: #F1EDF8;
+      --brand-sub: #A39EB2;
+      --line: rgba(140, 122, 230, 0.25);
+      --header-bg: rgba(24, 21, 36, 0.75);
+    }
+
     body {
-      background-color: #F9F8FC;
-      color: #1E1B2C;
+      background-color: var(--bg);
+      color: var(--brand-dark);
       letter-spacing: -0.02em;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     html { scroll-behavior: smooth; }
     
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #F9F8FC; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #C0B5FC; }
 
     /* ---- 깔끔하고 정갈한 카드 스타일 ---- */
     .premium-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(218, 209, 254, 0.4);
+      background: var(--card-bg);
+      border: 1px solid var(--line);
       border-radius: 24px;
       box-shadow: 0 4px 24px rgba(30, 27, 44, 0.02);
       transition: all 0.3s ease;
@@ -61,30 +83,30 @@
     .premium-card:hover {
       transform: translateY(-4px);
       border-color: #DAD1FE;
-      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.1);
+      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.12);
     }
 
     /* ---- 상단 내비게이션 플로팅 바 ---- */
     .nav-link {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #6E6B7B;
-        padding: 8px 24px;
-        border-radius: 99px;
-        transition: all 0.3s ease;
-        white-space: nowrap; /* 글자가 절대 밑으로 줄바꿈되지 않도록 방지 */
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--brand-sub);
+      padding: 8px 20px;
+      border-radius: 99px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
     }
 
-    /* 📱 화면 폭이 640px 이하인 모바일 기기 반응형 설정 */
     @media (max-width: 640px) {
       .nav-link {
-         font-size: 0.775rem; /* 글자 크기 살짝 축소 */
-         padding: 6px 10px;   /* 좌우 여백을 10px로 축소 */
+        font-size: 0.775rem;
+        padding: 6px 10px;
       }
     }
+
     .nav-link:hover {
-      color: #1E1B2C;
-      background: rgba(218, 209, 254, 0.4);
+      color: var(--brand-dark);
+      background: rgba(218, 209, 254, 0.3);
     }
     .nav-link.active {
       color: #1E1B2C;
@@ -92,10 +114,8 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 3D 패럴랙스 틸트 효과용 컨테이너 서식 ---- */
-    .tilt-container {
-      perspective: 1000px;
-    }
+    /* ---- 3D 패럴랙스 틸트 효과 ---- */
+    .tilt-container { perspective: 1000px; }
     .tilt-element {
       transform-style: preserve-3d;
       transition: transform 0.15s ease-out;
@@ -106,11 +126,27 @@
       position: absolute;
       width: 700px; height: 700px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(218,209,254,0.3) 0%, rgba(249,248,252,0) 70%);
+      background: radial-gradient(circle, rgba(218,209,254,0.25) 0%, rgba(249,248,252,0) 70%);
       top: -15%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: -1;
+    }
+
+    /* 💡 클릭 별빛 이펙트 스타일 */
+    .fxpop {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 16px;
+      user-select: none;
+      animation: fxpop 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+    @keyframes fxpop {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(1.4) rotate(45deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -119,18 +155,25 @@
   <div class="bg-glow-radial"></div>
 
   <!-- FLOATING HEADER & NAVIGATION -->
-  <div class="sticky top-4 z-50 px-6 max-w-4xl mx-auto">
-    <header class="bg-white/70 backdrop-blur-lg border border-line/50 h-20 rounded-full px-8 flex items-center justify-between shadow-lg shadow-brandDark/5">
-      <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
+  <div class="sticky top-4 z-50 px-4 md:px-6 max-w-4xl mx-auto">
+    <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-20 rounded-full px-4 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
+      <div class="font-montserrat text-xl font-bold tracking-wider text-[var(--brand-dark)]">
         SERU<span class="text-textPurple">.</span>
       </div>
-      <!-- 💡 고유 ID 부여로 링크 교체 안정성 보장 -->
-      <nav class="flex gap-1">
-        <a href="./" class="nav-link active">프로필</a>
-        <a href="./schedule" class="nav-link">일정</a>
-        <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
-      </nav>
+      
+      <div class="flex items-center gap-1 md:gap-2">
+        <nav class="flex gap-0.5 md:gap-1">
+          <a href="./" class="nav-link active">프로필</a>
+          <a href="./schedule" class="nav-link">일정</a>
+          <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+          <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
+        </nav>
+
+        <!-- 💡 다크모드 토글 스위치 -->
+        <button id="themeToggle" class="w-9 h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-sm ml-1 hover:border-textPurple transition shadow-sm" aria-label="다크모드 토글">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
     </header>
   </div>
 
@@ -138,7 +181,6 @@
 
     <!-- HERO SECTION -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center mb-28">
-      <!-- 왼쪽: 프로필 원형 아바타 (3D 틸트 효과 탑재) -->
       <div class="md:col-span-5 flex justify-center tilt-container">
         <div class="relative group tilt-element" id="avatarTilt">
           <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
@@ -149,18 +191,18 @@
       </div>
 
       <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
-        <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-brandSub uppercase mb-4 justify-center md:justify-start font-montserrat">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-[var(--brand-sub)] uppercase mb-4 justify-center md:justify-start font-montserrat">
           <span>SINCE 2025. 11. 22</span>
           <span class="w-1.5 h-1.5 rounded-full bg-textPurple"></span>
           <span>SOOP STREAMER</span>
         </div>
         
         <h1 class="flex items-baseline justify-center md:justify-start gap-3 mb-6">
-          <span class="font-sans font-extrabold text-[2.5rem] md:text-[3rem] text-brandDark leading-none">세르</span> 
+          <span class="font-sans font-extrabold text-[2.5rem] md:text-[3rem] text-[var(--brand-dark)] leading-none">세르</span> 
           <span class="font-medium text-textPurple text-xl md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
         </h1>
         
-        <p class="text-brandSub text-sm md:text-base leading-relaxed mb-8 max-w-md">
+        <p class="text-[var(--brand-sub)] text-sm md:text-base leading-relaxed mb-8 max-w-md">
           연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
           <br />
           숲 라이브 스트리머 세르입니다.
@@ -190,24 +232,30 @@
       </div>
     </section>
 
-    <!-- INFO CARDS -->
+    <!-- 💡 INFO CARDS (실시간 D-Day & D+ 계산 기능 반영) -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-      <div class="premium-card py-7 px-6 text-center">
-        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Birthday</div>
-        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat">06 . 08</div>
+      <div class="premium-card py-6 px-4 text-center relative overflow-hidden">
+        <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1.5 font-montserrat">Birthday</div>
+        <div class="text-[1.125rem] font-bold text-[var(--brand-dark)] font-montserrat">06 . 08</div>
+        <div class="mt-1.5"><span id="bdayBadge" class="text-[10px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
       </div>
-      <div class="premium-card py-7 px-6 text-center">
-        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">MBTI</div>
-        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat tracking-wider">I 🤍 FP</div>
+
+      <div class="premium-card py-6 px-4 text-center relative overflow-hidden">
+        <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1.5 font-montserrat">Debut</div>
+        <div class="text-[1.125rem] font-bold text-[var(--brand-dark)] font-montserrat">11 . 22</div>
+        <div class="mt-1.5"><span id="debutBadge" class="text-[10px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
       </div>
-      <div class="premium-card py-7 px-6 text-center">
-        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Live Time</div>
-        <div class="text-[1.125rem] font-bold text-brandDark font-montserrat">19 : 00</div>
-        <p class="text-[10px] text-brandSub font-semibold mt-1">오전 게릴라 방송 포함</p>
+
+      <div class="premium-card py-6 px-4 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1.5 font-montserrat">Live Time</div>
+        <div class="text-[1.125rem] font-bold text-[var(--brand-dark)] font-montserrat">19 : 00</div>
+        <p class="text-[10px] text-[var(--brand-sub)] font-semibold mt-1">오전 게릴라 방송 포함</p>
       </div>
-      <div class="premium-card py-7 px-6 text-center">
-        <div class="text-[11px] font-bold tracking-widest text-textPurple uppercase mb-2 font-montserrat">Off-Day</div>
-        <div class="text-[1.125rem] font-semibold text-brandDark">매주 일요일</div>
+
+      <div class="premium-card py-6 px-4 text-center">
+        <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1.5 font-montserrat">Off-Day</div>
+        <div class="text-[1.125rem] font-semibold text-[var(--brand-dark)]">매주 일요일</div>
+        <p class="text-[10px] text-[var(--brand-sub)] font-semibold mt-1">정기 휴방일</p>
       </div>
     </section>
 
@@ -219,17 +267,17 @@
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
           
-          <div class="flex items-center gap-5 pb-5 border-b border-line/30 mb-5">
+          <div class="flex items-center gap-5 pb-5 border-b border-[var(--line)] mb-5">
             <div class="w-16 h-16 shrink-0 flex items-center justify-center tilt-container select-none">
               <img src="./haetto_pf.png" alt="해또 프로필" id="haettoTilt" class="w-full h-full object-contain tilt-element filter drop-shadow-[0_4px_10px_rgba(140,122,230,0.12)]">
             </div>
             <div>
-              <h3 class="text-2xl font-bold text-brandDark">해또 <span class="font-light text-brandSub text-sm font-montserrat ml-0.5">haetto</span></h3>
-              <p class="text-xs text-brandSub mt-0.5 font-medium">세르의 가장 소중한 수호천사이자 동반자</p>
+              <h3 class="text-2xl font-bold text-[var(--brand-dark)]">해또 <span class="font-light text-[var(--brand-sub)] text-sm font-montserrat ml-0.5">haetto</span></h3>
+              <p class="text-xs text-[var(--brand-sub)] mt-0.5 font-medium">세르의 가장 소중한 수호천사이자 동반자</p>
             </div>
           </div>
           
-          <div class="text-[13px] text-brandSub font-medium tracking-tight px-1 py-1">
+          <div class="text-[13px] text-[var(--brand-sub)] font-medium tracking-tight px-1 py-1">
             <p class="leading-relaxed mb-4">
               항상 반짝이는 하얀 조개를 손에 소중하게 품고 다니며, 예쁜 리본이 달린 보라색 케이프가 가장 잘 어울리는 귀여운 연보라색 해달 요정입니다.
             </p>
@@ -239,10 +287,10 @@
           </div>
         </div>
         
-        <div class="border-t border-line/60 mt-6 pt-5">
+        <div class="border-t border-[var(--line)] mt-6 pt-5">
           <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">Fan Nickname</span>
-            <span class="font-bold text-brandDark bg-themePurple/20 px-3 py-1.5 rounded-full">닉네임º˚</span>
+            <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">Fan Nickname</span>
+            <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full">닉네임º˚</span>
           </div>
         </div>
       </div>
@@ -251,39 +299,39 @@
       <div class="premium-card p-8 flex flex-col justify-between group/charm">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
-          <h3 class="text-2xl font-bold text-brandDark mb-6">세르의 매력 프로필</h3>
+          <h3 class="text-2xl font-bold text-[var(--brand-dark)] mb-6">세르의 매력 프로필</h3>
           
           <div class="space-y-4">
             <div class="flex items-center gap-3 group">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🧸</span>
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🧸</span>
               <div>
-                <h4 class="text-sm font-bold text-brandDark">쫌 귀여움</h4>
-                <p class="text-[11px] text-brandSub">지나칠 수 없는 세르 고유의 패시브 특성</p>
+                <h4 class="text-sm font-bold text-[var(--brand-dark)]">쫌 귀여움</h4>
+                <p class="text-[11px] text-[var(--brand-sub)]">지나칠 수 없는 세르 고유의 패시브 특성</p>
               </div>
             </div>
             
             <div class="flex items-center gap-3 group">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">🔋</span>
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🔋</span>
               <div>
-                <h4 class="text-sm font-bold text-brandDark">체력</h4>
-                <p class="text-[11px] text-brandSub">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
+                <h4 class="text-sm font-bold text-[var(--brand-dark)]">체력</h4>
+                <p class="text-[11px] text-[var(--brand-sub)]">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
               </div>
             </div>
 
             <div class="flex items-center gap-3 group">
-              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-themePurple/30 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-themePurple/60">😼</span>
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">😼</span>
               <div>
-                <h4 class="text-sm font-bold text-brandDark">표?독?한?가?</h4>
-                <p class="text-[11px] text-brandSub">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
+                <h4 class="text-sm font-bold text-[var(--brand-dark)]">표?독?한?가?</h4>
+                <p class="text-[11px] text-[var(--brand-sub)]">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="border-t border-line/60 mt-6 pt-5">
+        <div class="border-t border-[var(--line)] mt-6 pt-5">
           <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-brandSub uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
-            <span class="font-bold text-brandDark bg-textPurple/10 px-3 py-1.5 rounded-full transition-all duration-300 group-hover/charm:bg-textPurple/25">귀엽기 ⭐</span>
+            <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
+            <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full transition-all duration-300 group-hover/charm:bg-textPurple/25">귀엽기 ⭐</span>
           </div>
         </div>
       </div>
@@ -292,10 +340,10 @@
     <!-- PLAYLIST VOD -->
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
-      <h3 class="text-3xl font-bold text-brandDark mb-12">노래 커버 및 다시보기</h3>
+      <h3 class="text-3xl font-bold text-[var(--brand-dark)] mb-12">노래 커버 및 다시보기</h3>
       
       <div class="max-w-3xl mx-auto">
-        <div class="p-4 bg-white border border-line rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
+        <div class="p-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
           <div class="aspect-video w-full rounded-[20px] overflow-hidden bg-black shadow-inner">
             <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
           </div>
@@ -305,52 +353,110 @@
 
   </main>
 
-  <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40 select-none">
+  <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold border-t border-[var(--line)] select-none">
     <p class="font-montserrat tracking-wider">
       © 2026 
-      <!-- 💡 URL 미리보기와 색상 변화 없이 클릭 시 바로 이동하는 완전 은폐 스크립트 -->
       <span onclick="location.href='./admin/'" class="cursor-default">SERU.</span> 
       ALL RIGHTS RESERVED.
     </p>
   </footer>
 
   <script>
-    // ---- 세르 프로필 아바타 3D 패럴랙스 틸트 ----
+    /* ---- 1. 다크모드 엔진 ---- */
+    const toggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
+        themeIcon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+      }
+    }
+
+    if (localStorage.getItem('seru_theme') === 'dark') {
+      applyTheme(true);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = !document.body.classList.contains('dark');
+      applyTheme(isDark);
+      localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
+    });
+
+    /* ---- 2. 생일 D-Day & 데뷔일 D+ 자동 계산 엔진 ---- */
+    function calcDday(month, day) {
+      const now = new Date();
+      now.setHours(0,0,0,0);
+      let target = new Date(now.getFullYear(), month - 1, day);
+      if (target < now) target = new Date(now.getFullYear() + 1, month - 1, day);
+      const diff = Math.round((target - now) / (1000 * 60 * 60 * 24));
+      return diff === 0 ? 'D-Day 🎉' : `D-${diff}`;
+    }
+
+    function calcDaysSince(year, month, day) {
+      const now = new Date();
+      now.setHours(0,0,0,0);
+      const start = new Date(year, month - 1, day);
+      start.setHours(0,0,0,0);
+      const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+      return diff >= 0 ? `D+${diff}` : `D-${Math.abs(diff)}`;
+    }
+
+    document.getElementById('bdayBadge').textContent = calcDday(6, 8);
+    document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
+
+    /* ---- 3. 별빛(✨) 클릭 이펙트 엔진 ---- */
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, input, textarea, iframe')) return;
+      
+      const count = 5;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('span');
+        star.className = 'fxpop';
+        star.textContent = '✨';
+        star.style.left = `${e.clientX}px`;
+        star.style.top = `${e.clientY}px`;
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 45;
+        star.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        star.style.setProperty('--dy', `${Math.sin(angle) * dist - 20}px`);
+        
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 700);
+      }
+    });
+
+    /* ---- 4. 3D 패럴랙스 틸트 ---- */
     const card = document.getElementById('avatarTilt');
     card.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
       const x = e.clientX - left - width / 2;
       const y = e.clientY - top - height / 2;
-      
       const rotateX = -(y / (height / 2)) * 15;
       const rotateY = (x / (width / 2)) * 15;
-      
       card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
     });
+    card.addEventListener('mouseleave', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
 
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-
-    // ---- 해또 미니 일러스트 3D 패럴랙스 틸트 ----
     const haettoCard = document.getElementById('haettoTilt');
     haettoCard.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = haettoCard.getBoundingClientRect();
       const x = e.clientX - left - width / 2;
       const y = e.clientY - top - height / 2;
-      
       const rotateX = -(y / (height / 2)) * 15;
       const rotateY = (x / (width / 2)) * 15;
-      
       haettoCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
     });
-
-    haettoCard.addEventListener('mouseleave', () => {
-      haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-    });
+    haettoCard.addEventListener('mouseleave', () => { haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
   </script>
 
-  <!-- Supabase DB 연동 스크립트 (완벽한 ID 매칭 로직) -->
+  <!-- Supabase DB 연동 스크립트 -->
   <script src="js/supabase-config.js"></script>
   <script>
     async function loadMainSettings() {
