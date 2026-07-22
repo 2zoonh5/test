@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU SCHEDULE 💜</title>
+  <title>SERU SCHEDULE</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
@@ -45,7 +45,6 @@
     ::-webkit-scrollbar-track { background: #F9F8FC; }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
 
-    /* ---- 플로팅 네비게이션 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -64,7 +63,6 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 달력 카드 및 셀 스타일 ---- */
     .calendar-card {
       background: #ffffff;
       border: 1px solid rgba(218, 209, 254, 0.5);
@@ -104,7 +102,7 @@
       cursor: pointer;
     }
     .cal-table td.has-event:hover {
-      background: rgba(218, 209, 254, 0.35);
+      background: rgba(218, 209, 254, 0.25);
     }
 
     .cal-table td.empty-cell {
@@ -139,7 +137,6 @@
     td:first-child .day-num-box { color: #D4727A; }
     td:last-child .day-num-box { color: #7BA0D4; }
 
-    /* ---- 일정 바 ---- */
     .event-bar-wrapper {
       margin-top: 2px;
       margin-bottom: 4px;
@@ -201,7 +198,6 @@
       background-color: currentColor;
     }
 
-    /* ---- Mobile List View ---- */
     .list-date-group { margin-bottom: 20px; }
     .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
     .list-day-num { 
@@ -261,8 +257,10 @@
       background: #ffffff; 
       border-radius: 28px; 
       padding: 32px; 
-      max-width: 460px; 
+      max-width: 500px; 
       width: 100%; 
+      max-height: 85vh;
+      overflow-y: auto;
       border: 1px solid rgba(218, 209, 254, 0.6); 
       box-shadow: 0 24px 60px rgba(30, 27, 44, 0.18); 
       animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -275,24 +273,21 @@
 </head>
 <body class="bg-bg min-h-screen font-sans pb-32">
 
-  <!-- FLOATING HEADER & NAVIGATION -->
   <div class="sticky top-4 z-50 px-6 max-w-4xl mx-auto">
     <header class="bg-white/70 backdrop-blur-lg border border-line/50 h-20 rounded-full px-8 flex items-center justify-between shadow-lg shadow-brandDark/5">
       <div class="font-montserrat text-xl font-bold tracking-wider text-brandDark">
         SERU<span class="text-textPurple">.</span>
       </div>
-      <!-- 💡 DB 링크 동적 연동을 위해 id 지정 -->
       <nav class="flex gap-1">
         <a href="../" class="nav-link">프로필</a>
         <a href="#" class="nav-link active">일정</a>
         <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
-        <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
+        <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
       </nav>
     </header>
   </div>
 
   <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
-    
     <section class="text-center mb-10">
       <div class="inline-flex flex-col items-center">
         <span class="text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
@@ -301,7 +296,6 @@
       </div>
     </section>
 
-    <!-- Month Navigation -->
     <section class="pb-6">
       <div class="flex items-center justify-between mb-8 max-w-xs mx-auto">
         <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-themePurple/20 transition shadow-sm">
@@ -313,7 +307,6 @@
         </button>
       </div>
       
-      <!-- Legend -->
       <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
         <span class="legend-badge" style="background:#D1C4FF33;">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
@@ -336,7 +329,6 @@
       </div>
     </section>
 
-    <!-- Desktop: Calendar Grid -->
     <section class="desktop-only mb-16">
       <div class="calendar-card">
         <table class="cal-table">
@@ -350,12 +342,10 @@
       </div>
     </section>
 
-    <!-- Mobile: List View -->
     <section class="mobile-only mb-12">
       <div id="listBody"></div>
     </section>
 
-    <!-- UPCOMING SCHEDULES -->
     <section class="mt-16 pt-10 border-t border-line/40 desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
@@ -367,40 +357,25 @@
     </section>
   </main>
 
+  <!-- 💡 해당 날짜의 모든 일정을 출력하는 모달 팝업 -->
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between pb-4 border-b border-line/40 mb-6">
-        <span class="legend-badge" id="modalBadge">
-          <span class="legend-badge-dot" id="modalBadgeDot"></span>
-          <span id="modalType"></span>
-        </span>
+        <div>
+          <div class="text-[10px] font-bold text-textPurple tracking-widest font-montserrat uppercase mb-0.5">SCHEDULE DETAILS</div>
+          <h3 id="modalHeaderDate" class="text-xl font-bold text-brandDark tracking-tight"></h3>
+        </div>
         <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold text-sm">✕</button>
       </div>
 
-      <h3 id="modalTitle" class="text-2xl font-bold text-brandDark leading-snug mb-5 tracking-tight"></h3>
-      
-      <div class="bg-[#F9F8FC] border border-line/50 rounded-2xl p-4 mb-6 space-y-2">
-        <div class="flex items-center gap-3">
-          <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">DATE</span>
-          <span id="modalDate" class="text-xs font-bold text-brandDark"></span>
-        </div>
-        <div id="modalTimeContainer" class="flex items-center gap-3 border-t border-line/30 pt-2">
-          <span class="text-[10px] font-bold tracking-widest text-brandSub font-montserrat uppercase w-10 shrink-0">TIME</span>
-          <span id="modalTime" class="text-xs font-semibold text-brandDark font-montserrat"></span>
-        </div>
-      </div>
-
-      <div>
-        <div class="text-[10px] font-bold text-brandSub uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
-        <div id="modalDesc" class="text-sm font-medium text-brandDark leading-relaxed bg-white p-4 rounded-2xl border border-line/40 min-h-[90px] whitespace-pre-line"></div>
-      </div>
+      <!-- 일정 카드 리스트가 삽입될 컨테이너 -->
+      <div id="modalEventList" class="space-y-4"></div>
     </div>
   </div>
 
   <footer class="text-center py-16 text-brandSub/60 text-xs font-semibold border-t border-line/40 select-none">
     <p class="font-montserrat tracking-wider">
       © 2026 
-      <!-- 💡 URL 미리보기와 색상 변화 없이 클릭 시 바로 이동하는 완전 은폐 스크립트 -->
       <span onclick="location.href='../admin/'" class="cursor-default">SERU.</span> 
       ALL RIGHTS RESERVED.
     </p>
@@ -443,11 +418,10 @@
       const n = new Date();
       currentYear = n.getFullYear();
       currentMonth = n.getMonth();
-      loadSettings(); // 💡 최신 메뉴 링크 불러오기
+      loadSettings();
       loadMonth();
     }
 
-    // 💡 Supabase DB에서 노래책/업보 최신 링크 가져와 연결하기
     async function loadSettings() {
       try {
         const { data, error } = await supabaseClient.from('settings').select('*');
@@ -534,9 +508,10 @@
 
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
+          // 💡 날짜 전체 클릭 시 그 날의 모든 일정 목록 모달 출력
           if (dayEvList.length > 0) {
             td.classList.add('has-event');
-            td.onclick = () => showEvent(dayEvList[0].id);
+            td.onclick = () => showDayEvents(ds, dayEvList);
           }
 
           dayEvList.forEach(ev => {
@@ -567,7 +542,7 @@
 
             bar.className = barClass;
             bar.style.backgroundColor = cColor;
-            
+
             if (isStart) {
               bar.textContent = ev.title;
             }
@@ -626,7 +601,7 @@
           const l = TYPE_LABELS[ev.event_type] || ev.event_type;
           const t = ev.event_time ? ev.event_time.slice(0,5) : '';
           html += `
-            <div class="list-event-item" onclick="showEvent('${ev.id}')">
+            <div class="list-event-item" onclick="showSingleEvent('${ev.id}')">
               <div class="list-event-bar" style="background:${c}"></div>
               <div class="list-event-info">
                 <div class="list-event-title">${ev.title}</div>
@@ -696,7 +671,7 @@
         }
         
         return `
-          <div class="group relative flex items-center justify-between p-5 bg-white rounded-2xl border border-line/40 hover:border-textPurple/50 hover:shadow-lg hover:shadow-themePurple/10 transition-all duration-300 cursor-pointer overflow-hidden" onclick="showEvent('${ev.id}')">
+          <div class="group relative flex items-center justify-between p-5 bg-white rounded-2xl border border-line/40 hover:border-textPurple/50 hover:shadow-lg hover:shadow-themePurple/10 transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
             <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
             <div class="pl-2 flex-1 min-w-0 pr-3">
               <div class="font-bold text-brandDark text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
@@ -712,39 +687,57 @@
       }).join('');
     }
 
-    function showEvent(id) {
-      const ev = schedules.find(s => s.id === id);
-      if (!ev) return;
-      const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-      const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
-      const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-      
-      const startD = new Date(ev.event_date + 'T00:00:00');
-      let dateDisplay = `${currentYear}년 ${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
-      
-      if (ev.end_date && ev.end_date !== ev.event_date) {
-        const endD = new Date(ev.end_date + 'T00:00:00');
-        dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
-      }
-      
-      const modalBadge = document.getElementById('modalBadge');
-      modalBadge.style.background = `${c}55`;
-      document.getElementById('modalBadgeDot').style.color = dotC;
-      document.getElementById('modalType').textContent = l;
+    // 💡 날짜 내의 모든 일정을 순서대로 카드 형태 생성해 모달에 노출
+    function showDayEvents(dateStr, eventList) {
+      const d = new Date(dateStr + 'T00:00:00');
+      document.getElementById('modalHeaderDate').textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${DAYS[d.getDay()]})`;
 
-      document.getElementById('modalTitle').textContent = ev.title;
-      document.getElementById('modalDate').textContent = dateDisplay;
+      const listContainer = document.getElementById('modalEventList');
       
-      const timeContainer = document.getElementById('modalTimeContainer');
-      if (ev.event_time) {
-        document.getElementById('modalTime').textContent = ev.event_time.slice(0, 5);
-        timeContainer.style.display = 'flex';
-      } else {
-        timeContainer.style.display = 'none';
-      }
-      
-      document.getElementById('modalDesc').textContent = ev.description || '상세 내용 설명이 등록되어 있지 않습니다.';
+      listContainer.innerHTML = eventList.map(ev => {
+        const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+        const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
+        const l = TYPE_LABELS[ev.event_type] || ev.event_type;
+        const t = ev.event_time ? ev.event_time.slice(0, 5) : null;
+        
+        const startD = new Date(ev.event_date + 'T00:00:00');
+        let dateRangeText = `${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
+        if (ev.end_date && ev.end_date !== ev.event_date) {
+          const endD = new Date(ev.end_date + 'T00:00:00');
+          dateRangeText += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
+        }
+
+        return `
+          <div class="bg-[#F9F8FC] border border-line/60 rounded-2xl p-5 relative overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="legend-badge" style="background:${c}55;">
+                <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+              </span>
+              ${t ? `<span class="text-xs font-bold text-brandDark font-montserrat bg-white px-2.5 py-1 rounded-lg border border-line/40">${t}</span>` : ''}
+            </div>
+
+            <h4 class="text-lg font-bold text-brandDark mb-2 tracking-tight">${ev.title}</h4>
+            
+            <div class="text-[11px] font-semibold text-brandSub font-montserrat mb-3">
+              <span>📅 ${dateRangeText}</span>
+            </div>
+
+            ${ev.description ? `
+              <div class="text-xs font-medium text-brandDark leading-relaxed bg-white p-3.5 rounded-xl border border-line/40 whitespace-pre-line">
+                ${ev.description}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
       document.getElementById('eventModal').classList.add('open');
+    }
+
+    function showSingleEvent(id) {
+      const ev = schedules.find(s => s.id === id);
+      if (ev) showDayEvents(ev.event_date, [ev]);
     }
 
     function closeModal(e) {
