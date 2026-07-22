@@ -67,55 +67,85 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- Desktop Calendar Grid ---- */
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    .cal-header { text-align: center; font-size: .8125rem; font-weight: 700; color: #6E6B7B; padding: 12px 0; font-family: 'Montserrat', sans-serif; }
-    .cal-header:first-child { color: #D4727A; } /* 일요일 */
-    .cal-header:last-child { color: #7BA0D4; }  /* 토요일 */
-    
-    .cal-cell { 
-      min-height: 110px; 
-      background: #ffffff; 
-      border-radius: 16px; 
-      border: 1px solid rgba(218, 209, 254, 0.4); 
-      padding: 10px; 
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-      cursor: default; 
-      overflow: hidden; 
-      min-width: 0;
+    /* ---- 일정이 하나로 길게 이어지는 통합형 달력 컨테이너 ---- */
+    .calendar-card {
+      background: #ffffff;
+      border: 1px solid rgba(218, 209, 254, 0.5);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
     }
-    .cal-cell:hover { 
-      border-color: #DAD1FE; 
-      box-shadow: 0 10px 25px rgba(218, 209, 254, 0.15); 
-      transform: translateY(-2px);
+
+    .cal-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
     }
-    .cal-cell.empty { background: transparent; border-color: transparent; }
-    .cal-cell.empty:hover { box-shadow: none; transform: none; }
-    .cal-cell.today { border-color: #9F8FFF; box-shadow: 0 0 0 1.5px #9F8FFF; }
-    
-    .cal-day-num { font-size: .875rem; font-weight: 700; color: #1E1B2C; margin-bottom: 6px; font-family: 'Montserrat', sans-serif; }
-    .cal-cell:nth-child(7n+1) .cal-day-num { color: #D4727A; }
-    .cal-cell:nth-child(7n) .cal-day-num { color: #7BA0D4; }
-    
-    .cal-event { 
-      display: block; 
-      width: 100%; 
-      font-size: .75rem; 
-      padding: 4px 8px; 
-      border-radius: 8px; 
-      margin-bottom: 4px; 
-      color: #1E1B2C; 
-      font-weight: 600; 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      cursor: pointer; 
-      transition: opacity .2s; 
-      border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .cal-table th {
+      text-align: center;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #6E6B7B;
+      padding-bottom: 16px;
+      font-family: 'Montserrat', sans-serif;
     }
-    .cal-event:hover { opacity: .85; }
-    .cal-cell.past { opacity: .45; }
-    .cal-cell.past:hover { opacity: .8; }
+    .cal-table th:first-child { color: #D4727A; } /* 일요일 */
+    .cal-table th:last-child { color: #7BA0D4; }  /* 토요일 */
+
+    .cal-table td {
+      border: 1px solid rgba(218, 209, 254, 0.35);
+      vertical-align: top;
+      height: 110px;
+      padding: 6px 0;
+      transition: background 0.2s;
+    }
+    .cal-table td.empty-cell {
+      background: rgba(249, 248, 252, 0.5);
+      border-color: rgba(218, 209, 254, 0.2);
+    }
+
+    .day-num-box {
+      padding: 0 8px 4px 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #1E1B2C;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .today .day-num-box span {
+      background: #DAD1FE;
+      color: #1E1B2C;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    td:first-child .day-num-box { color: #D4727A; }
+    td:last-child .day-num-box { color: #7BA0D4; }
+
+    /* ---- 끊김없이 이어지는 일정 바(Bar) 스타일 ---- */
+    .event-bar-wrapper {
+      margin-bottom: 4px;
+      height: 24px;
+    }
+    .event-bar {
+      height: 100%;
+      font-size: 0.725rem;
+      font-weight: 700;
+      color: #1E1B2C;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity 0.2s;
+    }
+    .event-bar:hover { opacity: 0.85; }
+
+    /* 시작/중간/끝 모서리 제어 */
+    .event-bar.is-start { border-top-left-radius: 8px; border-bottom-left-radius: 8px; margin-left: 4px; }
+    .event-bar.is-end { border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-right: 4px; }
+    .event-bar.is-single { border-radius: 8px; margin: 0 4px; }
 
     /* ---- Mobile List View ---- */
     .list-date-group { margin-bottom: 20px; }
@@ -135,9 +165,6 @@
     .list-day-num.today { background: #DAD1FE; color: #1E1B2C; border-color: #DAD1FE; }
     .list-day-num.sunday { color: #D4727A; }
     .list-day-num.saturday { color: #7BA0D4; }
-    .list-day-num.today.sunday, .list-day-num.today.saturday { color: #1E1B2C; }
-    .list-day-label { font-size: .8125rem; font-weight: 600; color: #6E6B7B; }
-    
     .list-event-item { 
       display: flex; align-items: center; gap: 16px; 
       padding: 16px; 
@@ -158,10 +185,6 @@
     .list-event-time { font-size: .8rem; color: #6E6B7B; margin-top: 2px; }
     .list-event-badge { font-size: .75rem; padding: 4px 12px; border-radius: 999px; font-weight: 600; flex-shrink: 0; }
 
-    .list-date-group.past { opacity: .5; }
-    .list-date-group.past .list-event-item { background: #fafafa; }
-
-    /* Today divider */
     .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
     .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
     .today-divider span { font-size: .75rem; font-weight: 700; color: #6E6B7B; white-space: nowrap; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
@@ -173,7 +196,7 @@
       .mobile-only { display: block; }
     }
 
-    /* ---- 깔끔하고 세련된 Premium Modal ---- */
+    /* ---- Premium Modal ---- */
     .modal-backdrop { 
       position: fixed; inset: 0; z-index: 100; 
       background: rgba(30, 27, 44, 0.35); 
@@ -197,7 +220,6 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
     
-    /* 둥근 뱃지 범례 전용 스타일 */
     .legend-badge {
       display: inline-flex;
       align-items: center;
@@ -208,7 +230,6 @@
       font-weight: 600;
       color: #1E1B2C;
       border: 1px solid rgba(30, 27, 44, 0.05);
-      transition: all 0.2s ease;
     }
     .legend-badge-dot {
       width: 6px;
@@ -235,21 +256,32 @@
     </header>
   </div>
 
-  <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
+  <main class="max-w-4xl mx-auto px-6 mt-10 pb-24">
+    
+    <!-- ✦ PAGE TITLE SECTION (사진 속 타이틀 컨셉 반영) ✦ -->
+    <section class="text-center mb-10">
+      <div class="flex items-center justify-center gap-3 text-textPurple/60 text-xs font-montserrat tracking-[0.3em] uppercase mb-2">
+        <span>✦</span>
+        <span>S C H E D U L E</span>
+        <span>✦</span>
+      </div>
+      <h1 class="text-xs font-bold text-brandSub tracking-widest uppercase">방송 및 주요 일정 안내</h1>
+    </section>
+
     <!-- Month Navigation -->
     <section class="pb-6">
-      <div class="flex items-center justify-between mb-8">
-        <button onclick="changeMonth(-1)" class="w-11 h-11 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
+      <div class="flex items-center justify-between mb-8 max-w-sm mx-auto">
+        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <h2 id="calMonth" class="text-2xl font-bold text-brandDark font-montserrat tracking-tight"></h2>
-        <button onclick="changeMonth(1)" class="w-11 h-11 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
+        <h2 id="calMonth" class="text-2xl font-extrabold text-brandDark font-montserrat tracking-tight"></h2>
+        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-white border border-line/50 flex items-center justify-center text-brandDark hover:bg-[#FAF9FF] transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
       
-      <!-- 둥근 알약 뱃지 스타일의 Legend -->
-      <div class="flex flex-wrap items-center justify-center gap-2.5 mb-4 desktop-only">
+      <!-- Legend -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
         <span class="legend-badge" style="background:#D1C4FF33;">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
         </span>
@@ -271,12 +303,18 @@
       </div>
     </section>
 
-    <!-- Desktop: Calendar Grid -->
+    <!-- Desktop: Integrated Continuous Calendar Grid -->
     <section class="desktop-only mb-16">
-      <div class="cal-grid mb-3">
-        <div class="cal-header">SUN</div><div class="cal-header">MON</div><div class="cal-header">TUE</div><div class="cal-header">WED</div><div class="cal-header">THU</div><div class="cal-header">FRI</div><div class="cal-header">SAT</div>
+      <div class="calendar-card">
+        <table class="cal-table">
+          <thead>
+            <tr>
+              <th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th>
+            </tr>
+          </thead>
+          <tbody id="calBody"></tbody>
+        </table>
       </div>
-      <div class="cal-grid" id="calBody"></div>
     </section>
 
     <!-- Mobile: List View -->
@@ -284,7 +322,7 @@
       <div id="listBody"></div>
     </section>
 
-    <!-- 세련된 UPCOMING SCHEDULES 섹션 (예정된 일정) -->
+    <!-- UPCOMING SCHEDULES 섹션 (예정된 일정) -->
     <section class="mt-16 pt-10 border-t border-line/40 desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
@@ -371,56 +409,110 @@
 
     async function loadMonth() {
       document.getElementById('calMonth').textContent = `${currentYear}년 ${currentMonth + 1}월`;
+      
+      // 해당 월 포함 날짜 범위
       const s = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-01`;
       const e = new Date(currentYear, currentMonth+1, 0);
       const eStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(e.getDate()).padStart(2,'0')}`;
+      
       try {
         const { data, error } = await supabaseClient.from('schedules').select('*')
-          .gte('event_date', s).lte('event_date', eStr)
+          .or(`event_date.gte.${s},end_date.gte.${s}`)
           .order('event_date').order('event_time');
         if (error) throw error;
         schedules = data || [];
-      } catch(e) { console.error(e); schedules = []; }
+      } catch(err) { console.error(err); schedules = []; }
+      
       renderCalendar();
       renderListView();
       renderUpcoming();
     }
 
-    // 날짜 간 포함 여부 확인 함수 (연속 기간 체크용)
-    function isDateInRange(targetDs, startDate, endDate) {
-      if (!endDate) return targetDs === startDate;
-      return targetDs >= startDate && targetDs <= endDate;
+    function isDateInRange(ds, startDate, endDate) {
+      const targetEnd = endDate || startDate;
+      return ds >= startDate && ds <= targetEnd;
     }
 
+    // 💡 날짜별이 아닌 주차(Week) 단위로 일정이 하나로 길게 이어지는 렌더링 로직
     function renderCalendar() {
       const body = document.getElementById('calBody');
       body.innerHTML = '';
+
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
       const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
       const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
 
-      for (let i = 0; i < firstDay; i++) body.innerHTML += '<div class="cal-cell empty"></div>';
+      let currentDay = 1;
+      let totalCells = firstDay + daysInMonth;
+      let rows = Math.ceil(totalCells / 7);
 
-      for (let d = 1; d <= daysInMonth; d++) {
-        const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
-        const isPast = (currentYear < today.getFullYear()) || (currentYear === today.getFullYear() && currentMonth < today.getMonth()) || (currentYear === today.getFullYear() && currentMonth === today.getMonth() && d < today.getDate());
-        
-        // 하루 일정 및 연속 일정(end_date) 모두 포함
-        const dayEv = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
-        let evH = '';
-        dayEv.forEach(ev => {
-          const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-          const t = ev.event_time ? ev.event_time.slice(0,2).replace(/^0/,'')+'시 ' : '';
-          
-          // 💡 title="..." 속성을 완전히 제거하여 커서 툴팁 안 뜨게 처리
-          evH += `<div class="cal-event" style="background:${c}" onclick="showEvent('${ev.id}')">${t}${ev.title}</div>`;
-        });
-        
-        let cellClass = 'cal-cell';
-        if (isToday) cellClass += ' today';
-        if (isPast) cellClass += ' past';
-        body.innerHTML += `<div class="${cellClass}"><div class="cal-day-num">${d}</div>${evH}</div>`;
+      for (let r = 0; r < rows; r++) {
+        let tr = document.createElement('tr');
+
+        for (let c = 0; c < 7; c++) {
+          let td = document.createElement('td');
+          let cellIndex = r * 7 + c;
+
+          if (cellIndex < firstDay || currentDay > daysInMonth) {
+            td.className = 'empty-cell';
+            tr.appendChild(td);
+            continue;
+          }
+
+          const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
+          if (ds === todayStr) td.classList.add('today');
+
+          // 날짜 표시
+          let numDiv = document.createElement('div');
+          numDiv.className = 'day-num-box';
+          numDiv.innerHTML = `<span>${currentDay}</span>`;
+          td.appendChild(numDiv);
+
+          // 해당 날짜에 들어갈 이벤트 추출 및 연속 바(Bar) 생성
+          const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
+
+          dayEvList.forEach(ev => {
+            const startStr = ev.event_date;
+            const endStr = ev.end_date || ev.event_date;
+
+            const isStart = (ds === startStr) || (c === 0); // 시작일이거나 주 시작(일요일)
+            const isEnd = (ds === endStr) || (c === 6);    // 종료일이거나 주 끝(토요일)
+            const isSingle = (startStr === endStr);
+
+            const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+            const t = (ev.event_time && isStart) ? ev.event_time.slice(0,2).replace(/^0/,'')+'시 ' : '';
+
+            let barWrap = document.createElement('div');
+            barWrap.className = 'event-bar-wrapper';
+
+            let bar = document.createElement('div');
+            let barClass = 'event-bar';
+
+            if (isSingle) {
+              barClass += ' is-single';
+            } else {
+              if (isStart) barClass += ' is-start';
+              if (isEnd) barClass += ' is-end';
+            }
+
+            bar.className = barClass;
+            bar.style.backgroundColor = cColor;
+            
+            // 연결된 일정 중 시작하는 날 또는 주 첫째날에만 글자 표시
+            if (isStart || ds === startStr) {
+              bar.textContent = `${t}${ev.title}`;
+            }
+
+            bar.onclick = () => showEvent(ev.id);
+            barWrap.appendChild(bar);
+            td.appendChild(barWrap);
+          });
+
+          currentDay++;
+          tr.appendChild(td);
+        }
+        body.appendChild(tr);
       }
     }
 
@@ -495,7 +587,6 @@
       }, 100);
     }
 
-    // 💡 기간 일정(시작일 ~ 종료일) 표기를 지원하는 UPCOMING SCHEDULES
     function renderUpcoming() {
       const list = document.getElementById('upcomingList');
       const now = new Date();
@@ -530,7 +621,6 @@
         const startD = new Date(ev.event_date + 'T00:00:00');
         let dateDisplay = `${startD.getMonth()+1}/${startD.getDate()} (${DAYS[startD.getDay()]})`;
         
-        // 종료일(end_date)이 지정되어 연속 일정인 경우: 7/22 (수) ~ 7/26 (일) 형태 표기
         if (ev.end_date && ev.end_date !== ev.event_date) {
           const endD = new Date(ev.end_date + 'T00:00:00');
           dateDisplay += ` ~ ${endD.getMonth()+1}/${endD.getDate()} (${DAYS[endD.getDay()]})`;
