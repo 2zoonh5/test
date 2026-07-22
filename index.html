@@ -37,6 +37,37 @@
   </script>
 
   <style>
+    /* ==========================================
+       SERU CUSTOM CURSOR SETTINGS (ALL 17 CURSORS)
+       ========================================== */
+    html, body {
+      cursor: url('/cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+    }
+
+    /* 일반 클릭 요소 & 내비게이션 */
+    button, [onclick], .nav-link, #themeToggle {
+      cursor: url('/cursors/Cursor5_ser_select.cur'), pointer !important;
+    }
+
+    /* 외부 연결 링크 (새 탭 링크, 팬카페, SOOP) */
+    a[target="_blank"] {
+      cursor: url('/cursors/Cursor15_ser_link.cur'), pointer !important;
+    }
+
+    /* 인물 / 캐릭터 영역 (아바타 & 해또 팬덤 카드) */
+    #avatarTilt, .group\/fandom, .group\/charm {
+      cursor: url('/cursors/Cursor17_ser_link_person.cur'), pointer !important;
+    }
+
+    /* 비활성화 및 텍스트 선택 */
+    :disabled, .disabled {
+      cursor: url('/cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+    }
+    input, textarea {
+      cursor: url('/cursors/Cursor6_ser_text.cur'), text !important;
+    }
+    /* ========================================== */
+
     :root {
       --bg: #F9F8FC;
       --card-bg: #FFFFFF;
@@ -200,7 +231,7 @@
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 바로가기 버튼 세트 (💡 다크모드 대응 고정 스타일 수정 완료) -->
+        <!-- 바로가기 버튼 세트 -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
