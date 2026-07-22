@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SERU PROFILE 💜</title>
   
-  <!-- 투명한 보라색 하트 이모지 파비콘 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
   
-  <!-- Tailwind CSS & Premium Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -39,7 +37,6 @@
   </script>
 
   <style>
-    /* 💡 테마 변수 체계화 (라이트 / 다크모드) */
     :root {
       --bg: #F9F8FC;
       --card-bg: #FFFFFF;
@@ -48,6 +45,8 @@
       --brand-sub: #6E6B7B;
       --line: rgba(218, 209, 254, 0.4);
       --header-bg: rgba(255, 255, 255, 0.75);
+      --soop-bg: #1E1B2C;
+      --soop-text: #FFFFFF;
     }
 
     body.dark {
@@ -58,6 +57,8 @@
       --brand-sub: #A39EB2;
       --line: rgba(140, 122, 230, 0.25);
       --header-bg: rgba(24, 21, 36, 0.75);
+      --soop-bg: #2B2540;
+      --soop-text: #F1EDF8;
     }
 
     body {
@@ -72,7 +73,6 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
 
-    /* ---- 깔끔하고 정갈한 카드 스타일 ---- */
     .premium-card {
       background: var(--card-bg);
       border: 1px solid var(--line);
@@ -86,7 +86,6 @@
       box-shadow: 0 12px 32px rgba(184, 168, 255, 0.12);
     }
 
-    /* ---- 상단 내비게이션 플로팅 바 ---- */
     .nav-link {
       font-size: 0.875rem;
       font-weight: 600;
@@ -98,10 +97,7 @@
     }
 
     @media (max-width: 640px) {
-      .nav-link {
-        font-size: 0.775rem;
-        padding: 6px 10px;
-      }
+      .nav-link { font-size: 0.775rem; padding: 6px 10px; }
     }
 
     .nav-link:hover {
@@ -114,14 +110,12 @@
       box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
     }
 
-    /* ---- 3D 패럴랙스 틸트 효과 ---- */
     .tilt-container { perspective: 1000px; }
     .tilt-element {
       transform-style: preserve-3d;
       transition: transform 0.15s ease-out;
     }
 
-    /* ---- 은은한 배경 그라데이션 ---- */
     .bg-glow-radial {
       position: absolute;
       width: 700px; height: 700px;
@@ -133,7 +127,6 @@
       z-index: -1;
     }
 
-    /* 💡 클릭 별빛 이펙트 스타일 */
     .fxpop {
       position: fixed;
       pointer-events: none;
@@ -169,7 +162,6 @@
           <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
         </nav>
 
-        <!-- 💡 다크모드 토글 스위치 -->
         <button id="themeToggle" class="w-9 h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-sm ml-1 hover:border-textPurple transition shadow-sm" aria-label="다크모드 토글">
           <span id="themeIcon">🌙</span>
         </button>
@@ -208,10 +200,10 @@
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 바로가기 버튼 세트 -->
+        <!-- 바로가기 버튼 세트 (💡 다크모드 대응 고정 스타일 수정 완료) -->
         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,70,32,0.15)] hover:shadow-[0_12px_24px_rgba(30,70,32,0.25)]">
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -220,8 +212,9 @@
             공식 팬카페 바로가기
           </a>
           <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
-             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 bg-brandDark text-white hover:bg-[#151320] rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-[0_4px_12px_rgba(30,27,44,0.15)] hover:shadow-[0_12px_24px_rgba(30,27,44,0.25)]">
-            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+             style="background-color: var(--soop-bg); color: var(--soop-text);"
+             class="inline-flex items-center justify-center gap-2.5 w-52 py-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md border border-[var(--line)]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -232,7 +225,7 @@
       </div>
     </section>
 
-    <!-- 💡 INFO CARDS (실시간 D-Day & D+ 계산 기능 반영) -->
+    <!-- INFO CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
       <div class="premium-card py-6 px-4 text-center relative overflow-hidden">
         <div class="text-[10px] font-bold tracking-widest text-textPurple uppercase mb-1.5 font-montserrat">Birthday</div>
@@ -261,8 +254,6 @@
 
     <!-- FANDOM & CHARACTER WIDGETS -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      
-      <!-- 왼쪽 카드: 해또 FANDOM -->
       <div class="premium-card p-8 flex flex-col justify-between group/fandom">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
@@ -295,7 +286,6 @@
         </div>
       </div>
 
-      <!-- 오른쪽 카드: 세르의 매력 프로필 -->
       <div class="premium-card p-8 flex flex-col justify-between group/charm">
         <div>
           <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
@@ -362,7 +352,6 @@
   </footer>
 
   <script>
-    /* ---- 1. 다크모드 엔진 ---- */
     const toggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
@@ -388,7 +377,6 @@
       localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
     });
 
-    /* ---- 2. 생일 D-Day & 데뷔일 D+ 자동 계산 엔진 ---- */
     function calcDday(month, day) {
       const now = new Date();
       now.setHours(0,0,0,0);
@@ -410,7 +398,6 @@
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
 
-    /* ---- 3. 별빛(✨) 클릭 이펙트 엔진 ---- */
     document.addEventListener('click', (e) => {
       if (e.target.closest('button, a, input, textarea, iframe')) return;
       
@@ -432,7 +419,6 @@
       }
     });
 
-    /* ---- 4. 3D 패럴랙스 틸트 ---- */
     const card = document.getElementById('avatarTilt');
     card.addEventListener('mousemove', (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
@@ -456,7 +442,6 @@
     haettoCard.addEventListener('mouseleave', () => { haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
   </script>
 
-  <!-- Supabase DB 연동 스크립트 -->
   <script src="js/supabase-config.js"></script>
   <script>
     async function loadMainSettings() {
