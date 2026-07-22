@@ -66,6 +66,11 @@
     input, textarea {
       cursor: url('./cursors/Cursor6_ser_text.cur'), text !important;
     }
+
+    /* 푸터 관리자 이동 문구 커서 반응 제거 (기본 커서 고정) */
+    .admin-secret-link {
+      cursor: url('./cursors/Cursor1_ser_arrow_1.cur'), default !important;
+    }
     /* ========================================== */
 
     :root {
@@ -377,7 +382,7 @@
   <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold border-t border-[var(--line)] select-none">
     <p class="font-montserrat tracking-wider">
       © 2026 
-      <span onclick="location.href='./admin/'" class="cursor-default">SERU.</span> 
+      <span onclick="location.href='./admin/'" class="admin-secret-link cursor-default">SERU.</span>
       ALL RIGHTS RESERVED.
     </p>
   </footer>
