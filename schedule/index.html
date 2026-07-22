@@ -357,7 +357,6 @@
     </section>
   </main>
 
-  <!-- 💡 기존 모달 디자인 완전 복원 + 다중 일정 스택 지원 모달 -->
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between pb-4 border-b border-line/40 mb-6">
@@ -365,7 +364,6 @@
         <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[#F9F8FC] hover:bg-themePurple/30 text-brandSub hover:text-brandDark transition flex items-center justify-center font-bold text-sm">✕</button>
       </div>
 
-      <!-- 원본 톤앤매너 완벽 보존형 일정 스택 영역 -->
       <div id="modalEventList" class="space-y-8"></div>
     </div>
   </div>
@@ -439,6 +437,31 @@
       }
     }
 
+    // 💡 핵심: 기간 일정을 최우선으로 배치하는 정렬 알고리즘
+    function sortSchedules(list) {
+      return list.sort((a, b) => {
+        const aIsMulti = a.end_date && a.end_date !== a.event_date;
+        const bIsMulti = b.end_date && b.end_date !== b.event_date;
+
+        // 1. 기간 일정(end_date가 있는 일정)을 항상 상단 배치
+        if (aIsMulti && !bIsMulti) return -1;
+        if (!aIsMulti && bIsMulti) return 1;
+
+        // 2. 기간 일정끼리는 기간이 긴 순서(또는 시작일) 순 정렬
+        if (aIsMulti && bIsMulti) {
+          const aDuration = new Date(a.end_date) - new Date(a.event_date);
+          const bDuration = new Date(b.end_date) - new Date(b.event_date);
+          if (aDuration !== bDuration) return bDuration - aDuration;
+          return a.event_date.localeCompare(b.event_date);
+        }
+
+        // 3. 단일 일정끼리는 시간(event_time)순 정렬
+        const timeA = a.event_time || '99:99';
+        const timeB = b.event_time || '99:99';
+        return timeA.localeCompare(timeB);
+      });
+    }
+
     async function loadMonth() {
       document.getElementById('calMonth').textContent = `${currentYear}년 ${currentMonth + 1}월`;
       
@@ -448,10 +471,11 @@
       
       try {
         const { data, error } = await supabaseClient.from('schedules').select('*')
-          .or(`event_date.gte.${s},end_date.gte.${s}`)
-          .order('event_date').order('event_time');
+          .or(`event_date.gte.${s},end_date.gte.${s}`);
         if (error) throw error;
-        schedules = data || [];
+        
+        // 정렬 엔진 통과
+        schedules = sortSchedules(data || []);
       } catch(err) { console.error(err); schedules = []; }
       
       renderCalendar();
@@ -503,6 +527,7 @@
           }
           td.appendChild(numDiv);
 
+          // 정렬 규칙이 적용된 해당 일자의 일정 목록
           const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
 
           if (dayEvList.length > 0) {
@@ -683,7 +708,6 @@
       }).join('');
     }
 
-    // 💡 원본 모달 스타일 보존 + DETAILS 공란 시 영역 숨김 처리
     function showDayEvents(eventList) {
       const listContainer = document.getElementById('modalEventList');
       
@@ -701,8 +725,6 @@
         }
 
         const borderClass = (index < eventList.length - 1) ? 'pb-8 border-b border-line/50' : '';
-
-        // 상세 설명이 존재하는지 여부 체크
         const hasDesc = ev.description && ev.description.trim() !== '';
 
         return `
@@ -728,7 +750,6 @@
               ` : ''}
             </div>
 
-            <!-- 💡 세부 설명이 있을 때만 DETAILS 구역 표시 -->
             ${hasDesc ? `
               <div>
                 <div class="text-[10px] font-bold text-brandSub uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
