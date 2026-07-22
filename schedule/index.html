@@ -35,7 +35,6 @@
   </script>
   
   <style>
-    /* 💡 테마 변수 체계화 (라이트 / 다크모드) */
     :root {
       --bg: #F9F8FC;
       --card-bg: #FFFFFF;
@@ -46,6 +45,8 @@
       --header-bg: rgba(255, 255, 255, 0.75);
       --modal-bg: #FFFFFF;
       --modal-sub-bg: #F9F8FC;
+      --badge-bg: rgba(218, 209, 254, 0.3);
+      --badge-text: #1E1B2C;
     }
 
     body.dark {
@@ -58,6 +59,8 @@
       --header-bg: rgba(24, 21, 36, 0.75);
       --modal-bg: #181524;
       --modal-sub-bg: #120F1D;
+      --badge-bg: rgba(140, 122, 230, 0.2);
+      --badge-text: #F1EDF8;
     }
 
     body {
@@ -83,10 +86,7 @@
     }
 
     @media (max-width: 640px) {
-      .nav-link {
-        font-size: 0.775rem;
-        padding: 6px 10px;
-      }
+      .nav-link { font-size: 0.775rem; padding: 6px 10px; }
     }
 
     .nav-link:hover {
@@ -197,6 +197,7 @@
     .event-bar.is-middle { left: 0; right: 0; }
     .event-bar.is-end { left: 0; right: 4px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
 
+    /* 💡 다크모드 대응 범례 뱃지 고정 스타일 */
     .legend-badge {
       display: inline-flex;
       align-items: center;
@@ -204,8 +205,9 @@
       padding: 5px 14px;
       border-radius: 99px;
       font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--brand-dark);
+      font-weight: 700;
+      color: var(--badge-text);
+      background: var(--badge-bg);
       border: 1px solid var(--line);
     }
     .legend-badge-dot {
@@ -215,7 +217,6 @@
       background-color: currentColor;
     }
 
-    /* ---- Mobile List View ---- */
     .list-date-group { margin-bottom: 20px; }
     .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
     .list-day-num { 
@@ -263,10 +264,9 @@
       .mobile-only { display: block; }
     }
 
-    /* 💡 모달 박스 스크롤 깔끔하게 잘라내기 */
     .modal-backdrop { 
       position: fixed; inset: 0; z-index: 100; 
-      background: rgba(30, 27, 44, 0.45); 
+      background: rgba(30, 27, 44, 0.55); 
       display: none; align-items: center; justify-content: center; 
       backdrop-filter: blur(10px); 
       padding: 20px;
@@ -283,7 +283,7 @@
       flex-direction: column;
       overflow: hidden; 
       border: 1px solid var(--line); 
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); 
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); 
       animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -297,7 +297,6 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* 💡 클릭 별빛 이펙트 스타일 */
     .fxpop {
       position: fixed;
       pointer-events: none;
@@ -316,7 +315,6 @@
 </head>
 <body class="bg-[var(--bg)] min-h-screen font-sans pb-32">
 
-  <!-- FLOATING HEADER & NAVIGATION -->
   <div class="sticky top-4 z-50 px-4 md:px-6 max-w-4xl mx-auto">
     <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-20 rounded-full px-4 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
       <div class="font-montserrat text-xl font-bold tracking-wider text-[var(--brand-dark)]">
@@ -331,7 +329,6 @@
           <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
         </nav>
 
-        <!-- 💡 다크모드 토글 스위치 -->
         <button id="themeToggle" class="w-9 h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-sm ml-1 hover:border-textPurple transition shadow-sm" aria-label="다크모드 토글">
           <span id="themeIcon">🌙</span>
         </button>
@@ -348,7 +345,6 @@
       </div>
     </section>
 
-    <!-- 월 선택 네비게이션 -->
     <section class="pb-6">
       <div class="flex items-center justify-between mb-8 max-w-xs mx-auto">
         <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
@@ -360,30 +356,29 @@
         </button>
       </div>
       
-      <!-- 유형별 뱃지 범례 -->
+      <!-- 유형별 범례 뱃지 (선명한 색상 수정 완료) -->
       <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
-        <span class="legend-badge" style="background:#D1C4FF33;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
         </span>
-        <span class="legend-badge" style="background:#E2E0E866;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#6E6B7B;"></span>휴방
         </span>
-        <span class="legend-badge" style="background:#FFD1E344;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#E56B98;"></span>이벤트
         </span>
-        <span class="legend-badge" style="background:#C3F0E655;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#2DB89B;"></span>합방
         </span>
-        <span class="legend-badge" style="background:#C2E0FF55;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#4A90E2;"></span>대회
         </span>
-        <span class="legend-badge" style="background:#FFE3C555;">
+        <span class="legend-badge">
           <span class="legend-badge-dot" style="color:#E28D3B;"></span>기타
         </span>
       </div>
     </section>
 
-    <!-- Desktop: 달력 그리드 -->
     <section class="desktop-only mb-16">
       <div class="calendar-card">
         <table class="cal-table">
@@ -397,12 +392,10 @@
       </div>
     </section>
 
-    <!-- Mobile: 카드 리스트 뷰 -->
     <section class="mobile-only mb-12">
       <div id="listBody"></div>
     </section>
 
-    <!-- UPCOMING SCHEDULES -->
     <section class="mt-16 pt-10 border-t border-[var(--line)] desktop-only">
       <div class="flex items-end justify-between mb-8">
         <div>
@@ -414,7 +407,6 @@
     </section>
   </main>
 
-  <!-- 💡 고정 헤더 + 독립 스크롤 분리 모달 구조 -->
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
@@ -467,7 +459,6 @@
       'other':      '기타'
     };
 
-    /* ---- 1. 다크모드 엔진 ---- */
     const toggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
@@ -493,7 +484,6 @@
       localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
     });
 
-    /* ---- 2. 별빛(✨) 클릭 이펙트 ---- */
     document.addEventListener('click', (e) => {
       if (e.target.closest('button, a, input, textarea, iframe, td, .list-event-item')) return;
       
@@ -543,7 +533,6 @@
       }
     }
 
-    // 💡 기간 일정을 항상 상단으로 정렬하는 알고리즘
     function sortSchedules(list) {
       return list.sort((a, b) => {
         const aIsMulti = a.end_date && a.end_date !== a.event_date;
@@ -729,7 +718,7 @@
                 <div class="list-event-title">${ev.title}</div>
                 ${t ? `<div class="list-event-time">${t}</div>` : ''}
               </div>
-              <span class="legend-badge" style="background:${c}55;">
+              <span class="legend-badge">
                 <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
               </span>
             </div>`;
@@ -802,7 +791,7 @@
                 ${t ? `<span>· ${t}</span>` : ''}
               </div>
             </div>
-            <span class="legend-badge shrink-0" style="background:${c}55;">
+            <span class="legend-badge shrink-0">
               <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
             </span>
           </div>`;
@@ -831,7 +820,7 @@
         return `
           <div class="${borderClass}">
             <div class="mb-4">
-              <span class="legend-badge" style="background:${c}55;">
+              <span class="legend-badge">
                 <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
               </span>
             </div>
