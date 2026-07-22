@@ -60,6 +60,19 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
+    /* 💡 다크모드 시 브라우저 기본 날짜/시간 피커 팝업 및 아이콘 하얗게 변경 */
+    body.dark input[type="date"],
+    body.dark input[type="time"],
+    body.dark select {
+      color-scheme: dark;
+    }
+
+    body.dark input[type="date"]::-webkit-calendar-picker-indicator,
+    body.dark input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.9);
+      cursor: pointer;
+    }
+
     .custom-modal-backdrop {
       position: fixed; inset: 0; z-index: 200;
       background: rgba(15, 13, 21, 0.65);
@@ -113,7 +126,6 @@
         <h1 class="text-2xl font-bold mt-0.5">방송 대시보드 관리자</h1>
       </div>
       
-      <!-- 💡 상단 헤더 우측: 메인 이동 -> 로그아웃 -> 다크모드 토글 스위치 순 정렬 -->
       <div class="flex items-center gap-2">
         <a href="../" class="text-xs font-bold text-[var(--brand-sub)] hover:text-[var(--brand-dark)] px-3.5 py-2 rounded-full border border-[var(--line)] bg-[var(--card-bg)] transition">메인으로 이동</a>
         
@@ -141,7 +153,6 @@
           <input type="url" id="karma_url" required placeholder="https://docs.google.com/..." class="w-full h-11 px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
         
-        <!-- 💡 디자인 통일된 고급 보라색 버튼 -->
         <button type="submit" class="w-full h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-sm rounded-xl transition shadow-lg shadow-textPurple/20">
           링크 수정 저장
         </button>
@@ -194,7 +205,6 @@
           <textarea id="description" rows="3" placeholder="팝업 모달에 노출될 상세 설명 문구를 적어주세요." class="w-full p-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]"></textarea>
         </div>
 
-        <!-- 💡 디자인 통일된 고급 보라색 버튼 -->
         <button type="submit" class="w-full h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-sm rounded-xl transition shadow-lg shadow-textPurple/20">
           일정 등록하기
         </button>
@@ -208,7 +218,6 @@
     </div>
   </div>
 
-  <!-- 💡 다크모드 피팅 커스텀 알림/확인 모달 -->
   <div id="customModal" class="custom-modal-backdrop">
     <div class="custom-modal-content text-center">
       <div id="modalIcon" class="w-12 h-12 rounded-2xl bg-themePurple/30 text-textPurple flex items-center justify-center text-xl mx-auto mb-3 font-bold">✨</div>
@@ -224,7 +233,6 @@
   <script>
     const ADMIN_PW = "seru1234";
 
-    /* ---- 다크모드 엔진 ---- */
     const toggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
@@ -270,7 +278,6 @@
       document.getElementById('customModal').classList.add('open');
     }
 
-    /* 💡 다크모드 모달 버튼 디테일 완벽 보정 */
     function showConfirm(title, msg, onConfirm) {
       document.getElementById('modalIcon').textContent = "❓";
       document.getElementById('modalTitleText').textContent = title;
