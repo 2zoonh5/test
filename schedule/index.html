@@ -46,12 +46,21 @@
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
 
     .nav-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: #6E6B7B;
-      padding: 8px 24px;
-      border-radius: 99px;
-      transition: all 0.3s ease;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6E6B7B;
+        padding: 8px 16px; /* 👈 기본 좌우 여백을 16px로 줄임 */
+        border-radius: 99px;
+        transition: all 0.3s ease;
+        white-space: nowrap; /* 글자가 절대 밑으로 줄바꿈되지 않도록 방지 */
+    }
+
+    /* 📱 화면 폭이 640px 이하인 모바일 기기 반응형 설정 */
+    @media (max-width: 640px) {
+      .nav-link {
+         font-size: 0.775rem; /* 글자 크기 살짝 축소 */
+         padding: 6px 10px;   /* 좌우 여백을 10px로 축소 */
+      }
     }
     .nav-link:hover {
       color: #1E1B2C;
