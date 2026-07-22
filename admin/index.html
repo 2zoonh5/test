@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SERU ADMIN 💜</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      theme: { 
+        extend: {
+          colors: { 
+            bg: '#F9F8FC', 
+            themePurple: '#DAD1FE', 
+            textPurple: '#8C7AE6',
+            brandDark: '#1E1B2C', 
+            brandSub: '#6E6B7B', 
+            line: 'rgba(218, 209, 254, 0.4)' 
+          },
+          fontFamily: { 
+            sans: ['Pretendard', 'sans-serif'], 
+            montserrat: ['Montserrat', 'sans-serif'] 
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg min-h-screen font-sans text-brandDark pb-20">
+
+  <!-- 로그인 인증 섹션 -->
+  <div id="loginView" class="min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white border border-line/60 rounded-3xl p-8 max-w-sm w-full shadow-xl text-center">
+      <div class="w-12 h-12 bg-themePurple/30 text-textPurple rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 font-bold">🔒</div>
+      <h2 class="text-xl font-bold font-montserrat tracking-wider mb-1">SERU ADMIN</h2>
+      <p class="text-xs text-brandSub mb-6">스트리머 관리자 인증이 필요합니다</p>
+      
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력" class="w-full h-12 px-4 rounded-xl border border-line focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
+        <button type="submit" class="w-full h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-sm rounded-xl transition shadow-md shadow-textPurple/20">로그인</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 관리자 메인 대시보드 (로그인 완료 시 표시) -->
+  <div id="adminView" class="hidden max-w-3xl mx-auto px-6 pt-10">
+    <div class="flex items-center justify-between pb-6 mb-8 border-b border-line/50">
+      <div>
+        <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">ADMIN PANEL</div>
+        <h1 class="text-2xl font-bold mt-0.5">방송 일정 관리자</h1>
+      </div>
+      <button onclick="location.reload()" class="text-xs font-bold text-brandSub hover:text-brandDark px-4 py-2 rounded-full border border-line bg-white">로그아웃</button>
+    </div>
+
+    <!-- 일정 추가 폼 -->
+    <div class="bg-white border border-line/60 rounded-3xl p-6 shadow-sm mb-10">
+      <h3 class="text-base font-bold mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-textPurple"></span>새 일정 등록
+      </h3>
+      
+      <form onsubmit="saveSchedule(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brandSub mb-1">일정 제목 *</label>
+          <input type="text" id="title" required placeholder="예: 4시 배그 벽킬내기 합방" class="w-full h-11 px-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-sm bg-[#F9F8FC]">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-brandSub mb-1">시작일 *</label>
+            <input type="date" id="event_date" required class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brandSub mb-1">종료일 (선택, 기간일정)</label>
+            <input type="date" id="end_date" class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brandSub mb-1">시작 시간 (선택)</label>
+            <input type="time" id="event_time" class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-brandSub mb-1">일정 유형 *</label>
+            <select id="event_type" class="w-full h-11 px-3 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]">
+              <option value="broadcast">방송 (파스텔 퍼플)</option>
+              <option value="off">휴방 (쿨그레이)</option>
+              <option value="event">이벤트 (피치 핑크)</option>
+              <option value="collab">합방 (소프트 민트)</option>
+              <option value="tournament">대회 (파스텔 블루)</option>
+              <option value="other">기타 (살구 크림)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brandSub mb-1">상세 내용 (선택)</label>
+          <textarea id="description" rows="3" placeholder="팝업 모달에 노출될 상세 설명 문구를 적어주세요." class="w-full p-4 rounded-xl border border-line/80 focus:outline-none focus:border-textPurple text-xs bg-[#F9F8FC]"></textarea>
+        </div>
+
+        <button type="submit" class="w-full h-12 bg-brandDark hover:bg-black text-white font-bold text-sm rounded-xl transition shadow-lg">등록하기</button>
+      </form>
+    </div>
+
+    <!-- 등록된 일정 리스트 & 삭제 관리 -->
+    <div>
+      <h3 class="text-base font-bold mb-4">등록된 일정 목록</h3>
+      <div id="scheduleList" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <script src="../js/supabase-config.js"></script>
+  <script>
+    // 💡 초기 기본 비밀번호 설정 (원하시는 비밀번호로 변경 가능합니다!)
+    const ADMIN_PW = "seru1234"; 
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const pw = document.getElementById('adminPassword').value;
+      if (pw === ADMIN_PW) {
+        document.getElementById('loginView').classList.add('hidden');
+        document.getElementById('adminView').classList.remove('hidden');
+        loadAdminSchedules();
+      } else {
+        alert("비밀번호가 올바르지 않습니다.");
+      }
+    }
+
+    async function loadAdminSchedules() {
+      const list = document.getElementById('scheduleList');
+      try {
+        const { data, error } = await supabaseClient.from('schedules').select('*').order('event_date', { ascending: false });
+        if (error) throw error;
+        
+        if (!data.length) {
+          list.innerHTML = '<div class="text-center py-8 text-xs text-brandSub bg-white rounded-2xl border border-line/40">등록된 일정이 없습니다.</div>';
+          return;
+        }
+
+        list.innerHTML = data.map(item => `
+          <div class="flex items-center justify-between p-4 bg-white rounded-2xl border border-line/50">
+            <div>
+              <div class="font-bold text-sm text-brandDark">${item.title}</div>
+              <div class="text-xs text-brandSub mt-1">
+                📅 ${item.event_date}${item.end_date ? ' ~ ' + item.end_date : ''} 
+                ${item.event_time ? '⏰ ' + item.event_time.slice(0,5) : ''}
+              </div>
+            </div>
+            <button onclick="deleteSchedule('${item.id}')" class="text-xs font-bold text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg border border-red-200 transition">삭제</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function saveSchedule(e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const event_date = document.getElementById('event_date').value;
+      const end_date = document.getElementById('end_date').value || null;
+      const event_time = document.getElementById('event_time').value || null;
+      const event_type = document.getElementById('event_type').value;
+      const description = document.getElementById('description').value;
+
+      try {
+        const { error } = await supabaseClient.from('schedules').insert([
+          { title, event_date, end_date, event_time, event_type, description }
+        ]);
+
+        if (error) throw error;
+        alert("성공적으로 일정이 등록되었습니다!");
+        e.target.reset();
+        loadAdminSchedules();
+      } catch (err) {
+        alert("일정 등록에 실패했습니다: " + err.message);
+      }
+    }
+
+    async function deleteSchedule(id) {
+      if (!confirm("정말 이 일정을 삭제하시겠습니까?")) return;
+      try {
+        const { error } = await supabaseClient.from('schedules').delete().eq('id', id);
+        if (error) throw error;
+        loadAdminSchedules();
+      } catch (err) {
+        alert("삭제에 실패했습니다: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
