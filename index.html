@@ -198,12 +198,12 @@
          transform: translateZ(0);
          }
 
-         /* 직접 접속 시 site-frame 해제용 클래스 */
+         /* 🔥 수정된 부분: 직접 접속 시 배경색(var(--bg))이 유지되도록 지정 */
          .site-frame.no-frame {
          border-radius: 0 !important;
          border: none !important;
          box-shadow: none !important;
-         background-color: transparent !important;
+         background-color: var(--bg) !important;
          -webkit-mask-image: none !important;
          transform: none !important;
          }
@@ -454,8 +454,9 @@
                // iframe(SOOP 등) 내부인 경우: site-frame 정상 적용 (팝업 노출 X)
                if (siteFrame) siteFrame.classList.remove('no-frame');
             } else {
-               // 직접 접속인 경우: site-frame 해제 & 오늘 하루 보지 않기 팝업 체크
+               // 직접 접속인 경우: site-frame 해제 & body 배경색 지정 & 팝업 체크
                if (siteFrame) siteFrame.classList.add('no-frame');
+               document.body.style.setProperty('background-color', 'var(--bg)', 'important');
                checkTodayNotice();
             }
          });
