@@ -641,22 +641,29 @@
       renderVideoIndex(nextIdx);
     }
 
-    // 모바일 터치 스와이프 기능
+    // 모바일 터치 스와이프 기능 (카드를 감싸는 부모 컨테이너에 적용)
     let touchStartX = 0;
     let touchEndX = 0;
-    const iframeBox = document.getElementById('mainVideoIframe');
+    
+    // iframe 대신 슬라이더 카드 전체 감싸는 박스를 타겟팅
+    const sliderContainer = document.getElementById('mainVideoIframe').closest('.premium-card, .p-3, .p-5') || document.getElementById('mainVideoIframe').parentElement.parentElement;
 
-    iframeBox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-    iframeBox.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, {passive: true});
+    if (sliderContainer) {
+      sliderContainer.addEventListener('touchstart', e => { 
+        touchStartX = e.changedTouches[0].screenX; 
+      }, {passive: true});
+
+      sliderContainer.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, {passive: true});
+    }
 
     function handleSwipe() {
+      // 50px 이상 좌우로 쓸었을 때 동작
       if (touchEndX < touchStartX - 50) nextVideo();
       if (touchEndX > touchStartX + 50) prevVideo();
     }
-
     loadMainSettings();
     loadMainVideos();
   </script>
