@@ -98,12 +98,27 @@
       --badge-text: #F1EDF8;
     }
 
-    body {
-      background-color: var(--bg);
-      color: var(--brand-dark);
-      letter-spacing: -0.02em;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
+    /* body를 투명하게 처리 */
+body {
+  background-color: transparent !important;
+  color: var(--brand-dark);
+  letter-spacing: -0.02em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* site-frame 배경을 투명하게 하고 테두리와 둥근 모서리만 적용 */
+.site-frame {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 !important;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: transparent !important;
+  position: relative;
+}
     html { scroll-behavior: smooth; }
     
     ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -356,6 +371,7 @@
   </style>
 </head>
 <body class="bg-[var(--bg)] min-h-screen font-sans pb-32 overflow-x-hidden">
+  <div class="site-frame">
 
   <!-- FLOATING HEADER & NAVIGATION -->
   <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
@@ -448,13 +464,14 @@
     </div>
   </div>
 
-  <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold border-t border-[var(--line)] select-none">
+  <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold select-none">
     <p class="font-montserrat tracking-wider">
       © 2026 
       <span onclick="location.href='../admin/'" class="admin-secret-link cursor-default">SERU.</span>
       ALL RIGHTS RESERVED.
     </p>
   </footer>
+</div>
 
   <script src="../js/supabase-config.js"></script>  
   <script>
