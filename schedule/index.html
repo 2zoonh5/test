@@ -1,934 +1,883 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU SCHEDULE 💜</title>
-  
-  <!-- 하위 폴더용 파비콘 설정 -->
-  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="../android-icon-192x192.png">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { 
-        extend: {
-          colors: { 
-            bg: 'var(--bg)', 
-            themePurple: 'var(--theme-purple)', 
-            textPurple: '#8C7AE6',
-            brandDark: 'var(--brand-dark)', 
-            brandSub: 'var(--brand-sub)', 
-            line: 'var(--line)' 
-          },
-          fontFamily: { 
-            sans: ['Pretendard', 'sans-serif'], 
-            montserrat: ['Montserrat', 'sans-serif'] 
-          }
-        }
-      }
-    }
-  </script>
-  
-  <style>
-    /* ==========================================
-       SERU CUSTOM CURSOR SETTINGS (SCHEDULE)
-       ========================================== */
-    html, body {
-      cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), auto !important;
-    }
-
-    button, [onclick], .nav-link, td.has-event, .list-event-item, #themeToggle {
-      cursor: url('../cursors/Cursor5_ser_select.cur'), pointer !important;
-    }
-
-    a[target="_blank"] {
-      cursor: url('../cursors/Cursor15_ser_link.cur'), pointer !important;
-    }
-
-    .legend-badge {
-      cursor: url('../cursors/Cursor2_ser_helpsel.cur'), help !important;
-    }
-
-    input, textarea {
-      cursor: url('../cursors/Cursor6_ser_text.cur'), text !important;
-    }
-    :disabled, .disabled {
-      cursor: url('../cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
-    }
-
-    .admin-secret-link {
-      cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), default !important;
-    }
-    /* ========================================== */
-
-    :root {
-      --bg: #F8F7FC;
-      --card-bg: #FFFFFF;
-      --theme-purple: #DAD1FE;
-      --brand-dark: #1A1726;
-      --brand-sub: #5E5B6E;
-      --line: rgba(218, 209, 254, 0.4);
-      --header-bg: rgba(255, 255, 255, 0.75);
-      --modal-bg: #FFFFFF;
-      --modal-sub-bg: #F9F8FC;
-      --badge-bg: rgba(218, 209, 254, 0.3);
-      --badge-text: #1E1B2C;
-    }
-
-    body.dark {
-      --bg: #0B0912;                /* 🔥 메인과 똑같은 깊은 밤하늘 톤으로 일치 */
-      --card-bg: #161221;           /* 메인 카드 배경 톤과 일치 */
-      --theme-purple: #3A3258;
-      --brand-dark: #FFFFFF;        /* 메인과 똑같은 화이트 텍스트 */
-      --brand-sub: #C8C3D4;         /* 메인과 똑같은 밝은 서브 텍스트 */
-      --line: rgba(140, 122, 230, 0.35); /* 메인과 똑같은 선 명도 */
-      --header-bg: rgba(22, 18, 33, 0.85);
-      --modal-bg: #161221;
-      --modal-sub-bg: #0B0912;
-      --badge-bg: rgba(140, 122, 230, 0.2);
-      --badge-text: #FFFFFF;
-    }
-
-    /* body를 투명하게 처리 */
-body {
-  background-color: transparent !important;
-  color: var(--brand-dark);
-  letter-spacing: -0.02em;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* site-frame 배경을 메인과 똑같이 변수(--bg)로 채워주기 */
-.site-frame {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 !important;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background-color: var(--bg);   /* 🔥 transparent 대신 이걸로 변경! */
-  position: relative;
-}
-    html { scroll-behavior: smooth; }
-    
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-
-    .nav-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--brand-sub);
-      padding: 8px 16px;
-      border-radius: 99px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 640px) {
-      .nav-link { font-size: 0.75rem; padding: 6px 10px; }
-    }
-
-    .nav-link:hover {
-      color: var(--brand-dark);
-      background: rgba(218, 209, 254, 0.3);
-    }
-    .nav-link.active {
-      color: #1E1B2C;
-      background: #DAD1FE;
-      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
-    }
-
-    .calendar-card {
-      background: var(--card-bg);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
-    }
-
-    .cal-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    .cal-table th {
-      text-align: center;
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: var(--brand-sub);
-      padding-bottom: 16px;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .cal-table th:first-child { color: #D4727A; }
-    .cal-table th:last-child { color: #7BA0D4; }
-
-    .cal-table td {
-      border: 1px solid var(--line);
-      vertical-align: top;
-      height: 110px;
-      padding: 6px 0;
-      position: relative;
-      transition: background 0.2s ease;
-      overflow: hidden;
-    }
-
-    .cal-table td.has-event { cursor: pointer; }
-    .cal-table td.has-event:hover { background: rgba(218, 209, 254, 0.25); }
-
-    .cal-table td.empty-cell { background: rgba(249, 248, 252, 0.04); }
-
-    .day-num-box {
-      padding: 0 8px;
-      height: 28px;
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--brand-dark);
-      font-family: 'Montserrat', sans-serif;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-    }
-
-    .today .day-num-box .today-badge {
-      background: #8C7AE6;
-      color: #ffffff;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8125rem;
-      box-shadow: 0 2px 8px rgba(140, 122, 230, 0.3);
-    }
-
-    td:first-child .day-num-box { color: #D4727A; }
-    td:last-child .day-num-box { color: #7BA0D4; }
-
-    .event-bar-wrapper {
-      margin-top: 2px;
-      margin-bottom: 4px;
-      height: 25px;
-      position: relative;
-      width: 100%;
-    }
-    
-    .event-bar {
-      height: 100%;
-      font-size: 0.725rem;
-      font-weight: 700;
-      color: #1E1B2C;
-      line-height: 25px;
-      padding: 0 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      position: absolute;
-      top: 0; bottom: 0;
-      pointer-events: none;
-      box-sizing: border-box;
-      z-index: 10;
-    }
-
-    .event-bar.is-single { left: 4px; right: 4px; border-radius: 6px; }
-    .event-bar.is-start { left: 4px; right: 0; border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
-    .event-bar.is-middle { left: 0; right: 0; }
-    .event-bar.is-end { left: 0; right: 4px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
-
-    .legend-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--badge-text);
-      background: var(--badge-bg);
-      border: 1px solid var(--line);
-    }
-    .legend-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: currentColor;
-    }
-
-    .list-date-group { margin-bottom: 20px; }
-    .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
-    .list-day-num { 
-      width: 40px; height: 40px; 
-      border-radius: 12px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      background: var(--card-bg); 
-      border: 1px solid var(--line); 
-      font-weight: 700; font-size: 1rem; 
-      color: var(--brand-dark);
-      font-family: 'Montserrat', sans-serif;
-    }
-    .list-day-num.today { background: #8C7AE6; color: #ffffff; border-color: #8C7AE6; }
-    .list-day-num.sunday { color: #D4727A; }
-    .list-day-num.saturday { color: #7BA0D4; }
-    
-    .list-event-item { 
-      display: flex; align-items: center; gap: 12px; 
-      padding: 14px; 
-      background: var(--card-bg); 
-      border-radius: 16px; 
-      border: 1px solid var(--line); 
-      margin-bottom: 8px; 
-      transition: all 0.2s ease; 
-      cursor: pointer;
-    }
-    .list-event-item:hover { 
-      border-color: #8C7AE6; 
-      box-shadow: 0 8px 20px rgba(218, 209, 254, 0.15); 
-    }
-    .list-event-bar { width: 4px; height: 32px; border-radius: 99px; flex-shrink: 0; }
-    .list-event-info { flex: 1; min-width: 0; }
-    .list-event-title { font-size: .875rem; font-weight: 700; color: var(--brand-dark); }
-    .list-event-time { font-size: .75rem; color: var(--brand-sub); margin-top: 2px; }
-
-    .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
-    .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
-    .today-divider span { font-size: .75rem; font-weight: 700; color: var(--brand-sub); white-space: nowrap; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
-
-    .desktop-only { display: block; }
-    .mobile-only { display: none; }
-    @media(max-width:768px){
-      .desktop-only { display: none; }
-      .mobile-only { display: block; }
-    }
-
-    .modal-backdrop { 
-      position: fixed; inset: 0; z-index: 100; 
-      background: rgba(30, 27, 44, 0.55); 
-      display: none; align-items: center; justify-content: center; 
-      backdrop-filter: blur(10px); 
-      padding: 16px;
-    }
-    .modal-backdrop.open { display: flex; }
-
-    .modal-content { 
-      background: var(--modal-bg); 
-      border-radius: 24px; 
-      max-width: 480px; 
-      width: 100%; 
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden; 
-      border: 1px solid var(--line); 
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); 
-      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    #modalEventList::-webkit-scrollbar { width: 4px; }
-    #modalEventList::-webkit-scrollbar-track { background: transparent; }
-    #modalEventList::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .fxpop {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      user-select: none;
-      animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translate(var(--dx), 0) scale(0.6) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-        transform: translate(var(--dx), -10px) scale(1) rotate(var(--rot));
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--dx), -45px) scale(0.8) rotate(var(--rot));
-      }
-    }
-  </style>
-</head>
-<body class="bg-[var(--bg)] min-h-screen font-sans pb-32 overflow-x-hidden">
-  <div class="site-frame">
-
-  <!-- FLOATING HEADER & NAVIGATION -->
-  <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
-    <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-16 md:h-20 rounded-full px-3 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
-      <div class="font-montserrat text-lg md:text-xl font-bold tracking-wider text-[var(--brand-dark)] shrink-0 pl-1">
-        SERU<span class="text-textPurple">.</span>
-      </div>
-      
-      <div class="flex items-center gap-1 md:gap-2">
-        <nav class="flex gap-0.5 md:gap-1">
-          <a href="../" class="nav-link">프로필</a>
-          <a href="#" class="nav-link active">일정</a>
-          <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
-          <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
-        </nav>
-
-        <button id="themeToggle" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-xs md:text-sm shrink-0 hover:border-textPurple transition shadow-sm ml-0.5" aria-label="다크모드 토글">
-          <span id="themeIcon">🌙</span>
-        </button>
-      </div>
-    </header>
-  </div>
-
-  <main class="max-w-4xl mx-auto px-4 md:px-6 mt-8 md:mt-12 pb-24">
-    <section class="text-center mb-8 md:mb-10">
-      <div class="inline-flex flex-col items-center">
-        <span class="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--brand-dark)] tracking-tight font-sans">방송 일정</h1>
-        <div class="w-10 md:w-12 h-0.5 bg-gradient-to-r from-transparent via-textPurple/40 to-transparent mt-2 rounded-full"></div>
-      </div>
-    </section>
-
-    <section class="pb-6">
-      <div class="flex items-center justify-between mb-6 md:mb-8 max-w-xs mx-auto">
-        <button onclick="changeMonth(-1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <h2 id="calMonth" class="text-lg md:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight"></h2>
-        <button onclick="changeMonth(1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-      
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-2 desktop-only">
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송</span>
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#6E6B7B;"></span>휴방</span>
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#E56B98;"></span>이벤트</span>
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#2DB89B;"></span>합방</span>
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#4A90E2;"></span>대회</span>
-        <span class="legend-badge"><span class="legend-badge-dot" style="color:#E28D3B;"></span>기타</span>
-      </div>
-    </section>
-
-    <section class="desktop-only mb-16">
-      <div class="calendar-card">
-        <table class="cal-table">
-          <thead>
-            <tr>
-              <th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th>
-            </tr>
-          </thead>
-          <tbody id="calBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="mobile-only mb-12">
-      <div id="listBody"></div>
-    </section>
-
-    <section class="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-[var(--line)] desktop-only">
-      <div class="flex items-end justify-between mb-6 md:mb-8">
-        <div>
-          <div class="text-[10px] md:text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
-          <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-dark)] tracking-tight">다가오는 일정</h3>
-        </div>
-      </div>
-      <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-    </section>
-  </main>
-
-  <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
-        <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">SCHEDULE DETAILS</div>
-        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--modal-sub-bg)] hover:bg-themePurple/30 text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition flex items-center justify-center font-bold text-xs sm:text-sm">✕</button>
-      </div>
-
-      <div id="modalEventList" class="p-5 sm:p-6 overflow-y-auto space-y-6 sm:space-y-8 flex-1"></div>
-    </div>
-  </div>
-
-  <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold select-none">
-    <p class="font-montserrat tracking-wider">
-      © 2026 
-      <span onclick="location.href='../admin/'" class="admin-secret-link cursor-default">SERU.</span>
-      ALL RIGHTS RESERVED.
-    </p>
-  </footer>
-</div>
-
-  <script src="../js/supabase-config.js"></script>  
-  <script>
-    let currentYear, currentMonth;
-    let schedules = [];
-    const DAYS = ['일','월','화','수','목','금','토'];
-    
-    const TYPE_COLORS = {
-      'broadcast':  '#D1C4FF',
-      'off':        '#E2E0E8',
-      'event':      '#FFD1E3',
-      'collab':     '#C3F0E6',
-      'tournament': '#C2E0FF',
-      'other':      '#FFE3C5'
-    };
-
-    const TYPE_DOT_COLORS = {
-      'broadcast':  '#8C7AE6',
-      'off':        '#6E6B7B',
-      'event':      '#E56B98',
-      'collab':     '#2DB89B',
-      'tournament': '#4A90E2',
-      'other':      '#E28D3B'
-    };
-
-    const TYPE_LABELS = {
-      'broadcast':  '방송',
-      'off':        '휴방', 
-      'event':      '이벤트',
-      'collab':     '합방',
-      'tournament': '대회',
-      'other':      '기타'
-    };
-
-    const toggleBtn = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-
-    function applyTheme(isDark) {
-      if (isDark) {
-        document.body.classList.add('dark');
-        document.documentElement.classList.add('dark');
-        themeIcon.textContent = '☀️';
-      } else {
-        document.body.classList.remove('dark');
-        document.documentElement.classList.remove('dark');
-        themeIcon.textContent = '🌙';
-      }
-    }
-
-    if (localStorage.getItem('seru_theme') === 'dark') {
-      applyTheme(true);
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      const isDark = !document.body.classList.contains('dark');
-      applyTheme(isDark);
-      localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
-    });
-
-    const popImages = [
-      '../fx_shell.png',
-      '../fx_haetto.png'
-    ];
-
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, input, textarea, iframe, td, .list-event-item')) return;
-
-      const count = 3;
-      for (let i = 0; i < count; i++) {
-        const img = document.createElement('img');
-        img.className = 'fxpop';
-
-        img.src = popImages[Math.floor(Math.random() * popImages.length)];
-
-        img.style.width = '24px';
-        img.style.height = '24px';
-        img.style.objectFit = 'contain';
-
-        img.style.left = `${e.clientX - 12}px`;
-        img.style.top = `${e.clientY - 12}px`;
-
-        const offsetX = (Math.random() - 0.5) * 35;
-        const rot = (Math.random() - 0.5) * 30;
-
-        img.style.setProperty('--dx', `${offsetX}px`);
-        img.style.setProperty('--rot', `${rot}deg`);
-
-        document.body.appendChild(img);
-        setTimeout(() => img.remove(), 800);
-      }
-    });
-
-    function init() {
-      const n = new Date();
-      currentYear = n.getFullYear();
-      currentMonth = n.getMonth();
-      loadSettings();
-      loadMonth();
-    }
-
-    async function loadSettings() {
-      try {
-        const { data, error } = await supabaseClient.from('settings').select('*');
-        if (error || !data) return;
-        
-        data.forEach(item => {
-          if (item.key === 'musicbook_url' && item.value) {
-            const el = document.getElementById('navMusicbook');
-            if (el) el.href = item.value;
-          }
-          if (item.key === 'karma_url' && item.value) {
-            const el = document.getElementById('navKarma');
-            if (el) el.href = item.value;
-          }
-        });
-      } catch (err) {
-        console.error('Settings load error:', err);
-      }
-    }
-
-    function sortSchedules(list) {
-      return list.sort((a, b) => {
-        const aIsMulti = a.end_date && a.end_date !== a.event_date;
-        const bIsMulti = b.end_date && b.end_date !== b.event_date;
-
-        if (aIsMulti && !bIsMulti) return -1;
-        if (!aIsMulti && bIsMulti) return 1;
-
-        if (aIsMulti && bIsMulti) {
-          const aDuration = new Date(a.end_date) - new Date(a.event_date);
-          const bDuration = new Date(b.end_date) - new Date(b.event_date);
-          if (aDuration !== bDuration) return bDuration - aDuration;
-          return a.event_date.localeCompare(b.event_date);
-        }
-
-        const timeA = a.event_time || '99:99';
-        const timeB = b.event_time || '99:99';
-        return timeA.localeCompare(timeB);
-      });
-    }
-
-    async function loadMonth() {
-      document.getElementById('calMonth').textContent = `${currentYear}년 ${currentMonth + 1}월`;
-      
-      const s = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-01`;
-      const e = new Date(currentYear, currentMonth+1, 0);
-      const eStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(e.getDate()).padStart(2,'0')}`;
-      
-      try {
-        const { data, error } = await supabaseClient.from('schedules').select('*')
-          .or(`event_date.gte.${s},end_date.gte.${s}`);
-        if (error) throw error;
-        
-        schedules = sortSchedules(data || []);
-      } catch(err) { console.error(err); schedules = []; }
-      
-      renderCalendar();
-      renderListView();
-      renderUpcoming();
-    }
-
-    function isDateInRange(ds, startDate, endDate) {
-      const targetEnd = endDate || startDate;
-      return ds >= startDate && ds <= targetEnd;
-    }
-
-    function renderCalendar() {
-      const body = document.getElementById('calBody');
-      body.innerHTML = '';
-
-      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-      const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-      const today = new Date();
-      const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
-      let currentDay = 1;
-      let totalCells = firstDay + daysInMonth;
-      let rows = Math.ceil(totalCells / 7);
-
-      for (let r = 0; r < rows; r++) {
-        let tr = document.createElement('tr');
-
-        for (let c = 0; c < 7; c++) {
-          let td = document.createElement('td');
-          let cellIndex = r * 7 + c;
-
-          if (cellIndex < firstDay || currentDay > daysInMonth) {
-            td.className = 'empty-cell';
-            tr.appendChild(td);
-            continue;
-          }
-
-          const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
-          const isToday = (ds === todayStr);
-          if (isToday) td.classList.add('today');
-
-          let numDiv = document.createElement('div');
-          numDiv.className = 'day-num-box';
-          if (isToday) {
-            numDiv.innerHTML = `<span class="today-badge">${currentDay}</span>`;
-          } else {
-            numDiv.innerHTML = `<span>${currentDay}</span>`;
-          }
-          td.appendChild(numDiv);
-
-          const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
-
-          if (dayEvList.length > 0) {
-            td.classList.add('has-event');
-            td.onclick = () => showDayEvents(dayEvList);
-          }
-
-          dayEvList.forEach(ev => {
-            const startStr = ev.event_date;
-            const endStr = ev.end_date || ev.event_date;
-
-            const isStart = (ds === startStr);
-            const isEnd = (ds === endStr);
-            const isSingle = (startStr === endStr);
-
-            const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-
-            let barWrap = document.createElement('div');
-            barWrap.className = 'event-bar-wrapper';
-
-            let bar = document.createElement('div');
-            let barClass = 'event-bar';
-
-            if (isSingle) {
-              barClass += ' is-single';
-            } else if (isStart) {
-              barClass += ' is-start';
-            } else if (isEnd) {
-              barClass += ' is-end';
-            } else {
-              barClass += ' is-middle';
-            }
-
-            bar.className = barClass;
-            bar.style.backgroundColor = cColor;
-
-            if (isStart) {
-              bar.textContent = ev.title;
-            }
-
-            barWrap.appendChild(bar);
-            td.appendChild(barWrap);
-          });
-
-          currentDay++;
-          tr.appendChild(td);
-        }
-        body.appendChild(tr);
-      }
-    }
-
-    function renderListView() {
-      const body = document.getElementById('listBody');
-      const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-      const today = new Date();
-      const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-      const isCurrentMonth = today.getFullYear()===currentYear && today.getMonth()===currentMonth;
-      let html = '';
-      let todayInserted = false;
-
-      for (let d = 1; d <= daysInMonth; d++) {
-        const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const dayEv = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
-        if (dayEv.length === 0) continue;
-
-        const date = new Date(currentYear, currentMonth, d);
-        const dayOfWeek = date.getDay();
-        const isToday = isCurrentMonth && today.getDate()===d;
-        const isPast = ds < todayStr;
-
-        if (isCurrentMonth && !todayInserted && ds >= todayStr) {
-          html += `<div class="today-divider" id="todayAnchor"><span>TODAY</span></div>`;
-          todayInserted = true;
-        }
-
-        let dayClass = 'list-day-num';
-        if (isToday) dayClass += ' today';
-        if (dayOfWeek === 0) dayClass += ' sunday';
-        if (dayOfWeek === 6) dayClass += ' saturday';
-
-        const groupClass = isPast ? 'list-date-group past' : 'list-date-group';
-
-        html += `<div class="${groupClass}">`;
-        html += `<div class="list-date-header">`;
-        html += `<div class="${dayClass}">${d}</div>`;
-        html += `<div class="list-day-label font-bold text-sm text-[var(--brand-dark)]">${DAYS[dayOfWeek]}요일${isToday ? ' · 오늘' : ''}</div>`;
-        html += `</div>`;
-
-        dayEv.forEach(ev => {
-          const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-          const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
-          const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-          const t = ev.event_time ? ev.event_time.slice(0,5) : '';
-          html += `
-            <div class="list-event-item" onclick="showSingleEvent('${ev.id}')">
-              <div class="list-event-bar" style="background:${c}"></div>
-              <div class="list-event-info">
-                <div class="list-event-title">${ev.title}</div>
-                ${t ? `<div class="list-event-time">${t}</div>` : ''}
-              </div>
-              <span class="legend-badge">
-                <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
-              </span>
-            </div>`;
-        });
-        html += `</div>`;
-      }
-
-      if (!todayInserted && isCurrentMonth) {
-        html += `<div class="today-divider" id="todayAnchor"><span>TODAY</span></div>`;
-        html += '<div class="text-center py-12 text-[var(--brand-sub)] text-sm font-semibold">예정된 방송 일정이 없습니다.</div>';
-      }
-
-      if (!html) {
-        html = '<div class="text-center py-16 text-[var(--brand-sub)] text-sm font-semibold">이번 달에 등록된 일정이 존재하지 않습니다.</div>';
-      }
-
-      body.innerHTML = html;
-
-      setTimeout(() => {
-        const anchor = document.getElementById('todayAnchor');
-        if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
-
-    function renderUpcoming() {
-      const list = document.getElementById('upcomingList');
-      const now = new Date();
-
-      const up = schedules.filter(s => {
-        if (!s.event_date) return false;
-        const targetEnd = s.end_date || s.event_date;
-        let eventDateTime;
-        if (s.event_time && s.event_date === targetEnd) {
-          eventDateTime = new Date(`${targetEnd}T${s.event_time}`);
-        } else {
-          eventDateTime = new Date(`${targetEnd}T23:59:59`);
-        }
-        return eventDateTime >= now;
-      }).slice(0, 4);
-      
-      if (!up.length) { 
-        list.innerHTML = `
-          <div class="col-span-2 text-center py-12 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)]">
-            <p class="text-sm font-semibold text-[var(--brand-sub)]">예정되어 있는 일정이 없습니다.</p>
-          </div>`; 
-        return; 
-      }
-      
-      list.innerHTML = up.map(ev => {
-        const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-        const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
-        const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-        const t = ev.event_time ? ev.event_time.slice(0,5) : '';
-        
-        const startD = new Date(ev.event_date + 'T00:00:00');
-        let dateDisplay = `${startD.getMonth()+1}/${startD.getDate()} (${DAYS[startD.getDay()]})`;
-        
-        if (ev.end_date && ev.end_date !== ev.event_date) {
-          const endD = new Date(ev.end_date + 'T00:00:00');
-          dateDisplay += ` ~ ${endD.getMonth()+1}/${endD.getDate()} (${DAYS[endD.getDay()]})`;
-        }
-        
-        return `
-          <div class="group relative flex items-center justify-between p-4 sm:p-5 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] hover:border-textPurple/50 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
-            <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
-            <div class="pl-2 flex-1 min-w-0 pr-3">
-              <div class="font-bold text-[var(--brand-dark)] text-sm sm:text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
-              <div class="flex items-center gap-2.5 text-xs font-semibold text-[var(--brand-sub)] mt-1.5 font-montserrat">
-                <span>${dateDisplay}</span>
-                ${t ? `<span>· ${t}</span>` : ''}
-              </div>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>세르 일정</title>
+      <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+      <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="../apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192" href="../android-icon-192x192.png">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script>
+         tailwind.config = {
+           darkMode: 'class',
+           theme: { 
+             extend: {
+               colors: { 
+                 bg: 'var(--bg)', 
+                 themePurple: 'var(--theme-purple)', 
+                 textPurple: '#8C7AE6',
+                 brandDark: 'var(--brand-dark)', 
+                 brandSub: 'var(--brand-sub)', 
+                 line: 'var(--line)' 
+               },
+               fontFamily: { 
+                 sans: ['Pretendard', 'sans-serif'], 
+                 montserrat: ['Montserrat', 'sans-serif'] 
+               }
+             }
+           }
+         }
+      </script>
+      <style>
+         html, body {
+         cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+         }
+         button, [onclick], .nav-link, td.has-event, .list-event-item, #themeToggle {
+         cursor: url('../cursors/Cursor5_ser_select.cur'), pointer !important;
+         }
+         a[target="_blank"] {
+         cursor: url('../cursors/Cursor15_ser_link.cur'), pointer !important;
+         }
+         .legend-badge {
+         cursor: url('../cursors/Cursor2_ser_helpsel.cur'), help !important;
+         }
+         input, textarea {
+         cursor: url('../cursors/Cursor6_ser_text.cur'), text !important;
+         }
+         :disabled, .disabled {
+         cursor: url('../cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+         }
+         .admin-secret-link {
+         cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), default !important;
+         }
+         :root {
+         --bg: #F8F7FC;
+         --card-bg: #FFFFFF;
+         --theme-purple: #DAD1FE;
+         --brand-dark: #1A1726;
+         --brand-sub: #5E5B6E;
+         --line: rgba(218, 209, 254, 0.4);
+         --header-bg: rgba(255, 255, 255, 0.75);
+         --modal-bg: #FFFFFF;
+         --modal-sub-bg: #F9F8FC;
+         --badge-bg: rgba(218, 209, 254, 0.3);
+         --badge-text: #1E1B2C;
+         }
+         body.dark {
+         --bg: #0B0912;
+         --card-bg: #161221;
+         --theme-purple: #3A3258;
+         --brand-dark: #FFFFFF;
+         --brand-sub: #C8C3D4;
+         --line: rgba(140, 122, 230, 0.35);
+         --header-bg: rgba(22, 18, 33, 0.85);
+         --modal-bg: #161221;
+         --modal-sub-bg: #0B0912;
+         --badge-bg: rgba(140, 122, 230, 0.2);
+         --badge-text: #FFFFFF;
+         }
+         body {
+         background-color: transparent !important;
+         color: var(--brand-dark);
+         letter-spacing: -0.02em;
+         transition: background-color 0.3s ease, color 0.3s ease;
+         margin: 0 !important;
+         padding: 0 !important;
+         }
+         .site-frame {
+         width: 100%;
+         max-width: 100%;
+         margin: 0 !important;
+         border-radius: 20px;
+         overflow: hidden;
+         border: 1px solid var(--line);
+         background-color: var(--bg);
+         position: relative;
+         }
+         html { scroll-behavior: smooth; }
+         ::-webkit-scrollbar { width: 5px; height: 5px; }
+         ::-webkit-scrollbar-track { background: var(--bg); }
+         ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
+         .nav-link {
+         font-size: 0.875rem;
+         font-weight: 600;
+         color: var(--brand-sub);
+         padding: 8px 16px;
+         border-radius: 99px;
+         transition: all 0.3s ease;
+         white-space: nowrap;
+         }
+         @media (max-width: 640px) {
+         .nav-link { font-size: 0.75rem; padding: 6px 10px; }
+         }
+         .nav-link:hover {
+         color: var(--brand-dark);
+         background: rgba(218, 209, 254, 0.3);
+         }
+         .nav-link.active {
+         color: #1E1B2C;
+         background: #DAD1FE;
+         box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
+         }
+         .calendar-card {
+         background: var(--card-bg);
+         border: 1px solid var(--line);
+         border-radius: 28px;
+         padding: 28px;
+         box-shadow: 0 10px 30px rgba(30, 27, 44, 0.03);
+         }
+         .cal-table {
+         width: 100%;
+         border-collapse: collapse;
+         table-layout: fixed;
+         }
+         .cal-table th {
+         text-align: center;
+         font-size: 0.8125rem;
+         font-weight: 700;
+         color: var(--brand-sub);
+         padding-bottom: 16px;
+         font-family: 'Montserrat', sans-serif;
+         }
+         .cal-table th:first-child { color: #D4727A; }
+         .cal-table th:last-child { color: #7BA0D4; }
+         .cal-table td {
+         border: 1px solid var(--line);
+         vertical-align: top;
+         height: 110px;
+         padding: 6px 0;
+         position: relative;
+         transition: background 0.2s ease;
+         overflow: hidden;
+         }
+         .cal-table td.has-event { cursor: pointer; }
+         .cal-table td.has-event:hover { background: rgba(218, 209, 254, 0.25); }
+         .cal-table td.empty-cell { background: rgba(249, 248, 252, 0.04); }
+         .day-num-box {
+         padding: 0 8px;
+         height: 28px;
+         font-size: 0.875rem;
+         font-weight: 700;
+         color: var(--brand-dark);
+         font-family: 'Montserrat', sans-serif;
+         pointer-events: none;
+         display: flex;
+         align-items: center;
+         }
+         .today .day-num-box .today-badge {
+         background: #8C7AE6;
+         color: #ffffff;
+         width: 24px;
+         height: 24px;
+         border-radius: 50%;
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 0.8125rem;
+         box-shadow: 0 2px 8px rgba(140, 122, 230, 0.3);
+         }
+         td:first-child .day-num-box { color: #D4727A; }
+         td:last-child .day-num-box { color: #7BA0D4; }
+         .event-bar-wrapper {
+         margin-top: 2px;
+         margin-bottom: 4px;
+         height: 25px;
+         position: relative;
+         width: 100%;
+         }
+         .event-bar {
+         height: 100%;
+         font-size: 0.725rem;
+         font-weight: 700;
+         color: #1E1B2C;
+         line-height: 25px;
+         padding: 0 8px;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         position: absolute;
+         top: 0; bottom: 0;
+         pointer-events: none;
+         box-sizing: border-box;
+         z-index: 10;
+         }
+         .event-bar.is-single { left: 4px; right: 4px; border-radius: 6px; }
+         .event-bar.is-start { left: 4px; right: 0; border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+         .event-bar.is-middle { left: 0; right: 0; }
+         .event-bar.is-end { left: 0; right: 4px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+         .legend-badge {
+         display: inline-flex;
+         align-items: center;
+         gap: 6px;
+         padding: 5px 14px;
+         border-radius: 99px;
+         font-size: 0.75rem;
+         font-weight: 700;
+         color: var(--badge-text);
+         background: var(--badge-bg);
+         border: 1px solid var(--line);
+         }
+         .legend-badge-dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         background-color: currentColor;
+         }
+         .list-date-group { margin-bottom: 20px; }
+         .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
+         .list-day-num { 
+         width: 40px; height: 40px; 
+         border-radius: 12px; 
+         display: flex; 
+         align-items: center; 
+         justify-content: center; 
+         background: var(--card-bg); 
+         border: 1px solid var(--line); 
+         font-weight: 700; font-size: 1rem; 
+         color: var(--brand-dark);
+         font-family: 'Montserrat', sans-serif;
+         }
+         .list-day-num.today { background: #8C7AE6; color: #ffffff; border-color: #8C7AE6; }
+         .list-day-num.sunday { color: #D4727A; }
+         .list-day-num.saturday { color: #7BA0D4; }
+         .list-event-item { 
+         display: flex; align-items: center; gap: 12px; 
+         padding: 14px; 
+         background: var(--card-bg); 
+         border-radius: 16px; 
+         border: 1px solid var(--line); 
+         margin-bottom: 8px; 
+         transition: all 0.2s ease; 
+         cursor: pointer;
+         }
+         .list-event-item:hover { 
+         border-color: #8C7AE6; 
+         box-shadow: 0 8px 20px rgba(218, 209, 254, 0.15); 
+         }
+         .list-event-bar { width: 4px; height: 32px; border-radius: 99px; flex-shrink: 0; }
+         .list-event-info { flex: 1; min-width: 0; }
+         .list-event-title { font-size: .875rem; font-weight: 700; color: var(--brand-dark); }
+         .list-event-time { font-size: .75rem; color: var(--brand-sub); margin-top: 2px; }
+         .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
+         .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
+         .today-divider span { font-size: .75rem; font-weight: 700; color: var(--brand-sub); white-space: nowrap; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
+         .desktop-only { display: block; }
+         .mobile-only { display: none; }
+         @media(max-width:768px){
+         .desktop-only { display: none; }
+         .mobile-only { display: block; }
+         }
+         .modal-backdrop { 
+         position: fixed; inset: 0; z-index: 100; 
+         background: rgba(30, 27, 44, 0.55); 
+         display: none; align-items: center; justify-content: center; 
+         backdrop-filter: blur(10px); 
+         padding: 16px;
+         }
+         .modal-backdrop.open { display: flex; }
+         .modal-content { 
+         background: var(--modal-bg); 
+         border-radius: 24px; 
+         max-width: 480px; 
+         width: 100%; 
+         max-height: 80vh;
+         display: flex;
+         flex-direction: column;
+         overflow: hidden; 
+         border: 1px solid var(--line); 
+         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); 
+         animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+         }
+         #modalEventList::-webkit-scrollbar { width: 4px; }
+         #modalEventList::-webkit-scrollbar-track { background: transparent; }
+         #modalEventList::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
+         @keyframes modalFadeIn {
+         from { opacity: 0; transform: scale(0.95) translateY(10px); }
+         to { opacity: 1; transform: scale(1) translateY(0); }
+         }
+         .fxpop {
+         position: fixed;
+         pointer-events: none;
+         z-index: 9999;
+         user-select: none;
+         animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+         }
+         @keyframes floatUp {
+         0% {
+         transform: translate(var(--dx), 0) scale(0.6) rotate(0deg);
+         opacity: 0;
+         }
+         20% {
+         opacity: 1;
+         transform: translate(var(--dx), -10px) scale(1) rotate(var(--rot));
+         }
+         100% {
+         opacity: 0;
+         transform: translate(var(--dx), -45px) scale(0.8) rotate(var(--rot));
+         }
+         }
+      </style>
+   </head>
+   <body class="bg-[var(--bg)] min-h-screen font-sans pb-32 overflow-x-hidden">
+      <div class="site-frame">
+         <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
+            <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-16 md:h-20 rounded-full px-3 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
+               <div class="font-montserrat text-lg md:text-xl font-bold tracking-wider text-[var(--brand-dark)] shrink-0 pl-1">
+                  SERU<span class="text-textPurple">.</span>
+               </div>
+               <div class="flex items-center gap-1 md:gap-2">
+                  <nav class="flex gap-0.5 md:gap-1">
+                     <a href="../" class="nav-link">프로필</a>
+                     <a href="#" class="nav-link active">일정</a>
+                     <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+                     <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
+                  </nav>
+                  <button id="themeToggle" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-xs md:text-sm shrink-0 hover:border-textPurple transition shadow-sm ml-0.5" aria-label="다크모드 토글">
+                  <span id="themeIcon">🌙</span>
+                  </button>
+               </div>
+            </header>
+         </div>
+         <main class="max-w-4xl mx-auto px-4 md:px-6 mt-8 md:mt-12 pb-24">
+            <section class="text-center mb-8 md:mb-10">
+               <div class="inline-flex flex-col items-center">
+                  <span class="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
+                  <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--brand-dark)] tracking-tight font-sans">방송 일정</h1>
+                  <div class="w-10 md:w-12 h-0.5 bg-gradient-to-r from-transparent via-textPurple/40 to-transparent mt-2 rounded-full"></div>
+               </div>
+            </section>
+            <section class="pb-6">
+               <div class="flex items-center justify-between mb-6 md:mb-8 max-w-xs mx-auto">
+                  <button onclick="changeMonth(-1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="15 18 9 12 15 6"/>
+                     </svg>
+                  </button>
+                  <h2 id="calMonth" class="text-lg md:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight"></h2>
+                  <button onclick="changeMonth(1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="9 18 15 12 9 6"/>
+                     </svg>
+                  </button>
+               </div>
+               <div class="flex flex-wrap items-center justify-center gap-2 mb-2 desktop-only">
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송</span>
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#6E6B7B;"></span>휴방</span>
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#E56B98;"></span>이벤트</span>
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#2DB89B;"></span>합방</span>
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#4A90E2;"></span>대회</span>
+                  <span class="legend-badge"><span class="legend-badge-dot" style="color:#E28D3B;"></span>기타</span>
+               </div>
+            </section>
+            <section class="desktop-only mb-16">
+               <div class="calendar-card">
+                  <table class="cal-table">
+                     <thead>
+                        <tr>
+                           <th>SUN</th>
+                           <th>MON</th>
+                           <th>TUE</th>
+                           <th>WED</th>
+                           <th>THU</th>
+                           <th>FRI</th>
+                           <th>SAT</th>
+                        </tr>
+                     </thead>
+                     <tbody id="calBody"></tbody>
+                  </table>
+               </div>
+            </section>
+            <section class="mobile-only mb-12">
+               <div id="listBody"></div>
+            </section>
+            <section class="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-[var(--line)] desktop-only">
+               <div class="flex items-end justify-between mb-6 md:mb-8">
+                  <div>
+                     <div class="text-[10px] md:text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
+                     <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-dark)] tracking-tight">다가오는 일정</h3>
+                  </div>
+               </div>
+               <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </section>
+         </main>
+         <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+               <div class="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
+                  <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">SCHEDULE DETAILS</div>
+                  <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--modal-sub-bg)] hover:bg-themePurple/30 text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition flex items-center justify-center font-bold text-xs sm:text-sm">✕</button>
+               </div>
+               <div id="modalEventList" class="p-5 sm:p-6 overflow-y-auto space-y-6 sm:space-y-8 flex-1"></div>
             </div>
-            <span class="legend-badge shrink-0">
-              <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
-            </span>
-          </div>`;
-      }).join('');
-    }
-
-    function showDayEvents(eventList) {
-      const listContainer = document.getElementById('modalEventList');
-      
-      listContainer.innerHTML = eventList.map((ev, index) => {
-        const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
-        const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
-        const l = TYPE_LABELS[ev.event_type] || ev.event_type;
-        
-        const startD = new Date(ev.event_date + 'T00:00:00');
-        let dateDisplay = `${currentYear}년 ${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
-        
-        if (ev.end_date && ev.end_date !== ev.event_date) {
-          const endD = new Date(ev.end_date + 'T00:00:00');
-          dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
-        }
-
-        const borderClass = (index < eventList.length - 1) ? 'pb-6 sm:pb-8 border-b border-[var(--line)]' : '';
-        const hasDesc = ev.description && ev.description.trim() !== '';
-
-        return `
-          <div class="${borderClass}">
-            <div class="mb-3 sm:mb-4">
-              <span class="legend-badge">
-                <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
-              </span>
-            </div>
-
-            <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)] leading-snug mb-4 sm:mb-5 tracking-tight">${ev.title}</h3>
-            
-            <div class="bg-[var(--modal-sub-bg)] border border-[var(--line)] rounded-2xl p-3.5 sm:p-4 ${hasDesc ? 'mb-4 sm:mb-6' : 'mb-2'} space-y-2">
-              <div class="flex items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">DATE</span>
-                <span class="text-xs font-bold text-[var(--brand-dark)]">${dateDisplay}</span>
-              </div>
-              ${ev.event_time ? `
-                <div class="flex items-center gap-3 border-t border-[var(--line)] pt-2">
-                  <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">TIME</span>
-                  <span class="text-xs font-semibold text-[var(--brand-dark)] font-montserrat">${ev.event_time.slice(0, 5)}</span>
-                </div>
-              ` : ''}
-            </div>
-
-            ${hasDesc ? `
-              <div>
-                <div class="text-[10px] font-bold text-[var(--brand-sub)] uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
-                <div class="text-xs sm:text-sm font-medium text-[var(--brand-dark)] leading-relaxed bg-[var(--card-bg)] p-3.5 sm:p-4 rounded-2xl border border-[var(--line)] min-h-[70px] whitespace-pre-line">${ev.description}</div>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('eventModal').classList.add('open');
-    }
-
-    function showSingleEvent(id) {
-      const ev = schedules.find(s => s.id === id);
-      if (ev) showDayEvents([ev]);
-    }
-
-    function closeModal(e) {
-      if (e.target === e.currentTarget) document.getElementById('eventModal').classList.remove('open');
-    }
-
-    function changeMonth(o) {
-      currentMonth += o;
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-      loadMonth();
-    }
-
-    init();
-  </script>
-</body>
+         </div>
+         <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold select-none">
+            <p class="font-montserrat tracking-wider">
+               © 2026 
+               <span onclick="location.href='../admin/'" class="admin-secret-link cursor-default">SERU.</span>
+               ALL RIGHTS RESERVED.
+            </p>
+         </footer>
+      </div>
+      <script src="../js/supabase-config.js"></script>  
+      <script>
+         let currentYear, currentMonth;
+         let schedules = [];
+         const DAYS = ['일','월','화','수','목','금','토'];
+         
+         const TYPE_COLORS = {
+           'broadcast':  '#D1C4FF',
+           'off':        '#E2E0E8',
+           'event':      '#FFD1E3',
+           'collab':     '#C3F0E6',
+           'tournament': '#C2E0FF',
+           'other':      '#FFE3C5'
+         };
+         
+         const TYPE_DOT_COLORS = {
+           'broadcast':  '#8C7AE6',
+           'off':        '#6E6B7B',
+           'event':      '#E56B98',
+           'collab':     '#2DB89B',
+           'tournament': '#4A90E2',
+           'other':      '#E28D3B'
+         };
+         
+         const TYPE_LABELS = {
+           'broadcast':  '방송',
+           'off':        '휴방', 
+           'event':      '이벤트',
+           'collab':     '합방',
+           'tournament': '대회',
+           'other':      '기타'
+         };
+         
+         const toggleBtn = document.getElementById('themeToggle');
+         const themeIcon = document.getElementById('themeIcon');
+         
+         function applyTheme(isDark) {
+           if (isDark) {
+             document.body.classList.add('dark');
+             document.documentElement.classList.add('dark');
+             themeIcon.textContent = '☀️';
+           } else {
+             document.body.classList.remove('dark');
+             document.documentElement.classList.remove('dark');
+             themeIcon.textContent = '🌙';
+           }
+         }
+         
+         if (localStorage.getItem('seru_theme') === 'dark') {
+           applyTheme(true);
+         }
+         
+         toggleBtn.addEventListener('click', () => {
+           const isDark = !document.body.classList.contains('dark');
+           applyTheme(isDark);
+           localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
+         });
+         
+         const popImages = [
+           '../fx_shell.png',
+           '../fx_haetto.png'
+         ];
+         
+         document.addEventListener('click', (e) => {
+           if (e.target.closest('button, a, input, textarea, iframe, td, .list-event-item')) return;
+         
+           const count = 3;
+           for (let i = 0; i < count; i++) {
+             const img = document.createElement('img');
+             img.className = 'fxpop';
+         
+             img.src = popImages[Math.floor(Math.random() * popImages.length)];
+         
+             img.style.width = '24px';
+             img.style.height = '24px';
+             img.style.objectFit = 'contain';
+         
+             img.style.left = `${e.clientX - 12}px`;
+             img.style.top = `${e.clientY - 12}px`;
+         
+             const offsetX = (Math.random() - 0.5) * 35;
+             const rot = (Math.random() - 0.5) * 30;
+         
+             img.style.setProperty('--dx', `${offsetX}px`);
+             img.style.setProperty('--rot', `${rot}deg`);
+         
+             document.body.appendChild(img);
+             setTimeout(() => img.remove(), 800);
+           }
+         });
+         
+         function init() {
+           const n = new Date();
+           currentYear = n.getFullYear();
+           currentMonth = n.getMonth();
+           loadSettings();
+           loadMonth();
+         }
+         
+         async function loadSettings() {
+           try {
+             const { data, error } = await supabaseClient.from('settings').select('*');
+             if (error || !data) return;
+             
+             data.forEach(item => {
+               if (item.key === 'musicbook_url' && item.value) {
+                 const el = document.getElementById('navMusicbook');
+                 if (el) el.href = item.value;
+               }
+               if (item.key === 'karma_url' && item.value) {
+                 const el = document.getElementById('navKarma');
+                 if (el) el.href = item.value;
+               }
+             });
+           } catch (err) {
+             console.error('Settings load error:', err);
+           }
+         }
+         
+         function sortSchedules(list) {
+           return list.sort((a, b) => {
+             const aIsMulti = a.end_date && a.end_date !== a.event_date;
+             const bIsMulti = b.end_date && b.end_date !== b.event_date;
+         
+             if (aIsMulti && !bIsMulti) return -1;
+             if (!aIsMulti && bIsMulti) return 1;
+         
+             if (aIsMulti && bIsMulti) {
+               const aDuration = new Date(a.end_date) - new Date(a.event_date);
+               const bDuration = new Date(b.end_date) - new Date(b.event_date);
+               if (aDuration !== bDuration) return bDuration - aDuration;
+               return a.event_date.localeCompare(b.event_date);
+             }
+         
+             const timeA = a.event_time || '99:99';
+             const timeB = b.event_time || '99:99';
+             return timeA.localeCompare(timeB);
+           });
+         }
+         
+         async function loadMonth() {
+           document.getElementById('calMonth').textContent = `${currentYear}년 ${currentMonth + 1}월`;
+           
+           const s = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-01`;
+           const e = new Date(currentYear, currentMonth+1, 0);
+           const eStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(e.getDate()).padStart(2,'0')}`;
+           
+           try {
+             const { data, error } = await supabaseClient.from('schedules').select('*')
+               .or(`event_date.gte.${s},end_date.gte.${s}`);
+             if (error) throw error;
+             
+             schedules = sortSchedules(data || []);
+           } catch(err) { console.error(err); schedules = []; }
+           
+           renderCalendar();
+           renderListView();
+           renderUpcoming();
+         }
+         
+         function isDateInRange(ds, startDate, endDate) {
+           const targetEnd = endDate || startDate;
+           return ds >= startDate && ds <= targetEnd;
+         }
+         
+         function renderCalendar() {
+           const body = document.getElementById('calBody');
+           body.innerHTML = '';
+         
+           const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+           const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+           const today = new Date();
+           const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+         
+           let currentDay = 1;
+           let totalCells = firstDay + daysInMonth;
+           let rows = Math.ceil(totalCells / 7);
+         
+           for (let r = 0; r < rows; r++) {
+             let tr = document.createElement('tr');
+         
+             for (let c = 0; c < 7; c++) {
+               let td = document.createElement('td');
+               let cellIndex = r * 7 + c;
+         
+               if (cellIndex < firstDay || currentDay > daysInMonth) {
+                 td.className = 'empty-cell';
+                 tr.appendChild(td);
+                 continue;
+               }
+         
+               const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
+               const isToday = (ds === todayStr);
+               if (isToday) td.classList.add('today');
+         
+               let numDiv = document.createElement('div');
+               numDiv.className = 'day-num-box';
+               if (isToday) {
+                 numDiv.innerHTML = `<span class="today-badge">${currentDay}</span>`;
+               } else {
+                 numDiv.innerHTML = `<span>${currentDay}</span>`;
+               }
+               td.appendChild(numDiv);
+         
+               const dayEvList = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
+         
+               if (dayEvList.length > 0) {
+                 td.classList.add('has-event');
+                 td.onclick = () => showDayEvents(dayEvList);
+               }
+         
+               dayEvList.forEach(ev => {
+                 const startStr = ev.event_date;
+                 const endStr = ev.end_date || ev.event_date;
+         
+                 const isStart = (ds === startStr);
+                 const isEnd = (ds === endStr);
+                 const isSingle = (startStr === endStr);
+         
+                 const cColor = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+         
+                 let barWrap = document.createElement('div');
+                 barWrap.className = 'event-bar-wrapper';
+         
+                 let bar = document.createElement('div');
+                 let barClass = 'event-bar';
+         
+                 if (isSingle) {
+                   barClass += ' is-single';
+                 } else if (isStart) {
+                   barClass += ' is-start';
+                 } else if (isEnd) {
+                   barClass += ' is-end';
+                 } else {
+                   barClass += ' is-middle';
+                 }
+         
+                 bar.className = barClass;
+                 bar.style.backgroundColor = cColor;
+         
+                 if (isStart) {
+                   bar.textContent = ev.title;
+                 }
+         
+                 barWrap.appendChild(bar);
+                 td.appendChild(barWrap);
+               });
+         
+               currentDay++;
+               tr.appendChild(td);
+             }
+             body.appendChild(tr);
+           }
+         }
+         
+         function renderListView() {
+           const body = document.getElementById('listBody');
+           const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+           const today = new Date();
+           const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+           const isCurrentMonth = today.getFullYear()===currentYear && today.getMonth()===currentMonth;
+           let html = '';
+           let todayInserted = false;
+         
+           for (let d = 1; d <= daysInMonth; d++) {
+             const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+             const dayEv = schedules.filter(s => isDateInRange(ds, s.event_date, s.end_date));
+             if (dayEv.length === 0) continue;
+         
+             const date = new Date(currentYear, currentMonth, d);
+             const dayOfWeek = date.getDay();
+             const isToday = isCurrentMonth && today.getDate()===d;
+             const isPast = ds < todayStr;
+         
+             if (isCurrentMonth && !todayInserted && ds >= todayStr) {
+               html += `<div class="today-divider" id="todayAnchor"><span>TODAY</span></div>`;
+               todayInserted = true;
+             }
+         
+             let dayClass = 'list-day-num';
+             if (isToday) dayClass += ' today';
+             if (dayOfWeek === 0) dayClass += ' sunday';
+             if (dayOfWeek === 6) dayClass += ' saturday';
+         
+             const groupClass = isPast ? 'list-date-group past' : 'list-date-group';
+         
+             html += `<div class="${groupClass}">`;
+             html += `<div class="list-date-header">`;
+             html += `<div class="${dayClass}">${d}</div>`;
+             html += `<div class="list-day-label font-bold text-sm text-[var(--brand-dark)]">${DAYS[dayOfWeek]}요일${isToday ? ' · 오늘' : ''}</div>`;
+             html += `</div>`;
+         
+             dayEv.forEach(ev => {
+               const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+               const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
+               const l = TYPE_LABELS[ev.event_type] || ev.event_type;
+               const t = ev.event_time ? ev.event_time.slice(0,5) : '';
+               html += `
+                 <div class="list-event-item" onclick="showSingleEvent('${ev.id}')">
+                   <div class="list-event-bar" style="background:${c}"></div>
+                   <div class="list-event-info">
+                     <div class="list-event-title">${ev.title}</div>
+                     ${t ? `<div class="list-event-time">${t}</div>` : ''}
+                   </div>
+                   <span class="legend-badge">
+                     <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+                   </span>
+                 </div>`;
+             });
+             html += `</div>`;
+           }
+         
+           if (!todayInserted && isCurrentMonth) {
+             html += `<div class="today-divider" id="todayAnchor"><span>TODAY</span></div>`;
+             html += '<div class="text-center py-12 text-[var(--brand-sub)] text-sm font-semibold">예정된 방송 일정이 없습니다.</div>';
+           }
+         
+           if (!html) {
+             html = '<div class="text-center py-16 text-[var(--brand-sub)] text-sm font-semibold">이번 달에 등록된 일정이 존재하지 않습니다.</div>';
+           }
+         
+           body.innerHTML = html;
+         
+           setTimeout(() => {
+             const anchor = document.getElementById('todayAnchor');
+             if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+           }, 100);
+         }
+         
+         function renderUpcoming() {
+           const list = document.getElementById('upcomingList');
+           const now = new Date();
+         
+           const up = schedules.filter(s => {
+             if (!s.event_date) return false;
+             const targetEnd = s.end_date || s.event_date;
+             let eventDateTime;
+             if (s.event_time && s.event_date === targetEnd) {
+               eventDateTime = new Date(`${targetEnd}T${s.event_time}`);
+             } else {
+               eventDateTime = new Date(`${targetEnd}T23:59:59`);
+             }
+             return eventDateTime >= now;
+           }).slice(0, 4);
+           
+           if (!up.length) { 
+             list.innerHTML = `
+               <div class="col-span-2 text-center py-12 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)]">
+                 <p class="text-sm font-semibold text-[var(--brand-sub)]">예정되어 있는 일정이 없습니다.</p>
+               </div>`; 
+             return; 
+           }
+           
+           list.innerHTML = up.map(ev => {
+             const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+             const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
+             const l = TYPE_LABELS[ev.event_type] || ev.event_type;
+             const t = ev.event_time ? ev.event_time.slice(0,5) : '';
+             
+             const startD = new Date(ev.event_date + 'T00:00:00');
+             let dateDisplay = `${startD.getMonth()+1}/${startD.getDate()} (${DAYS[startD.getDay()]})`;
+             
+             if (ev.end_date && ev.end_date !== ev.event_date) {
+               const endD = new Date(ev.end_date + 'T00:00:00');
+               dateDisplay += ` ~ ${endD.getMonth()+1}/${endD.getDate()} (${DAYS[endD.getDay()]})`;
+             }
+             
+             return `
+               <div class="group relative flex items-center justify-between p-4 sm:p-5 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] hover:border-textPurple/50 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
+                 <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
+                 <div class="pl-2 flex-1 min-w-0 pr-3">
+                   <div class="font-bold text-[var(--brand-dark)] text-sm sm:text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
+                   <div class="flex items-center gap-2.5 text-xs font-semibold text-[var(--brand-sub)] mt-1.5 font-montserrat">
+                     <span>${dateDisplay}</span>
+                     ${t ? `<span>· ${t}</span>` : ''}
+                   </div>
+                 </div>
+                 <span class="legend-badge shrink-0">
+                   <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+                 </span>
+               </div>`;
+           }).join('');
+         }
+         
+         function showDayEvents(eventList) {
+           const listContainer = document.getElementById('modalEventList');
+           
+           listContainer.innerHTML = eventList.map((ev, index) => {
+             const c = ev.color || TYPE_COLORS[ev.event_type] || '#DAD1FE';
+             const dotC = TYPE_DOT_COLORS[ev.event_type] || '#8C7AE6';
+             const l = TYPE_LABELS[ev.event_type] || ev.event_type;
+             
+             const startD = new Date(ev.event_date + 'T00:00:00');
+             let dateDisplay = `${currentYear}년 ${startD.getMonth()+1}월 ${startD.getDate()}일 (${DAYS[startD.getDay()]})`;
+             
+             if (ev.end_date && ev.end_date !== ev.event_date) {
+               const endD = new Date(ev.end_date + 'T00:00:00');
+               dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
+             }
+         
+             const borderClass = (index < eventList.length - 1) ? 'pb-6 sm:pb-8 border-b border-[var(--line)]' : '';
+             const hasDesc = ev.description && ev.description.trim() !== '';
+         
+             return `
+               <div class="${borderClass}">
+                 <div class="mb-3 sm:mb-4">
+                   <span class="legend-badge">
+                     <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
+                   </span>
+                 </div>
+         
+                 <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)] leading-snug mb-4 sm:mb-5 tracking-tight">${ev.title}</h3>
+                 
+                 <div class="bg-[var(--modal-sub-bg)] border border-[var(--line)] rounded-2xl p-3.5 sm:p-4 ${hasDesc ? 'mb-4 sm:mb-6' : 'mb-2'} space-y-2">
+                   <div class="flex items-center gap-3">
+                     <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">DATE</span>
+                     <span class="text-xs font-bold text-[var(--brand-dark)]">${dateDisplay}</span>
+                   </div>
+                   ${ev.event_time ? `
+                     <div class="flex items-center gap-3 border-t border-[var(--line)] pt-2">
+                       <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">TIME</span>
+                       <span class="text-xs font-semibold text-[var(--brand-dark)] font-montserrat">${ev.event_time.slice(0, 5)}</span>
+                     </div>
+                   ` : ''}
+                 </div>
+         
+                 ${hasDesc ? `
+                   <div>
+                     <div class="text-[10px] font-bold text-[var(--brand-sub)] uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
+                     <div class="text-xs sm:text-sm font-medium text-[var(--brand-dark)] leading-relaxed bg-[var(--card-bg)] p-3.5 sm:p-4 rounded-2xl border border-[var(--line)] min-h-[70px] whitespace-pre-line">${ev.description}</div>
+                   </div>
+                 ` : ''}
+               </div>
+             `;
+           }).join('');
+         
+           document.getElementById('eventModal').classList.add('open');
+         }
+         
+         function showSingleEvent(id) {
+           const ev = schedules.find(s => s.id === id);
+           if (ev) showDayEvents([ev]);
+         }
+         
+         function closeModal(e) {
+           if (e.target === e.currentTarget) document.getElementById('eventModal').classList.remove('open');
+         }
+         
+         function changeMonth(o) {
+           currentMonth += o;
+           if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+           if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+           loadMonth();
+         }
+         
+         init();
+      </script>
+   </body>
 </html>
