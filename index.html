@@ -98,11 +98,13 @@
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--brand-dark);
-      letter-spacing: -0.02em;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
+  background-color: transparent !important;
+  color: var(--brand-dark);
+  letter-spacing: -0.02em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
     html { scroll-behavior: smooth; }
     
     ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -218,19 +220,21 @@
     
     /* 🔥 SOOP 게시글 임베드용 둥근 프레임 설정 */
     .site-frame {
-      max-width: 1000px;
-      margin: 16px auto;
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-      background-color: var(--bg);
-      position: relative;
-    }
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 20px; /* 게시글 안에서 예쁘게 라운딩 */
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: var(--bg); /* 실제 배경색은 여기서 지정 */
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
 
     body.dark .site-frame {
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    }
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
   </style>
 </head>
 <body class="relative min-h-screen font-sans pb-16 overflow-x-hidden">
