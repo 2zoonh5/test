@@ -151,30 +151,32 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* ✨ [디자인 적용 1] 배경 은은한 숨쉬기 애니메이션 (Ambient Lighting) */
-    .bg-glow-radial {
-      position: absolute;
-      width: min(700px, 100vw);
-      height: min(700px, 100vw);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(218,209,254,0.28) 0%, rgba(249,248,252,0) 70%);
-      top: -15%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: pulseGlow 8s ease-in-out infinite;
-    }
+    /* 🔥 눈에 확실히 보이는 연보라 오로라 배경 조명 🔥 */
+.bg-glow-radial {
+  position: absolute;
+  width: min(1000px, 120vw);
+  height: min(1000px, 120vw);
+  border-radius: 50%;
+  /* 색상 농도 및 범위를 대폭 강화 */
+  background: radial-gradient(circle, rgba(140, 122, 230, 0.28) 0%, rgba(218, 209, 254, 0.12) 45%, rgba(0,0,0,0) 70%);
+  top: -10%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+  /* 4초 주기로 더 빠르게/크게 넘실거리도록 설정 */
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
 
-    @keyframes pulseGlow {
-      0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.5);
-        opacity: 1;
-      }
-    }
+@keyframes pulseGlow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -40%) scale(1.35);
+    opacity: 1;
+  }
+}
 
     /* ✨ [디자인 적용 2] 세르의 여정 수직선 은은한 연보라 그라데이션 */
     #milestoneContainer::before {
