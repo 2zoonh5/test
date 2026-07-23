@@ -103,7 +103,7 @@
       color-scheme: dark !important;
     }
 
-    /* 🔥 모바일 날짜/시간 선택창 짤림 및 너비 불일치 완벽 해결 CSS 🔥 */
+    /* 🔥 모바일 날짜/시간 선택창 세로 중앙 정렬 & 수평/수직 핏 완벽 수정 🔥 */
     input[type="date"], input[type="time"] {
       -webkit-appearance: none !important;
       -moz-appearance: none !important;
@@ -111,7 +111,21 @@
       box-sizing: border-box !important;
       width: 100% !important;
       min-width: 0 !important;
-      display: block !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      line-height: normal !important;
+    }
+
+    /* iOS Safari 텍스트 세로 정렬 및 내부 여백 강제 리셋 */
+    input[type="date"]::-webkit-date-and-time-value,
+    input[type="time"]::-webkit-date-and-time-value {
+      text-align: left !important;
+      line-height: normal !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: auto !important;
+      min-height: auto !important;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator,
@@ -119,6 +133,7 @@
       margin-left: auto !important;
       padding: 0 !important;
       cursor: pointer;
+      flex-shrink: 0 !important;
     }
 
     .dark input[type="date"]::-webkit-calendar-picker-indicator,
@@ -249,7 +264,6 @@
           <input type="text" id="title" required placeholder="예: 배그 벽킬내기 합방" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
 
-        <!-- 인풋박스 크기 균일화 적용 영역 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">시작일 *</label>
