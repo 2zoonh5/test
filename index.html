@@ -185,6 +185,21 @@
         transform: translate(var(--dx), -45px) scale(0.8) rotate(var(--rot));
       }
     }
+
+    /* 캐러셀 인디케이터 스타일 */
+    .indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background-color: var(--brand-sub);
+      opacity: 0.3;
+      transition: all 0.3s ease;
+    }
+    .indicator-dot.active {
+      width: 24px;
+      background-color: #8C7AE6;
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="relative min-h-screen font-sans pb-32 overflow-x-hidden">
@@ -269,7 +284,7 @@
       </div>
     </section>
 
-    <!-- INFO CARDS (수정된 PC/모바일 최적화 비율 적용) -->
+    <!-- INFO CARDS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 mb-12 md:mb-16">
       <!-- BIRTHDAY -->
       <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
@@ -281,7 +296,7 @@
       <!-- DEBUT -->
       <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
         <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Debut</div>
-        <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">25 . 11 . 22</div>
+        <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">2025 . 11 . 22</div>
         <div class="mt-1.5"><span id="debutBadge" class="text-[10px] sm:text-[11px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
       </div>
 
@@ -375,14 +390,34 @@
       </div>
     </section>
 
-    <!-- PLAYLIST VOD -->
+    <!-- PLAYLIST VOD (단일 뷰어 + 깔끔한 캐러셀 슬라이더) -->
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
-      <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)] mb-8 sm:mb-12">노래 커버 및 다시보기</h3>
-  
-      <!-- 영상 카드 그리드 (Supabase 자동 로드) -->
-      <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <!-- JS에서 동적으로 생성됩니다 -->
+      <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)] mb-8 sm:mb-10">노래 커버 및 다시보기</h3>
+
+      <div class="max-w-3xl mx-auto relative px-2 sm:px-10">
+        <!-- 이전 버튼 -->
+        <button id="prevVidBtn" onclick="prevVideo()" class="absolute left-0 sm:-left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <!-- 다음 버튼 -->
+        <button id="nextVidBtn" onclick="nextVideo()" class="absolute right-0 sm:-right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+        <!-- 슬라이드 컨테이너 -->
+        <div class="p-3 sm:p-5 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
+          <div class="aspect-video w-full rounded-[18px] sm:rounded-[22px] overflow-hidden bg-black shadow-inner">
+            <iframe id="mainVideoIframe" src="" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
+          </div>
+          <div class="mt-4 px-2 text-center">
+            <h4 id="mainVideoTitle" class="font-bold text-base sm:text-lg text-[var(--brand-dark)] truncate">영상을 불러오는 중...</h4>
+          </div>
+        </div>
+
+        <!-- 슬라이더 인디케이터 (도트) -->
+        <div id="videoIndicators" class="flex items-center justify-center gap-2 mt-5"></div>
       </div>
     </section>
     
@@ -502,6 +537,9 @@
 
   <script src="js/supabase-config.js"></script>
   <script>
+    let videoList = [];
+    let currentVideoIdx = 0;
+
     async function loadMainSettings() {
       try {
         const { data } = await supabaseClient.from('settings').select('*');
@@ -519,7 +557,6 @@
       } catch (err) { console.error('Main Settings Error:', err); }
     }
 
-    // SOOP VOD, 유튜브 등 다양한 링크 형태를 임베드 주소로 변환
     function getEmbedUrl(url) {
       if (!url) return '';
   
@@ -544,11 +581,7 @@
       return url;
     }
 
-    // Supabase에서 영상 불러오기
     async function loadMainVideos() {
-      const container = document.getElementById('videoContainer');
-      if (!container) return;
-
       try {
         const { data, error } = await supabaseClient
           .from('videos')
@@ -557,34 +590,71 @@
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
-          container.innerHTML = `
-            <div class="col-span-full py-12 px-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl text-[var(--brand-sub)] text-xs font-semibold">
-              등록된 영상이 없습니다.
-            </div>
-          `;
+        videoList = data || [];
+
+        if (videoList.length === 0) {
+          document.getElementById('mainVideoTitle').textContent = '등록된 영상이 없습니다.';
+          document.getElementById('prevVidBtn').style.display = 'none';
+          document.getElementById('nextVidBtn').style.display = 'none';
           return;
         }
 
-        container.innerHTML = data.map(video => {
-          const embedUrl = getEmbedUrl(video.url);
-          return `
-            <div class="p-3 sm:p-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-[24px] sm:rounded-[28px] shadow-md hover:shadow-lg transition-all duration-300 text-left flex flex-col justify-between">
-              <div>
-                <div class="aspect-video w-full rounded-[16px] sm:rounded-[20px] overflow-hidden bg-black shadow-inner mb-3">
-                  <iframe src="${embedUrl}" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
-                </div>
-                <h4 class="font-bold text-sm sm:text-base text-[var(--brand-dark)] line-clamp-2 px-1 leading-snug">
-                  ${video.title}
-                </h4>
-              </div>
-            </div>
-          `;
-        }).join('');
-
+        renderVideoIndex(0);
       } catch (err) {
         console.error('Video Load Error:', err);
       }
+    }
+
+    function renderVideoIndex(idx) {
+      if (videoList.length === 0) return;
+      currentVideoIdx = idx;
+
+      const video = videoList[currentVideoIdx];
+      document.getElementById('mainVideoIframe').src = getEmbedUrl(video.url);
+      document.getElementById('mainVideoTitle').textContent = video.title;
+
+      // 화살표 활성화/비활성화 (영상이 1개만 있으면 화살표 숨김)
+      if (videoList.length <= 1) {
+        document.getElementById('prevVidBtn').style.display = 'none';
+        document.getElementById('nextVidBtn').style.display = 'none';
+      } else {
+        document.getElementById('prevVidBtn').style.display = 'flex';
+        document.getElementById('nextVidBtn').style.display = 'flex';
+      }
+
+      // 인디케이터 생성
+      const indicatorContainer = document.getElementById('videoIndicators');
+      indicatorContainer.innerHTML = videoList.map((_, i) => `
+        <button onclick="renderVideoIndex(${i})" class="indicator-dot ${i === currentVideoIdx ? 'active' : ''}" aria-label="Slide ${i+1}"></button>
+      `).join('');
+    }
+
+    function prevVideo() {
+      let nextIdx = currentVideoIdx - 1;
+      if (nextIdx < 0) nextIdx = videoList.length - 1;
+      renderVideoIndex(nextIdx);
+    }
+
+    function nextVideo() {
+      let nextIdx = currentVideoIdx + 1;
+      if (nextIdx >= videoList.length) nextIdx = 0;
+      renderVideoIndex(nextIdx);
+    }
+
+    // 모바일 터치 스와이프 기능
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const iframeBox = document.getElementById('mainVideoIframe');
+
+    iframeBox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+    iframeBox.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, {passive: true});
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) nextVideo();
+      if (touchEndX > touchStartX + 50) prevVideo();
     }
 
     loadMainSettings();
