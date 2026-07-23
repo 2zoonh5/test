@@ -5,14 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SERU SCHEDULE 💜</title>
   
-  <!-- 기본 파비콘 (PC 브라우저) -->
+  <!-- 하위 폴더용 파비콘 설정 -->
   <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-
-  <!-- 애플 아이폰/아이패드 (iOS) -->
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-icon-180x180.png">
-
-  <!-- 안드로이드 / Chrome 모바일 -->
   <link rel="icon" type="image/png" sizes="192x192" href="../android-icon-192x192.png">
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -68,7 +64,7 @@
     :disabled, .disabled {
       cursor: url('../cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
     }
-    /* 푸터 관리자 이동 문구 커서 반응 제거 (기본 커서 고정) */
+
     .admin-secret-link {
       cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), default !important;
     }
@@ -118,14 +114,14 @@
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--brand-sub);
-      padding: 8px 20px;
+      padding: 8px 16px;
       border-radius: 99px;
       transition: all 0.3s ease;
       white-space: nowrap;
     }
 
     @media (max-width: 640px) {
-      .nav-link { font-size: 0.775rem; padding: 6px 10px; }
+      .nav-link { font-size: 0.75rem; padding: 6px 10px; }
     }
 
     .nav-link:hover {
@@ -258,23 +254,24 @@
     .list-date-group { margin-bottom: 20px; }
     .list-date-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 0 4px; }
     .list-day-num { 
-      width: 44px; height: 44px; 
-      border-radius: 14px; 
+      width: 40px; height: 40px; 
+      border-radius: 12px; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       background: var(--card-bg); 
       border: 1px solid var(--line); 
-      font-weight: 700; font-size: 1.1rem; 
+      font-weight: 700; font-size: 1rem; 
       color: var(--brand-dark);
       font-family: 'Montserrat', sans-serif;
     }
     .list-day-num.today { background: #8C7AE6; color: #ffffff; border-color: #8C7AE6; }
     .list-day-num.sunday { color: #D4727A; }
     .list-day-num.saturday { color: #7BA0D4; }
+    
     .list-event-item { 
-      display: flex; align-items: center; gap: 16px; 
-      padding: 16px; 
+      display: flex; align-items: center; gap: 12px; 
+      padding: 14px; 
       background: var(--card-bg); 
       border-radius: 16px; 
       border: 1px solid var(--line); 
@@ -286,10 +283,10 @@
       border-color: #8C7AE6; 
       box-shadow: 0 8px 20px rgba(218, 209, 254, 0.15); 
     }
-    .list-event-bar { width: 4px; height: 36px; border-radius: 99px; flex-shrink: 0; }
+    .list-event-bar { width: 4px; height: 32px; border-radius: 99px; flex-shrink: 0; }
     .list-event-info { flex: 1; min-width: 0; }
-    .list-event-title { font-size: .95rem; font-weight: 700; color: var(--brand-dark); }
-    .list-event-time { font-size: .8rem; color: var(--brand-sub); margin-top: 2px; }
+    .list-event-title { font-size: .875rem; font-weight: 700; color: var(--brand-dark); }
+    .list-event-time { font-size: .75rem; color: var(--brand-sub); margin-top: 2px; }
 
     .today-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0 16px; padding: 0 4px; }
     .today-divider::before, .today-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #DAD1FE, transparent); }
@@ -307,13 +304,13 @@
       background: rgba(30, 27, 44, 0.55); 
       display: none; align-items: center; justify-content: center; 
       backdrop-filter: blur(10px); 
-      padding: 20px;
+      padding: 16px;
     }
     .modal-backdrop.open { display: flex; }
 
     .modal-content { 
       background: var(--modal-bg); 
-      border-radius: 28px; 
+      border-radius: 24px; 
       max-width: 480px; 
       width: 100%; 
       max-height: 80vh;
@@ -328,7 +325,6 @@
     #modalEventList::-webkit-scrollbar { width: 4px; }
     #modalEventList::-webkit-scrollbar-track { background: transparent; }
     #modalEventList::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-    #modalEventList::-webkit-scrollbar-thumb:hover { background: #8C7AE6; }
 
     @keyframes modalFadeIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
@@ -359,11 +355,12 @@
     }
   </style>
 </head>
-<body class="bg-[var(--bg)] min-h-screen font-sans pb-32">
+<body class="bg-[var(--bg)] min-h-screen font-sans pb-32 overflow-x-hidden">
 
-  <div class="sticky top-4 z-50 px-4 md:px-6 max-w-4xl mx-auto">
-    <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-20 rounded-full px-4 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
-      <div class="font-montserrat text-xl font-bold tracking-wider text-[var(--brand-dark)]">
+  <!-- FLOATING HEADER & NAVIGATION -->
+  <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
+    <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-16 md:h-20 rounded-full px-3 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
+      <div class="font-montserrat text-lg md:text-xl font-bold tracking-wider text-[var(--brand-dark)] shrink-0 pl-1">
         SERU<span class="text-textPurple">.</span>
       </div>
       
@@ -375,52 +372,40 @@
           <a href="https://docs.google.com/spreadsheets/d/1URD9MiS3Fqc2oMzrKh4k7EwGUZDWU7q40D2YLCKXSnc/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
         </nav>
 
-        <button id="themeToggle" class="w-9 h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-sm ml-1 hover:border-textPurple transition shadow-sm" aria-label="다크모드 토글">
+        <button id="themeToggle" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-xs md:text-sm shrink-0 hover:border-textPurple transition shadow-sm ml-0.5" aria-label="다크모드 토글">
           <span id="themeIcon">🌙</span>
         </button>
       </div>
     </header>
   </div>
 
-  <main class="max-w-4xl mx-auto px-6 mt-12 pb-24">
-    <section class="text-center mb-10">
+  <main class="max-w-4xl mx-auto px-4 md:px-6 mt-8 md:mt-12 pb-24">
+    <section class="text-center mb-8 md:mb-10">
       <div class="inline-flex flex-col items-center">
-        <span class="text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
-        <h1 class="text-3xl font-extrabold text-[var(--brand-dark)] tracking-tight font-sans">방송 일정</h1>
-        <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-textPurple/40 to-transparent mt-2.5 rounded-full"></div>
+        <span class="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-textPurple uppercase font-montserrat mb-1">SCHEDULE</span>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--brand-dark)] tracking-tight font-sans">방송 일정</h1>
+        <div class="w-10 md:w-12 h-0.5 bg-gradient-to-r from-transparent via-textPurple/40 to-transparent mt-2 rounded-full"></div>
       </div>
     </section>
 
     <section class="pb-6">
-      <div class="flex items-center justify-between mb-8 max-w-xs mx-auto">
-        <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
+      <div class="flex items-center justify-between mb-6 md:mb-8 max-w-xs mx-auto">
+        <button onclick="changeMonth(-1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <h2 id="calMonth" class="text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight"></h2>
-        <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
+        <h2 id="calMonth" class="text-lg md:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight"></h2>
+        <button onclick="changeMonth(1)" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-[var(--brand-dark)] hover:bg-themePurple/20 transition shadow-sm">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
       
-      <div class="flex flex-wrap items-center justify-center gap-2.5 mb-2 desktop-only">
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송
-        </span>
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#6E6B7B;"></span>휴방
-        </span>
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#E56B98;"></span>이벤트
-        </span>
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#2DB89B;"></span>합방
-        </span>
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#4A90E2;"></span>대회
-        </span>
-        <span class="legend-badge">
-          <span class="legend-badge-dot" style="color:#E28D3B;"></span>기타
-        </span>
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-2 desktop-only">
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#8C7AE6;"></span>방송</span>
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#6E6B7B;"></span>휴방</span>
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#E56B98;"></span>이벤트</span>
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#2DB89B;"></span>합방</span>
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#4A90E2;"></span>대회</span>
+        <span class="legend-badge"><span class="legend-badge-dot" style="color:#E28D3B;"></span>기타</span>
       </div>
     </section>
 
@@ -441,11 +426,11 @@
       <div id="listBody"></div>
     </section>
 
-    <section class="mt-16 pt-10 border-t border-[var(--line)] desktop-only">
-      <div class="flex items-end justify-between mb-8">
+    <section class="mt-12 md:mt-16 pt-8 md:pt-10 border-t border-[var(--line)] desktop-only">
+      <div class="flex items-end justify-between mb-6 md:mb-8">
         <div>
-          <div class="text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
-          <h3 class="text-2xl font-bold text-[var(--brand-dark)] tracking-tight">다가오는 일정</h3>
+          <div class="text-[10px] md:text-[11px] font-bold tracking-[0.2em] text-textPurple uppercase font-montserrat mb-1">UPCOMING SCHEDULES</div>
+          <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-dark)] tracking-tight">다가오는 일정</h3>
         </div>
       </div>
       <div id="upcomingList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -454,12 +439,12 @@
 
   <div class="modal-backdrop" id="eventModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
+      <div class="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-[var(--line)] shrink-0 bg-[var(--modal-bg)] z-10">
         <div class="text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase">SCHEDULE DETAILS</div>
-        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-8 h-8 rounded-full bg-[var(--modal-sub-bg)] hover:bg-themePurple/30 text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition flex items-center justify-center font-bold text-sm">✕</button>
+        <button onclick="document.getElementById('eventModal').classList.remove('open')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--modal-sub-bg)] hover:bg-themePurple/30 text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition flex items-center justify-center font-bold text-xs sm:text-sm">✕</button>
       </div>
 
-      <div id="modalEventList" class="p-6 overflow-y-auto space-y-8 flex-1"></div>
+      <div id="modalEventList" class="p-5 sm:p-6 overflow-y-auto space-y-6 sm:space-y-8 flex-1"></div>
     </div>
   </div>
 
@@ -760,7 +745,7 @@
         html += `<div class="${groupClass}">`;
         html += `<div class="list-date-header">`;
         html += `<div class="${dayClass}">${d}</div>`;
-        html += `<div class="list-day-label">${DAYS[dayOfWeek]}요일${isToday ? ' · 오늘' : ''}</div>`;
+        html += `<div class="list-day-label font-bold text-sm text-[var(--brand-dark)]">${DAYS[dayOfWeek]}요일${isToday ? ' · 오늘' : ''}</div>`;
         html += `</div>`;
 
         dayEv.forEach(ev => {
@@ -839,10 +824,10 @@
         }
         
         return `
-          <div class="group relative flex items-center justify-between p-5 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] hover:border-textPurple/50 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
+          <div class="group relative flex items-center justify-between p-4 sm:p-5 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] hover:border-textPurple/50 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden" onclick="showSingleEvent('${ev.id}')">
             <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background:${c}"></div>
             <div class="pl-2 flex-1 min-w-0 pr-3">
-              <div class="font-bold text-[var(--brand-dark)] text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
+              <div class="font-bold text-[var(--brand-dark)] text-sm sm:text-base tracking-tight truncate group-hover:text-textPurple transition-colors">${ev.title}</div>
               <div class="flex items-center gap-2.5 text-xs font-semibold text-[var(--brand-sub)] mt-1.5 font-montserrat">
                 <span>${dateDisplay}</span>
                 ${t ? `<span>· ${t}</span>` : ''}
@@ -871,20 +856,20 @@
           dateDisplay += ` ~ ${endD.getMonth()+1}월 ${endD.getDate()}일 (${DAYS[endD.getDay()]})`;
         }
 
-        const borderClass = (index < eventList.length - 1) ? 'pb-8 border-b border-[var(--line)]' : '';
+        const borderClass = (index < eventList.length - 1) ? 'pb-6 sm:pb-8 border-b border-[var(--line)]' : '';
         const hasDesc = ev.description && ev.description.trim() !== '';
 
         return `
           <div class="${borderClass}">
-            <div class="mb-4">
+            <div class="mb-3 sm:mb-4">
               <span class="legend-badge">
                 <span class="legend-badge-dot" style="color:${dotC};"></span>${l}
               </span>
             </div>
 
-            <h3 class="text-2xl font-bold text-[var(--brand-dark)] leading-snug mb-5 tracking-tight">${ev.title}</h3>
+            <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)] leading-snug mb-4 sm:mb-5 tracking-tight">${ev.title}</h3>
             
-            <div class="bg-[var(--modal-sub-bg)] border border-[var(--line)] rounded-2xl p-4 ${hasDesc ? 'mb-6' : 'mb-2'} space-y-2">
+            <div class="bg-[var(--modal-sub-bg)] border border-[var(--line)] rounded-2xl p-3.5 sm:p-4 ${hasDesc ? 'mb-4 sm:mb-6' : 'mb-2'} space-y-2">
               <div class="flex items-center gap-3">
                 <span class="text-[10px] font-bold tracking-widest text-[var(--brand-sub)] font-montserrat uppercase w-10 shrink-0">DATE</span>
                 <span class="text-xs font-bold text-[var(--brand-dark)]">${dateDisplay}</span>
@@ -900,7 +885,7 @@
             ${hasDesc ? `
               <div>
                 <div class="text-[10px] font-bold text-[var(--brand-sub)] uppercase tracking-widest font-montserrat mb-2">DETAILS</div>
-                <div class="text-sm font-medium text-[var(--brand-dark)] leading-relaxed bg-[var(--card-bg)] p-4 rounded-2xl border border-[var(--line)] min-h-[80px] whitespace-pre-line">${ev.description}</div>
+                <div class="text-xs sm:text-sm font-medium text-[var(--brand-dark)] leading-relaxed bg-[var(--card-bg)] p-3.5 sm:p-4 rounded-2xl border border-[var(--line)] min-h-[70px] whitespace-pre-line">${ev.description}</div>
               </div>
             ` : ''}
           </div>
