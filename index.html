@@ -197,6 +197,34 @@
          -webkit-mask-image: -webkit-radial-gradient(white, black);
          transform: translateZ(0);
          }
+
+         /* 직접 접속 시 site-frame 해제용 클래스 */
+         .site-frame.no-frame {
+         border-radius: 0 !important;
+         border: none !important;
+         box-shadow: none !important;
+         background-color: transparent !important;
+         -webkit-mask-image: none !important;
+         transform: none !important;
+         }
+
+         /* 오늘 하루 보지 않기 팝업 모달 */
+         .today-notice-backdrop {
+         position: fixed; inset: 0; z-index: 99999;
+         background: rgba(15, 13, 21, 0.65);
+         display: none; align-items: center; justify-content: center;
+         backdrop-filter: blur(8px); padding: 16px;
+         }
+         .today-notice-backdrop.open { display: flex; }
+         .today-notice-content {
+         background: var(--card-bg);
+         border-radius: 24px;
+         overflow: hidden;
+         max-width: 400px; width: 100%;
+         border: 1px solid var(--line);
+         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+         animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+         }
       </style>
    </head>
    <body class="relative min-h-screen font-sans pb-16 overflow-x-hidden">
@@ -397,7 +425,64 @@
             </p>
          </footer>
       </div>
+
+      <!-- 📢 오늘 하루 보지 않기 팝업 모달 (직접 접속 시만 작동) -->
+      <div id="todayNoticeModal" class="today-notice-backdrop" onclick="closeNotice(event)">
+         <div class="today-notice-content" onclick="event.stopPropagation()">
+            <div class="w-full bg-black/5 overflow-hidden">
+               <img src="./popup.webp" alt="공지사항" class="w-full h-auto object-cover block" onerror="this.style.display='none'">
+            </div>
+            <div class="flex items-center justify-between px-4 py-3 bg-[var(--card-bg)] border-t border-[var(--line)] text-xs font-bold text-[var(--brand-sub)]">
+               <button onclick="closeNoticeToday()" class="hover:text-[var(--brand-dark)] transition py-1">
+                  오늘 하루 보지 않기
+               </button>
+               <button onclick="closeNotice()" class="px-3.5 py-1.5 bg-textPurple text-white rounded-xl hover:bg-[#7B67DC] transition shadow-sm">
+                  닫기
+               </button>
+            </div>
+         </div>
+      </div>
+
       <script>
+         // 🔍 1. iframe 삽입 여부 판별 및 site-frame, 팝업 제어
+         const isIframe = (window.self !== window.top);
+
+         document.addEventListener("DOMContentLoaded", () => {
+            const siteFrame = document.querySelector('.site-frame');
+
+            if (isIframe) {
+               // iframe(SOOP 등) 내부인 경우: site-frame 정상 적용 (팝업 노출 X)
+               if (siteFrame) siteFrame.classList.remove('no-frame');
+            } else {
+               // 직접 접속인 경우: site-frame 해제 & 오늘 하루 보지 않기 팝업 체크
+               if (siteFrame) siteFrame.classList.add('no-frame');
+               checkTodayNotice();
+            }
+         });
+
+         function checkTodayNotice() {
+            const hideUntil = localStorage.getItem('seru_hide_notice_until');
+            const now = new Date().getTime();
+
+            if (!hideUntil || now > parseInt(hideUntil, 10)) {
+               const modal = document.getElementById('todayNoticeModal');
+               if (modal) modal.classList.add('open');
+            }
+         }
+
+         function closeNoticeToday() {
+            const now = new Date();
+            const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59).getTime();
+            localStorage.setItem('seru_hide_notice_until', endOfToday.toString());
+            closeNotice();
+         }
+
+         function closeNotice(e) {
+            if (e && e.target !== e.currentTarget) return;
+            const modal = document.getElementById('todayNoticeModal');
+            if (modal) modal.classList.remove('open');
+         }
+
          const toggleBtn = document.getElementById('themeToggle');
          const themeIcon = document.getElementById('themeIcon');
          
