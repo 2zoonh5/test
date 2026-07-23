@@ -99,15 +99,12 @@
          background-color: var(--bg);
          position: relative;
          }
-
-         /* 🔥 수정된 부분: 직접 접속 시 배경색(var(--bg))이 유지되도록 지정 */
          .site-frame.no-frame {
          border-radius: 0 !important;
          border: none !important;
          box-shadow: none !important;
          background-color: var(--bg) !important;
          }
-
          html { scroll-behavior: smooth; }
          ::-webkit-scrollbar { width: 5px; height: 5px; }
          ::-webkit-scrollbar-track { background: var(--bg); }
@@ -433,22 +430,19 @@
       </div>
       <script src="../js/supabase-config.js"></script>  
       <script>
-         // 🔍 1. iframe 삽입 여부 판별 및 site-frame 제어
          const isIframe = (window.self !== window.top);
-
+         
          document.addEventListener("DOMContentLoaded", () => {
             const siteFrame = document.querySelector('.site-frame');
-
+         
             if (isIframe) {
-               // iframe(SOOP 등) 내부인 경우: site-frame 정상 적용
                if (siteFrame) siteFrame.classList.remove('no-frame');
             } else {
-               // 직접 접속인 경우: site-frame 해제 & body 배경색 지정
                if (siteFrame) siteFrame.classList.add('no-frame');
                document.body.style.setProperty('background-color', 'var(--bg)', 'important');
             }
          });
-
+         
          let currentYear, currentMonth;
          let schedules = [];
          const DAYS = ['일','월','화','수','목','금','토'];
