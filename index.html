@@ -380,16 +380,13 @@
     <section class="mb-12 text-center">
       <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
       <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)] mb-8 sm:mb-12">노래 커버 및 다시보기</h3>
-      
-      <div class="max-w-3xl mx-auto">
-        <div class="p-2.5 sm:p-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-[24px] sm:rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
-          <div class="aspect-video w-full rounded-[16px] sm:rounded-[20px] overflow-hidden bg-black shadow-inner">
-            <iframe src="https://vod.sooplive.com/player/197914321/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
-          </div>
-        </div>
+  
+      <!-- 영상 카드 그리드 (Supabase 자동 로드) -->
+      <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <!-- JS에서 dynamic하게 추가됨 -->
       </div>
     </section>
-
+    
   </main>
 
   <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold border-t border-[var(--line)] select-none">
@@ -523,6 +520,79 @@
       } catch (err) { console.error('Main Settings Error:', err); }
     }
     loadMainSettings();
+    // SOOP VOD, 유튜브 등 다양한 링크 형태를 임베드 주소로 변환
+    function getEmbedUrl(url) {
+      if (!url) return '';
+  
+      // SOOP VOD 임베드 URL 처리
+      if (url.includes('sooplive.com') || url.includes('afreecatv.com')) {
+        const match = url.match(/(?:player\/|station\/[^\/]+\/vod\/)(\d+)/);
+        if (match && match[1]) {
+          return `https://vod.sooplive.com/player/${match[1]}/embed?showChat=false&autoPlay=false&mutePlay=false`;
+        }
+      }
+  
+      // 유튜브 URL 처리
+      if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+        let videoId = '';
+        if (url.includes('youtu.be/')) {
+          videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        } else {
+          const urlParams = new URLSearchParams(new URL(url).search);
+          videoId = urlParams.get('v');
+        }
+        if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      return url; // 이미 embed 형태인 경우 그대로 반환
+    }
+
+    // Supabase에서 영상 불러오기
+    async function loadMainVideos() {
+      const container = document.getElementById('videoContainer');
+      if (!container) return;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('videos')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full py-12 px-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl text-[var(--brand-sub)] text-xs font-semibold">
+              등록된 영상이 없습니다.
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = data.map(video => {
+          const embedUrl = getEmbedUrl(video.url);
+          return `
+            <div class="p-3 sm:p-4 bg-[var(--card-bg)] border border-[var(--line)] rounded-[24px] sm:rounded-[28px] shadow-md hover:shadow-lg transition-all duration-300 text-left flex flex-col justify-between">
+              <div>
+                <div class="aspect-video w-full rounded-[16px] sm:rounded-[20px] overflow-hidden bg-black shadow-inner mb-3">
+                  <iframe src="${embedUrl}" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
+                </div>
+                <h4 class="font-bold text-sm sm:text-base text-[var(--brand-dark)] line-clamp-2 px-1 leading-snug">
+                  ${video.title}
+                </h4>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Video Load Error:', err);
+      }
+    }
+
+    // 기존 loadMainSettings() 실행 시 같이 호출
+    loadMainSettings();
+    loadMainVideos();
   </script>
 </body>
 </html>
