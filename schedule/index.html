@@ -108,7 +108,7 @@ body {
   padding: 0 !important;
 }
 
-/* site-frame 배경을 투명하게 하고 테두리와 둥근 모서리만 적용 */
+/* site-frame 배경을 메인과 똑같이 변수(--bg)로 채워주기 */
 .site-frame {
   width: 100%;
   max-width: 100%;
@@ -116,7 +116,7 @@ body {
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid var(--line);
-  background-color: transparent !important;
+  background-color: var(--bg);   /* 🔥 transparent 대신 이걸로 변경! */
   position: relative;
 }
     html { scroll-behavior: smooth; }
