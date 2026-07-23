@@ -103,7 +103,6 @@
       color-scheme: dark !important;
     }
 
-    /* 모바일 날짜/시간 선택창 짤림 문제 방지 CSS */
     input[type="date"], input[type="time"] {
       box-sizing: border-box !important;
       max-width: 100% !important;
@@ -193,11 +192,11 @@
   <!-- 관리자 대시보드 화면 -->
   <div id="adminView" class="hidden max-w-3xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
     
-    <!-- 2번 수정: 한글 명칭 '세르 관리자 센터'로 고혹적이고 직관적이게 다듬음 -->
+    <!-- 2번 수정: 명칭을 'ADMIN PAGE' 및 큼직한 '관리자 페이지'로 변경 -->
     <div class="flex items-center justify-between gap-2 pb-5 mb-8 border-b border-[var(--line)]">
       <div class="min-w-0">
-        <div class="text-[10px] sm:text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase truncate">ADMIN PANEL</div>
-        <h1 class="text-base sm:text-2xl font-extrabold tracking-tight text-[var(--brand-dark)] truncate">세르 관리자 센터</h1>
+        <div class="text-[10px] sm:text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase truncate">ADMIN PAGE</div>
+        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--brand-dark)] truncate">관리자 페이지</h1>
       </div>
       
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -245,26 +244,26 @@
           <input type="text" id="title" required placeholder="예: 배그 벽킬내기 합방" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
 
-        <!-- 1번 수정: 모바일 짤림 철저 방지 레이아웃 (px-2, text-[12px] 및 border-box 처리) -->
+        <!-- 1번 수정: 모바일에서는 넓은 세로 1열로 표시되어 위아래 입력창과 크기가 동일해지고, 태블릿 이상(sm:)에서 3열 배치 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">시작일 *</label>
-            <input type="date" id="event_date" required class="w-full h-11 px-2 sm:px-3 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-[12px] sm:text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+            <input type="date" id="event_date" required class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
           </div>
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">종료일 (선택)</label>
-            <input type="date" id="end_date" class="w-full h-11 px-2 sm:px-3 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-[12px] sm:text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+            <input type="date" id="end_date" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
           </div>
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">시작 시간 (선택)</label>
-            <input type="time" id="event_time" class="w-full h-11 px-2 sm:px-3 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-[12px] sm:text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+            <input type="time" id="event_time" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">일정 유형 *</label>
-            <select id="event_type" class="w-full h-11 px-3 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+            <select id="event_type" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
               <option value="broadcast">방송 (파스텔 퍼플)</option>
               <option value="off">휴방 (쿨그레이)</option>
               <option value="event">이벤트 (피치 핑크)</option>
