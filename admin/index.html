@@ -250,10 +250,10 @@
       </form>
     </div>
 
-    <!-- 🏆 발자취 (마일스톤) 관리 카드 -->
+    <!-- 🏆 발자취 (세르의 여정) 관리 카드 -->
     <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-6 sm:mb-8">
       <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-textPurple"></span>세르 & 해또의 발자취 (타임라인) 관리
+        <span class="w-2 h-2 rounded-full bg-textPurple"></span>세르의 여정 (타임라인) 관리
       </h3>
       
       <form onsubmit="saveMilestone(event)" class="space-y-4">
@@ -273,12 +273,12 @@
         </div>
         
         <button type="submit" class="w-full h-11 sm:h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg shadow-textPurple/20">
-          발자취 기록 등록하기
+          여정 기록 등록하기
         </button>
       </form>
 
       <div class="mt-6 pt-5 border-t border-[var(--line)]">
-        <h4 class="text-xs font-bold text-[var(--brand-sub)] mb-3">등록된 발자취 목록</h4>
+        <h4 class="text-xs font-bold text-[var(--brand-sub)] mb-3">등록된 여정 목록</h4>
         <div id="adminMilestoneList" class="space-y-2.5"></div>
       </div>
     </div>
@@ -374,14 +374,6 @@
       <div id="scheduleList" class="space-y-3"></div>
     </div>
 
-    <!-- 💌 방명록 삭제 관리 카드 -->
-    <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-10">
-      <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-textPurple"></span>최근 응원 방명록 관리 (부적절한글 삭제)
-      </h3>
-      <div id="adminGuestbookList" class="space-y-2.5"></div>
-    </div>
-
   </div>
 
   <div id="customModal" class="custom-modal-backdrop">
@@ -432,7 +424,6 @@
         loadAdminSchedules();
         loadAdminVideos();
         loadAdminMilestones();
-        loadAdminGuestbook();
       }
     });
 
@@ -480,7 +471,6 @@
         loadAdminSchedules();
         loadAdminVideos();
         loadAdminMilestones();
-        loadAdminGuestbook();
       } else {
         showAlert("인증 실패", "비밀번호가 올바르지 않습니다.", "🔒");
       }
@@ -519,7 +509,7 @@
       }
     }
 
-    // 마일스톤 관리
+    // 마일스톤 (세르의 여정) 관리
     async function saveMilestone(e) {
       e.preventDefault();
       const event_date = document.getElementById('ms_date').value;
@@ -529,7 +519,7 @@
       try {
         const { error } = await supabaseClient.from('milestones').insert([{ event_date, title, description }]);
         if (error) throw error;
-        showAlert("등록 완료", "발자취 기록이 등록되었습니다!", "🏆");
+        showAlert("등록 완료", "여정 기록이 등록되었습니다!", "🏆");
         e.target.reset();
         loadAdminMilestones();
       } catch (err) {
@@ -546,7 +536,7 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          list.innerHTML = '<div class="text-center py-6 text-xs text-[var(--brand-sub)] bg-[var(--input-bg)] rounded-xl border border-[var(--line)]">등록된 발자취가 없습니다.</div>';
+          list.innerHTML = '<div class="text-center py-6 text-xs text-[var(--brand-sub)] bg-[var(--input-bg)] rounded-xl border border-[var(--line)]">등록된 여정이 없습니다.</div>';
           return;
         }
 
@@ -565,11 +555,11 @@
     }
 
     function deleteMilestone(id) {
-      showConfirm("발자취 삭제", "정말로 이 항목을 삭제하시겠습니까?", async () => {
+      showConfirm("여정 삭제", "정말로 이 항목을 삭제하시겠습니까?", async () => {
         try {
           const { error } = await supabaseClient.from('milestones').delete().eq('id', id);
           if (error) throw error;
-          showAlert("삭제 완료", "발자취가 삭제되었습니다.", "🗑️");
+          showAlert("삭제 완료", "여정 기록이 삭제되었습니다.", "🗑️");
           loadAdminMilestones();
         } catch (err) {
           showAlert("삭제 실패", err.message, "⚠️");
@@ -723,47 +713,6 @@
           if (error) throw error;
           showAlert("삭제 완료", "영상이 삭제되었습니다.", "🗑️");
           loadAdminVideos();
-        } catch (err) {
-          showAlert("삭제 실패", err.message, "⚠️");
-        }
-      });
-    }
-
-    // 방명록 관리
-    async function loadAdminGuestbook() {
-      const list = document.getElementById('adminGuestbookList');
-      if (!list) return;
-
-      try {
-        const { data, error } = await supabaseClient.from('guestbook').select('*').order('created_at', { ascending: false }).limit(15);
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-          list.innerHTML = '<div class="text-center py-6 text-xs text-[var(--brand-sub)] bg-[var(--input-bg)] rounded-xl border border-[var(--line)]">등록된 응원 방명록이 없습니다.</div>';
-          return;
-        }
-
-        list.innerHTML = data.map(item => `
-          <div class="flex items-center justify-between p-3 bg-[var(--input-bg)] rounded-xl border border-[var(--line)] gap-2">
-            <div class="min-w-0 flex-1">
-              <div class="font-bold text-xs text-textPurple font-montserrat">@${item.nickname}</div>
-              <div class="text-xs font-medium text-[var(--brand-dark)] truncate">${item.message}</div>
-            </div>
-            <button onclick="deleteGuestbook('${item.id}')" class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900/40 transition shrink-0">삭제</button>
-          </div>
-        `).join('');
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    function deleteGuestbook(id) {
-      showConfirm("방명록 삭제", "이 메시지를 삭제하시겠습니까?", async () => {
-        try {
-          const { error } = await supabaseClient.from('guestbook').delete().eq('id', id);
-          if (error) throw error;
-          showAlert("삭제 완료", "방명록 메시지가 삭제되었습니다.", "🗑️");
-          loadAdminGuestbook();
         } catch (err) {
           showAlert("삭제 실패", err.message, "⚠️");
         }
