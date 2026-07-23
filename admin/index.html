@@ -90,11 +90,10 @@
          box-sizing: border-box !important;
          width: 100% !important;
          min-width: 0 !important;
-         display: flex !important;
+         display: inline-flex !important;
          align-items: center !important;
          justify-content: space-between !important;
          line-height: normal !important;
-         text-align: left !important;
          }
          input[type="date"]::-webkit-date-and-time-value,
          input[type="time"]::-webkit-date-and-time-value {
@@ -102,12 +101,13 @@
          line-height: normal !important;
          margin: 0 !important;
          padding: 0 !important;
-         width: 100% !important;
+         height: auto !important;
+         min-height: auto !important;
          }
          input[type="date"]::-webkit-calendar-picker-indicator,
          input[type="time"]::-webkit-calendar-picker-indicator {
          margin-left: auto !important;
-         padding: 2px !important;
+         padding: 0 !important;
          cursor: pointer;
          flex-shrink: 0 !important;
          }
