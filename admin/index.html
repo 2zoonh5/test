@@ -103,14 +103,20 @@
       color-scheme: dark !important;
     }
 
+    /* 🔥 모바일 날짜/시간 선택창 짤림 및 너비 불일치 완벽 해결 CSS 🔥 */
     input[type="date"], input[type="time"] {
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
       box-sizing: border-box !important;
-      max-width: 100% !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      display: block !important;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator,
     input[type="time"]::-webkit-calendar-picker-indicator {
-      margin-left: 2px !important;
+      margin-left: auto !important;
       padding: 0 !important;
       cursor: pointer;
     }
@@ -192,7 +198,6 @@
   <!-- 관리자 대시보드 화면 -->
   <div id="adminView" class="hidden max-w-3xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
     
-    <!-- 2번 수정: 명칭을 'ADMIN PAGE' 및 큼직한 '관리자 페이지'로 변경 -->
     <div class="flex items-center justify-between gap-2 pb-5 mb-8 border-b border-[var(--line)]">
       <div class="min-w-0">
         <div class="text-[10px] sm:text-xs font-bold text-textPurple tracking-widest font-montserrat uppercase truncate">ADMIN PAGE</div>
@@ -219,11 +224,11 @@
       <form onsubmit="saveLinks(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">노래책 URL</label>
-          <input type="url" id="musicbook_url" required placeholder="https://meloming.com/..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+          <input type="url" id="musicbook_url" required placeholder="https://meloming.com/..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
         <div>
           <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">업보 URL (구글 스프레드시트)</label>
-          <input type="url" id="karma_url" required placeholder="https://docs.google.com/..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]">
+          <input type="url" id="karma_url" required placeholder="https://docs.google.com/..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
         
         <button type="submit" class="w-full h-11 sm:h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg shadow-textPurple/20">
@@ -239,12 +244,12 @@
       </h3>
       
       <form onsubmit="saveSchedule(event)" class="space-y-4">
-        <div>
+        <div class="w-full min-w-0">
           <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">일정 제목 *</label>
           <input type="text" id="title" required placeholder="예: 배그 벽킬내기 합방" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
         </div>
 
-        <!-- 1번 수정: 모바일에서는 넓은 세로 1열로 표시되어 위아래 입력창과 크기가 동일해지고, 태블릿 이상(sm:)에서 3열 배치 -->
+        <!-- 인풋박스 크기 균일화 적용 영역 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="w-full min-w-0">
             <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">시작일 *</label>
