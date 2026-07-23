@@ -103,7 +103,6 @@
       color-scheme: dark !important;
     }
 
-    /* 🔥 모바일 날짜/시간 선택창 세로 중앙 정렬 & 수평/수직 핏 완벽 수정 🔥 */
     input[type="date"], input[type="time"] {
       -webkit-appearance: none !important;
       -moz-appearance: none !important;
@@ -117,7 +116,6 @@
       line-height: normal !important;
     }
 
-    /* iOS Safari 텍스트 세로 정렬 및 내부 여백 강제 리셋 */
     input[type="date"]::-webkit-date-and-time-value,
     input[type="time"]::-webkit-date-and-time-value {
       text-align: left !important;
@@ -252,6 +250,39 @@
       </form>
     </div>
 
+    <!-- 영상 관리 카드 -->
+    <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-6 sm:mb-8">
+      <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-textPurple"></span>노래 커버 및 다시보기 영상 관리
+      </h3>
+      
+      <form onsubmit="saveVideo(event)" class="space-y-4">
+        <input type="hidden" id="video_id" value="">
+        <div>
+          <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">영상 제목 *</label>
+          <input type="text" id="video_title" required placeholder="예: 세르 - 연보라빛 밤 커버" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">영상 URL (SOOP VOD 또는 유튜브 링크) *</label>
+          <input type="url" id="video_url" required placeholder="https://vod.sooplive.com/player/197914321..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textPurple text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+        </div>
+        
+        <div class="flex gap-2">
+          <button type="button" id="cancelVideoEditBtn" onclick="resetVideoForm()" class="hidden w-1/3 h-11 sm:h-12 bg-[var(--input-bg)] text-[var(--brand-dark)] font-bold text-xs sm:text-sm rounded-xl border border-[var(--line)] transition">
+            취소
+          </button>
+          <button type="submit" id="saveVideoBtn" class="flex-1 h-11 sm:h-12 bg-textPurple hover:bg-[#7B67DC] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg shadow-textPurple/20">
+            영상 등록하기
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-[var(--line)]">
+        <h4 class="text-xs font-bold text-[var(--brand-sub)] mb-3">등록된 영상 목록</h4>
+        <div id="adminVideoList" class="space-y-2.5"></div>
+      </div>
+    </div>
+
     <!-- 새 일정 등록 폼 -->
     <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-8 sm:mb-10">
       <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
@@ -357,6 +388,7 @@
         document.getElementById('adminView').classList.remove('hidden');
         loadLinks();
         loadAdminSchedules();
+        loadAdminVideos();
       }
     });
 
@@ -402,6 +434,7 @@
         document.getElementById('adminView').classList.remove('hidden');
         loadLinks();
         loadAdminSchedules();
+        loadAdminVideos();
       } else {
         showAlert("인증 실패", "비밀번호가 올바르지 않습니다.", "🔒");
       }
@@ -446,7 +479,7 @@
         const { data, error } = await supabaseClient.from('schedules').select('*').order('event_date', { ascending: false });
         if (error) throw error;
         
-        if (!data.length) {
+        if (!data || !data.length) {
           list.innerHTML = '<div class="text-center py-8 text-xs text-[var(--brand-sub)] bg-[var(--card-bg)] rounded-2xl border border-[var(--line)]">등록된 일정이 없습니다.</div>';
           return;
         }
@@ -496,6 +529,97 @@
           if (error) throw error;
           showAlert("삭제 완료", "일정이 정상적으로 삭제되었습니다.", "🗑️");
           loadAdminSchedules();
+        } catch (err) {
+          showAlert("삭제 실패", err.message, "⚠️");
+        }
+      });
+    }
+
+    // 영상 등록 및 수정
+    async function saveVideo(e) {
+      e.preventDefault();
+      const id = document.getElementById('video_id').value;
+      const title = document.getElementById('video_title').value;
+      const url = document.getElementById('video_url').value;
+
+      try {
+        if (id) {
+          const { error } = await supabaseClient.from('videos').update({ title, url }).eq('id', id);
+          if (error) throw error;
+          showAlert("수정 완료", "영상 정보가 성공적으로 수정되었습니다!", "🎥");
+        } else {
+          const { error } = await supabaseClient.from('videos').insert([{ title, url }]);
+          if (error) throw error;
+          showAlert("등록 완료", "새로운 영상이 등록되었습니다!", "🎥");
+        }
+
+        resetVideoForm();
+        loadAdminVideos();
+      } catch (err) {
+        showAlert("저장 실패", err.message, "⚠️");
+      }
+    }
+
+    // 영상 목록 로드
+    async function loadAdminVideos() {
+      const list = document.getElementById('adminVideoList');
+      if (!list) return;
+
+      try {
+        const { data, error } = await supabaseClient.from('videos').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          list.innerHTML = '<div class="text-center py-6 text-xs text-[var(--brand-sub)] bg-[var(--input-bg)] rounded-xl border border-[var(--line)]">등록된 영상이 없습니다.</div>';
+          return;
+        }
+
+        list.innerHTML = data.map(item => `
+          <div class="flex items-center justify-between p-3 bg-[var(--input-bg)] rounded-xl border border-[var(--line)] gap-2">
+            <div class="min-w-0 flex-1">
+              <div class="font-bold text-xs sm:text-sm text-[var(--brand-dark)] truncate">${item.title}</div>
+              <div class="text-[10px] text-[var(--brand-sub)] truncate font-montserrat">${item.url}</div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="editVideo('${item.id}', '${escapeHtml(item.title)}', '${item.url}')" class="text-xs font-bold text-textPurple bg-textPurple/10 hover:bg-textPurple/20 px-2.5 py-1.5 rounded-lg border border-textPurple/20 transition">수정</button>
+              <button onclick="deleteVideo('${item.id}')" class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900/40 transition">삭제</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+
+    function editVideo(id, title, url) {
+      document.getElementById('video_id').value = id;
+      document.getElementById('video_title').value = title;
+      document.getElementById('video_url').value = url;
+      
+      document.getElementById('saveVideoBtn').textContent = "영상 수정하기";
+      document.getElementById('cancelVideoEditBtn').classList.remove('hidden');
+    }
+
+    function resetVideoForm() {
+      document.getElementById('video_id').value = "";
+      document.getElementById('video_title').value = "";
+      document.getElementById('video_url').value = "";
+      
+      document.getElementById('saveVideoBtn').textContent = "영상 등록하기";
+      document.getElementById('cancelVideoEditBtn').classList.add('hidden');
+    }
+
+    function deleteVideo(id) {
+      showConfirm("영상 삭제", "정말로 이 영상을 삭제하시겠습니까?", async () => {
+        try {
+          const { error } = await supabaseClient.from('videos').delete().eq('id', id);
+          if (error) throw error;
+          showAlert("삭제 완료", "영상이 삭제되었습니다.", "🗑️");
+          loadAdminVideos();
         } catch (err) {
           showAlert("삭제 실패", err.message, "⚠️");
         }
