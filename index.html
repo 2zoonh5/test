@@ -582,6 +582,9 @@
     }
 
     async function loadMainVideos() {
+      const container = document.getElementById('videoContainer'); // 이전 구조 호환용
+      const sliderBox = document.querySelector('#mainVideoIframe')?.closest('.max-w-3xl');
+
       try {
         const { data, error } = await supabaseClient
           .from('videos')
@@ -592,13 +595,23 @@
 
         videoList = data || [];
 
+        // ❌ 등록된 영상이 0개일 때
         if (videoList.length === 0) {
-          document.getElementById('mainVideoTitle').textContent = '등록된 영상이 없습니다.';
-          document.getElementById('prevVidBtn').style.display = 'none';
-          document.getElementById('nextVidBtn').style.display = 'none';
+          if (sliderBox) {
+            sliderBox.innerHTML = `
+              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-textPurple/10 text-textPurple flex items-center justify-center text-2xl sm:text-3xl mb-4 font-bold shadow-inner">
+                  🎬
+                </div>
+                <h4 class="font-bold text-base sm:text-lg text-[var(--brand-dark)] mb-1">등록된 영상이 없습니다</h4>
+                <p class="text-xs sm:text-sm text-[var(--brand-sub)] font-medium">관리자 페이지에서 영상을 등록해 보세요!</p>
+              </div>
+            `;
+          }
           return;
         }
 
+        // ⭕ 영상이 1개 이상 있을 때
         renderVideoIndex(0);
       } catch (err) {
         console.error('Video Load Error:', err);
