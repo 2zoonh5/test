@@ -1,751 +1,670 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERU PROFILE 💜</title>
-  
-  <!-- 파비콘 설정 -->
-  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="./android-icon-192x192.png">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            bg: 'var(--bg)',          
-            themePurple: 'var(--theme-purple)', 
-            textPurple: '#8C7AE6',   
-            brandDark: 'var(--brand-dark)',    
-            brandSub: 'var(--brand-sub)',     
-            line: 'var(--line)', 
-            naverGreen: '#1E4620', 
-            naverGreenHover: '#153317',
-          },
-          fontFamily: {
-            sans: ['Pretendard', 'sans-serif'],
-            montserrat: ['Montserrat', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    /* ==========================================
-       SERU CUSTOM CURSOR SETTINGS (MAIN)
-       ========================================== */
-    html, body {
-      cursor: url('./cursors/Cursor1_ser_arrow_1.cur'), auto !important;
-    }
-
-    button, [onclick], .nav-link, #themeToggle {
-      cursor: url('./cursors/Cursor5_ser_select.cur'), pointer !important;
-    }
-
-    a[target="_blank"] {
-      cursor: url('./cursors/Cursor15_ser_link.cur'), pointer !important;
-    }
-
-    #avatarTilt, .group\/fandom, .group\/charm {
-      cursor: url('./cursors/Cursor17_ser_link_person.cur'), pointer !important;
-    }
-
-    :disabled, .disabled {
-      cursor: url('./cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
-    }
-    input, textarea {
-      cursor: url('./cursors/Cursor6_ser_text.cur'), text !important;
-    }
-
-    .admin-secret-link {
-      cursor: url('./cursors/Cursor1_ser_arrow_1.cur'), default !important;
-    }
-    /* ========================================== */
-
-    :root {
-      --bg: #F8F7FC;
-      --card-bg: rgba(255, 255, 255, 0.96);
-      --theme-purple: #DAD1FE;
-      --brand-dark: #1A1726;
-      --brand-sub: #5E5B6E;
-      --line: rgba(218, 209, 254, 0.6);
-      --header-bg: rgba(255, 255, 255, 0.85);
-      --soop-bg: #1A1726;
-      --soop-text: #FFFFFF;
-    }
-
-    /* 🔥 다크모드 가독성 대폭 강화 색상 세팅 */
-    body.dark {
-      --bg: #0B0912;
-      --card-bg: rgba(22, 18, 33, 0.96);
-      --theme-purple: #3A3258;
-      --brand-dark: #FFFFFF;
-      --brand-sub: #C8C3D4;
-      --line: rgba(140, 122, 230, 0.35);
-      --header-bg: rgba(22, 18, 33, 0.85);
-      --soop-bg: #2B2540;
-      --soop-text: #FFFFFF;
-    }
-
-    /* 1. 중간 보라 배경 삭제 -> 완벽 투명 처리 */
-body {
-  background-color: transparent !important;
-  color: var(--brand-dark);
-  letter-spacing: -0.02em;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-    html { scroll-behavior: smooth; }
-    
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
-
-    /* 🔥 클린 미니멀 + 네온 글로우 카드 */
-    .premium-card {
-      background: var(--card-bg);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .premium-card:hover {
-      transform: translateY(-4px);
-      border-color: #8C7AE6;
-      box-shadow: 0 8px 30px rgba(140, 122, 230, 0.22);
-    }
-
-    .nav-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--brand-sub);
-      padding: 8px 16px;
-      border-radius: 99px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 640px) {
-      .nav-link { font-size: 0.75rem; padding: 6px 10px; }
-    }
-
-    .nav-link:hover {
-      color: var(--brand-dark);
-      background: rgba(218, 209, 254, 0.3);
-    }
-    .nav-link.active {
-      color: #1E1B2C;
-      background: #DAD1FE;
-      box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
-    }
-
-    .tilt-container { perspective: 1000px; }
-    .tilt-element {
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out;
-    }
-
-    /* 🔥 정갈한 정적 보랏빛 소프트 조명 */
-    .bg-glow-static {
-      position: absolute;
-      width: min(800px, 100vw);
-      height: min(800px, 100vw);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(140, 122, 230, 0.15) 0%, rgba(218, 209, 254, 0.04) 50%, transparent 70%);
-      top: -10%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* 🔥 [세르의 여정] 수직선 은은한 연보라 그라데이션 */
-    #milestoneContainer::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 4px;
-      bottom: 4px;
-      width: 2px;
-      background: linear-gradient(180deg, #8C7AE6 0%, rgba(140, 122, 230, 0.4) 60%, rgba(218, 209, 254, 0.05) 100%);
-      border-radius: 99px;
-    }
-
-    .fxpop {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      user-select: none;
-      animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    
-    @keyframes floatUp {
-      0% {
-        transform: translate(var(--dx), 0) scale(0.6) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-        transform: translate(var(--dx), -10px) scale(1) rotate(var(--rot));
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--dx), -45px) scale(0.8) rotate(var(--rot));
-      }
-    }
-
-    .indicator-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background-color: var(--brand-sub);
-      opacity: 0.3;
-      transition: all 0.3s ease;
-    }
-    .indicator-dot.active {
-      width: 24px;
-      background-color: #8C7AE6;
-      opacity: 1;
-    }
-    
-    /* 2. 테두리가 숲 게시글 끝까지 딱 붙어서 여백이 안 남게 설정 */
-.site-frame {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 !important;
-  border-radius: 20px; /* 원하시는 둥근 모서리 정도 */
-  overflow: hidden;
-  border: 1px solid var(--line); /* 테두리선 */
-  background-color: var(--bg);   /* 테두리 '안쪽'만 보라색/흰색 배경 적용 */
-  position: relative;
-}
-
-    body.dark .site-frame {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-}
-  </style>
-</head>
-<body class="relative min-h-screen font-sans pb-16 overflow-x-hidden">
-
-  <!-- 🔥 SOOP 게시글용 둥근 프레임 시작 -->
-  <div class="site-frame">
-    
-    <!-- 상단 은은한 미니멀 조명 -->
-    <div class="bg-glow-static"></div>
-
-    <!-- FLOATING HEADER & NAVIGATION -->
-    <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
-      <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-16 md:h-20 rounded-full px-3 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
-        <div class="font-montserrat text-lg md:text-xl font-bold tracking-wider text-[var(--brand-dark)] shrink-0 pl-1">
-          SERU<span class="text-textPurple">.</span>
-        </div>
-        
-        <div class="flex items-center gap-1 md:gap-2">
-          <nav class="flex gap-0.5 md:gap-1">
-            <a href="./" class="nav-link active">프로필</a>
-            <a href="./schedule" class="nav-link">일정</a>
-            <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
-            <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
-          </nav>
-
-          <button id="themeToggle" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-xs md:text-sm shrink-0 hover:border-textPurple transition shadow-sm ml-0.5" aria-label="다크모드 토글">
-            <span id="themeIcon">🌙</span>
-          </button>
-        </div>
-      </header>
-    </div>
-
-    <main class="max-w-4xl mx-auto px-4 md:px-6 mt-12 md:mt-20">
-
-      <!-- HERO SECTION -->
-      <section class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mb-16 md:mb-28">
-        <div class="md:col-span-5 flex justify-center tilt-container">
-          <div class="relative group tilt-element" id="avatarTilt">
-            <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
-            <div class="w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl">
-              <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover select-none">
-            </div>
-          </div>
-        </div>
-
-        <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
-          <div class="inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold tracking-widest text-[var(--brand-sub)] uppercase mb-3 md:mb-4 justify-center md:justify-start font-montserrat">
-            <span>SINCE 2025. 11. 22</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-textPurple"></span>
-            <span>SOOP STREAMER</span>
-          </div>
-          
-          <h1 class="flex items-baseline justify-center md:justify-start gap-3 mb-4 md:mb-6">
-            <span class="font-sans font-extrabold text-[2.25rem] md:text-[3rem] text-[var(--brand-dark)] leading-none">세르</span> 
-            <span class="font-medium text-textPurple text-lg md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
-          </h1>
-          
-          <p class="text-[var(--brand-sub)] text-sm md:text-base leading-relaxed mb-6 md:mb-8 max-w-md mx-auto md:mx-0 break-keep">
-            연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
-            <br class="hidden md:block" />
-            숲 라이브 스트리머 세르입니다.
-          </p>
-
-          <!-- 바로가기 버튼 세트 -->
-          <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
-            <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
-               class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-              공식 팬카페 바로가기
-            </a>
-            <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
-               style="background-color: var(--soop-bg); color: var(--soop-text);"
-               class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md border border-[var(--line)]">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-              SOOP 방송국 바로가기
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- INFO CARDS -->
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 mb-12 md:mb-16">
-        <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
-          <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Birthday</div>
-          <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">06 . 08</div>
-          <div class="mt-1.5"><span id="bdayBadge" class="text-[10px] sm:text-[11px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
-        </div>
-
-        <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
-          <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Debut</div>
-          <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">2025 . 11 . 22</div>
-          <div class="mt-1.5"><span id="debutBadge" class="text-[10px] sm:text-[11px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
-        </div>
-
-        <div class="premium-card py-5 px-3 sm:px-4 text-center flex flex-col justify-center items-center">
-          <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Live Time</div>
-          <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">19 : 00</div>
-          <p class="text-[10px] sm:text-[11px] text-[var(--brand-sub)] font-semibold mt-1 truncate w-full">오전 게릴라 방송 포함</p>
-        </div>
-
-        <div class="premium-card py-5 px-3 sm:px-4 text-center flex flex-col justify-center items-center">
-          <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Off-Day</div>
-          <div class="text-base sm:text-lg font-bold text-[var(--brand-dark)] tracking-tight my-0.5">매주 일요일</div>
-          <p class="text-[10px] sm:text-[11px] text-[var(--brand-sub)] font-semibold mt-1">정기 휴방일</p>
-        </div>
-      </section>
-
-      <!-- FANDOM & CHARACTER WIDGETS -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-24">
-        <div class="premium-card p-6 sm:p-8 flex flex-col justify-between group/fandom">
-          <div>
-            <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
-            
-            <div class="flex items-center gap-4 sm:gap-5 pb-5 border-b border-[var(--line)] mb-5">
-              <div class="w-14 h-14 sm:w-16 sm:h-16 shrink-0 flex items-center justify-center tilt-container select-none">
-                <img src="./haetto_pf.png" alt="해또 프로필" id="haettoTilt" class="w-full h-full object-contain tilt-element filter drop-shadow-[0_4px_10px_rgba(140,122,230,0.12)]">
-              </div>
-              <div>
-                <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)]">해또 <span class="font-light text-[var(--brand-sub)] text-xs sm:text-sm font-montserrat ml-0.5">haetto</span></h3>
-                <p class="text-xs text-[var(--brand-sub)] mt-0.5 font-medium">세르의 가장 소중한 수호천사이자 동반자</p>
-              </div>
-            </div>
-            
-            <div class="text-[13px] text-[var(--brand-sub)] font-medium tracking-tight px-1 py-1 break-keep">
-              <p class="leading-relaxed mb-4">
-                항상 반짝이는 하얀 조개를 손에 소중하게 품고 다니며, 예쁜 리본이 달린 보라색 케이프가 가장 잘 어울리는 귀여운 연보라색 해달 요정입니다.
-              </p>
-              <p class="leading-relaxed">
-                잔잔하게 밤하늘을 감상하는 낭만과 노래 듣기를 좋아하며, 세르의 곁을 언제나 변함없이 묵묵하고 든든하게 지켜주는 소중한 가족이자 팬덤입니다.
-              </p>
-            </div>
-          </div>
-          
-          <div class="border-t border-[var(--line)] mt-6 pt-5">
-            <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">Fan Nickname</span>
-              <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full">닉네임º˚</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="premium-card p-6 sm:p-8 flex flex-col justify-between group/charm">
-          <div>
-            <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)] mb-6">세르의 매력 프로필</h3>
-            
-            <div class="space-y-4">
-              <div class="flex items-center gap-3 group">
-                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🧸</span>
-                <div>
-                  <h4 class="text-sm font-bold text-[var(--brand-dark)]">쫌 귀여움</h4>
-                  <p class="text-[11px] text-[var(--brand-sub)]">지나칠 수 없는 세르 고유의 패시브 특성</p>
-                </div>
-              </div>
-              
-              <div class="flex items-center gap-3 group">
-                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🔋</span>
-                <div>
-                  <h4 class="text-sm font-bold text-[var(--brand-dark)]">체력</h4>
-                  <p class="text-[11px] text-[var(--brand-sub)]">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-3 group">
-                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">😼</span>
-                <div>
-                  <h4 class="text-sm font-bold text-[var(--brand-dark)]">표?독?한?가?</h4>
-                  <p class="text-[11px] text-[var(--brand-sub)]">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="border-t border-[var(--line)] mt-6 pt-5">
-            <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
-              <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full transition-all duration-300 group-hover/charm:bg-textPurple/25">귀엽기 ⭐</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 🏆 세르의 여정 (마일스톤 타임라인) -->
-      <section class="mb-16 md:mb-24">
-        <div class="text-center mb-8 sm:mb-12">
-          <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">MILESTONE</div>
-          <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)]">세르의 여정</h3>
-        </div>
-
-        <div class="max-w-2xl mx-auto relative pl-6 space-y-8" id="milestoneContainer">
-          <!-- JS에서 동적으로 생성됩니다 -->
-        </div>
-      </section>
-
-      <!-- PLAYLIST VOD -->
-      <section class="mb-12 text-center">
-        <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
-        <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)] mb-8 sm:mb-10">노래 커버 및 다시보기</h3>
-
-        <div class="max-w-3xl mx-auto relative px-2 sm:px-10">
-          <button id="prevVidBtn" onclick="prevVideo()" class="absolute left-0 sm:-left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-
-          <button id="nextVidBtn" onclick="nextVideo()" class="absolute right-0 sm:-right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-
-          <div class="p-3 sm:p-5 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="aspect-video w-full rounded-[18px] sm:rounded-[22px] overflow-hidden bg-black shadow-inner">
-              <iframe id="mainVideoIframe" src="" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
-            </div>
-            <div class="mt-4 px-2 text-center">
-              <h4 id="mainVideoTitle" class="font-bold text-base sm:text-lg text-[var(--brand-dark)] truncate">영상을 불러오는 중...</h4>
-            </div>
-          </div>
-
-          <div id="videoIndicators" class="flex items-center justify-center gap-2 mt-5"></div>
-        </div>
-      </section>
-      
-    </main>
-
-    <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold select-none">
-      <p class="font-montserrat tracking-wider">
-        © 2026 
-        <span onclick="location.href='./admin/'" class="admin-secret-link cursor-default">SERU.</span>
-        ALL RIGHTS RESERVED.
-      </p>
-    </footer>
-
-  </div> 
-  <!-- 🔥 둥근 프레임 끝 -->
-
-  <script>
-    const toggleBtn = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-
-    function applyTheme(isDark) {
-      if (isDark) {
-        document.body.classList.add('dark');
-        document.documentElement.classList.add('dark');
-        themeIcon.textContent = '☀️';
-      } else {
-        document.body.classList.remove('dark');
-        document.documentElement.classList.remove('dark');
-        themeIcon.textContent = '🌙';
-      }
-    }
-
-    if (localStorage.getItem('seru_theme') === 'dark') {
-      applyTheme(true);
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      const isDark = !document.body.classList.contains('dark');
-      applyTheme(isDark);
-      localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
-    });
-
-    function calcDday(month, day) {
-      const now = new Date();
-      now.setHours(0,0,0,0);
-      let target = new Date(now.getFullYear(), month - 1, day);
-      if (target < now) target = new Date(now.getFullYear() + 1, month - 1, day);
-      const diff = Math.round((target - now) / (1000 * 60 * 60 * 24));
-      return diff === 0 ? 'D-Day 🎉' : `D-${diff}`;
-    }
-
-    function calcDaysSince(year, month, day) {
-      const now = new Date();
-      now.setHours(0,0,0,0);
-      const start = new Date(year, month - 1, day);
-      start.setHours(0,0,0,0);
-      const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-      return diff >= 0 ? `D+${diff}` : `D-${Math.abs(diff)}`;
-    }
-
-    document.getElementById('bdayBadge').textContent = calcDday(6, 8);
-    document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
-
-    // 클릭 이펙트
-    const popImages = [
-      './fx_shell.png',
-      './fx_haetto.png'
-    ];
-
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, input, textarea, iframe')) return;
-
-      const count = 3;
-      for (let i = 0; i < count; i++) {
-        const img = document.createElement('img');
-        img.className = 'fxpop';
-
-        img.src = popImages[Math.floor(Math.random() * popImages.length)];
-
-        img.style.width = '24px';
-        img.style.height = '24px';
-        img.style.objectFit = 'contain';
-
-        img.style.left = `${e.clientX - 12}px`;
-        img.style.top = `${e.clientY - 12}px`;
-
-        const offsetX = (Math.random() - 0.5) * 35;
-        const rot = (Math.random() - 0.5) * 30;
-
-        img.style.setProperty('--dx', `${offsetX}px`);
-        img.style.setProperty('--rot', `${rot}deg`);
-
-        document.body.appendChild(img);
-        setTimeout(() => img.remove(), 800);
-      }
-    });
-
-    const card = document.getElementById('avatarTilt');
-    card.addEventListener('mousemove', (e) => {
-      const { left, top, width, height } = card.getBoundingClientRect();
-      const x = e.clientX - left - width / 2;
-      const y = e.clientY - top - height / 2;
-      const rotateX = -(y / (height / 2)) * 15;
-      const rotateY = (x / (width / 2)) * 15;
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-    });
-    card.addEventListener('mouseleave', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
-
-    const haettoCard = document.getElementById('haettoTilt');
-    haettoCard.addEventListener('mousemove', (e) => {
-      const { left, top, width, height } = haettoCard.getBoundingClientRect();
-      const x = e.clientX - left - width / 2;
-      const y = e.clientY - top - height / 2;
-      const rotateX = -(y / (height / 2)) * 15;
-      const rotateY = (x / (width / 2)) * 15;
-      haettoCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
-    });
-    haettoCard.addEventListener('mouseleave', () => { haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
-  </script>
-
-  <script src="js/supabase-config.js"></script>
-  <script>
-    let videoList = [];
-    let currentVideoIdx = 0;
-
-    async function loadMainSettings() {
-      try {
-        const { data } = await supabaseClient.from('settings').select('*');
-        if (!data) return;
-        data.forEach(item => {
-          if (item.key === 'musicbook_url' && item.value) {
-            const el = document.getElementById('navMusicbook');
-            if (el) el.href = item.value;
-          }
-          if (item.key === 'karma_url' && item.value) {
-            const el = document.getElementById('navKarma');
-            if (el) el.href = item.value;
-          }
-        });
-      } catch (err) { console.error('Main Settings Error:', err); }
-    }
-
-    function getEmbedUrl(url) {
-      if (!url) return '';
-  
-      if (url.includes('sooplive.com') || url.includes('afreecatv.com')) {
-        const match = url.match(/(?:player\/|station\/[^\/]+\/vod\/)(\d+)/);
-        if (match && match[1]) {
-          return `https://vod.sooplive.com/player/${match[1]}/embed?showChat=false&autoPlay=false&mutePlay=false`;
-        }
-      }
-  
-      if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-        let videoId = '';
-        if (url.includes('youtu.be/')) {
-          videoId = url.split('youtu.be/')[1]?.split('?')[0];
-        } else {
-          const urlParams = new URLSearchParams(new URL(url).search);
-          videoId = urlParams.get('v');
-        }
-        if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-      }
-
-      return url;
-    }
-
-    async function loadMainVideos() {
-      const sliderBox = document.querySelector('#mainVideoIframe')?.closest('.max-w-3xl');
-
-      try {
-        const { data, error } = await supabaseClient
-          .from('videos')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        videoList = data || [];
-
-        if (videoList.length === 0) {
-          if (sliderBox) {
-            sliderBox.innerHTML = `
-              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-textPurple/10 text-textPurple flex items-center justify-center text-2xl sm:text-3xl mb-4 font-bold shadow-inner">
-                  🎬
-                </div>
-                <h4 class="font-bold text-base sm:text-lg text-[var(--brand-dark)] mb-1">등록된 영상이 없습니다</h4>
-                <p class="text-xs sm:text-sm text-[var(--brand-sub)] font-medium">관리자 페이지에서 영상을 등록해 보세요!</p>
-              </div>
-            `;
-          }
-          return;
-        }
-
-        renderVideoIndex(0);
-      } catch (err) {
-        console.error('Video Load Error:', err);
-      }
-    }
-
-    function renderVideoIndex(idx) {
-      if (videoList.length === 0) return;
-      currentVideoIdx = idx;
-
-      const video = videoList[currentVideoIdx];
-      document.getElementById('mainVideoIframe').src = getEmbedUrl(video.url);
-      document.getElementById('mainVideoTitle').textContent = video.title;
-
-      if (videoList.length <= 1) {
-        document.getElementById('prevVidBtn').style.display = 'none';
-        document.getElementById('nextVidBtn').style.display = 'none';
-      } else {
-        document.getElementById('prevVidBtn').style.display = 'flex';
-        document.getElementById('nextVidBtn').style.display = 'flex';
-      }
-
-      const indicatorContainer = document.getElementById('videoIndicators');
-      indicatorContainer.innerHTML = videoList.map((_, i) => `
-        <button onclick="renderVideoIndex(${i})" class="indicator-dot ${i === currentVideoIdx ? 'active' : ''}" aria-label="Slide ${i+1}"></button>
-      `).join('');
-    }
-
-    function prevVideo() {
-      let nextIdx = currentVideoIdx - 1;
-      if (nextIdx < 0) nextIdx = videoList.length - 1;
-      renderVideoIndex(nextIdx);
-    }
-
-    function nextVideo() {
-      let nextIdx = currentVideoIdx + 1;
-      if (nextIdx >= videoList.length) nextIdx = 0;
-      renderVideoIndex(nextIdx);
-    }
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const sliderContainer = document.getElementById('mainVideoIframe')?.closest('.max-w-3xl');
-
-    if (sliderContainer) {
-      sliderContainer.addEventListener('touchstart', e => { 
-        touchStartX = e.changedTouches[0].screenX; 
-      }, {passive: true});
-
-      sliderContainer.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-      }, {passive: true});
-    }
-
-    function handleSwipe() {
-      if (touchEndX < touchStartX - 50) nextVideo();
-      if (touchEndX > touchStartX + 50) prevVideo();
-    }
-
-    // 🏆 마일스톤 (세르의 여정) 로드
-    async function loadMilestones() {
-      const container = document.getElementById('milestoneContainer');
-      if (!container) return;
-
-      try {
-        const { data, error } = await supabaseClient.from('milestones').select('*').order('event_date', { ascending: true });
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-          container.innerHTML = `
-            <div class="text-xs font-semibold text-[var(--brand-sub)] py-4">등록된 여정이 없습니다.</div>
-          `;
-          return;
-        }
-
-        container.innerHTML = data.map(item => `
-          <div class="relative group">
-            <div class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-textPurple border-4 border-[var(--bg)] shadow"></div>
-            <div class="text-xs font-bold text-textPurple font-montserrat mb-1">${item.event_date}</div>
-            <h4 class="text-base font-bold text-[var(--brand-dark)] mb-1">${item.title}</h4>
-            ${item.description ? `<p class="text-xs text-[var(--brand-sub)] leading-relaxed">${item.description}</p>` : ''}
-          </div>
-        `).join('');
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    loadMainSettings();
-    loadMainVideos();
-    loadMilestones();
-  </script>
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>세르</title>
+      <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+      <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="./apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192" href="./android-icon-192x192.png">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script>
+         tailwind.config = {
+           darkMode: 'class',
+           theme: {
+             extend: {
+               colors: {
+                 bg: 'var(--bg)',          
+                 themePurple: 'var(--theme-purple)', 
+                 textPurple: '#8C7AE6',   
+                 brandDark: 'var(--brand-dark)',    
+                 brandSub: 'var(--brand-sub)',     
+                 line: 'var(--line)', 
+                 naverGreen: '#1E4620', 
+                 naverGreenHover: '#153317',
+               },
+               fontFamily: {
+                 sans: ['Pretendard', 'sans-serif'],
+                 montserrat: ['Montserrat', 'sans-serif'],
+               }
+             }
+           }
+         }
+      </script>
+      <style>
+         html, body {
+         cursor: url('./cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+         }
+         button, [onclick], .nav-link, #themeToggle {
+         cursor: url('./cursors/Cursor5_ser_select.cur'), pointer !important;
+         }
+         a[target="_blank"] {
+         cursor: url('./cursors/Cursor15_ser_link.cur'), pointer !important;
+         }
+         #avatarTilt, .group\/fandom, .group\/charm {
+         cursor: url('./cursors/Cursor17_ser_link_person.cur'), pointer !important;
+         }
+         :disabled, .disabled {
+         cursor: url('./cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+         }
+         input, textarea {
+         cursor: url('./cursors/Cursor6_ser_text.cur'), text !important;
+         }
+         .admin-secret-link {
+         cursor: url('./cursors/Cursor1_ser_arrow_1.cur'), default !important;
+         }
+         :root {
+         --bg: #F8F7FC;
+         --card-bg: rgba(255, 255, 255, 0.96);
+         --theme-purple: #DAD1FE;
+         --brand-dark: #1A1726;
+         --brand-sub: #5E5B6E;
+         --line: rgba(218, 209, 254, 0.6);
+         --header-bg: rgba(255, 255, 255, 0.85);
+         --soop-bg: #1A1726;
+         --soop-text: #FFFFFF;
+         }
+         body.dark {
+         --bg: #0B0912;
+         --card-bg: rgba(22, 18, 33, 0.96);
+         --theme-purple: #3A3258;
+         --brand-dark: #FFFFFF;
+         --brand-sub: #C8C3D4;
+         --line: rgba(140, 122, 230, 0.35);
+         --header-bg: rgba(22, 18, 33, 0.85);
+         --soop-bg: #2B2540;
+         --soop-text: #FFFFFF;
+         }
+         body {
+         background-color: transparent !important;
+         color: var(--brand-dark);
+         letter-spacing: -0.02em;
+         transition: background-color 0.3s ease, color 0.3s ease;
+         margin: 0 !important;
+         padding: 0 !important;
+         }
+         html { scroll-behavior: smooth; }
+         ::-webkit-scrollbar { width: 5px; height: 5px; }
+         ::-webkit-scrollbar-track { background: var(--bg); }
+         ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
+         .premium-card {
+         background: var(--card-bg);
+         border: 1px solid var(--line);
+         border-radius: 24px;
+         backdrop-filter: blur(8px);
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+         }
+         .premium-card:hover {
+         transform: translateY(-4px);
+         border-color: #8C7AE6;
+         box-shadow: 0 8px 30px rgba(140, 122, 230, 0.22);
+         }
+         .nav-link {
+         font-size: 0.875rem;
+         font-weight: 600;
+         color: var(--brand-sub);
+         padding: 8px 16px;
+         border-radius: 99px;
+         transition: all 0.3s ease;
+         white-space: nowrap;
+         }
+         @media (max-width: 640px) {
+         .nav-link { font-size: 0.75rem; padding: 6px 10px; }
+         }
+         .nav-link:hover {
+         color: var(--brand-dark);
+         background: rgba(218, 209, 254, 0.3);
+         }
+         .nav-link.active {
+         color: #1E1B2C;
+         background: #DAD1FE;
+         box-shadow: 0 4px 15px rgba(218, 209, 254, 0.4);
+         }
+         .tilt-container { perspective: 1000px; }
+         .tilt-element {
+         transform-style: preserve-3d;
+         transition: transform 0.15s ease-out;
+         }
+         .bg-glow-static {
+         position: absolute;
+         width: min(800px, 100vw);
+         height: min(800px, 100vw);
+         border-radius: 50%;
+         background: radial-gradient(circle, rgba(140, 122, 230, 0.15) 0%, rgba(218, 209, 254, 0.04) 50%, transparent 70%);
+         top: -10%; left: 50%;
+         transform: translate(-50%, -50%);
+         pointer-events: none;
+         z-index: -1;
+         }
+         #milestoneContainer::before {
+         content: '';
+         position: absolute;
+         left: 0;
+         top: 4px;
+         bottom: 4px;
+         width: 2px;
+         background: linear-gradient(180deg, #8C7AE6 0%, rgba(140, 122, 230, 0.4) 60%, rgba(218, 209, 254, 0.05) 100%);
+         border-radius: 99px;
+         }
+         .fxpop {
+         position: fixed;
+         pointer-events: none;
+         z-index: 9999;
+         user-select: none;
+         animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+         }
+         @keyframes floatUp {
+         0% {
+         transform: translate(var(--dx), 0) scale(0.6) rotate(0deg);
+         opacity: 0;
+         }
+         20% {
+         opacity: 1;
+         transform: translate(var(--dx), -10px) scale(1) rotate(var(--rot));
+         }
+         100% {
+         opacity: 0;
+         transform: translate(var(--dx), -45px) scale(0.8) rotate(var(--rot));
+         }
+         }
+         .indicator-dot {
+         width: 8px;
+         height: 8px;
+         border-radius: 99px;
+         background-color: var(--brand-sub);
+         opacity: 0.3;
+         transition: all 0.3s ease;
+         }
+         .indicator-dot.active {
+         width: 24px;
+         background-color: #8C7AE6;
+         opacity: 1;
+         }
+         .site-frame {
+         width: 100%;
+         max-width: 100%;
+         margin: 0 !important;
+         border-radius: 20px;
+         overflow: hidden;
+         border: 1px solid var(--line);
+         background-color: var(--bg);
+         position: relative;
+         }
+         body.dark .site-frame {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+         }
+      </style>
+   </head>
+   <body class="relative min-h-screen font-sans pb-16 overflow-x-hidden">
+      <div class="site-frame">
+         <div class="bg-glow-static"></div>
+         <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
+            <header class="bg-[var(--header-bg)] backdrop-blur-lg border border-[var(--line)] h-16 md:h-20 rounded-full px-3 md:px-8 flex items-center justify-between shadow-lg shadow-brandDark/5 transition-colors duration-300">
+               <div class="font-montserrat text-lg md:text-xl font-bold tracking-wider text-[var(--brand-dark)] shrink-0 pl-1">
+                  SERU<span class="text-textPurple">.</span>
+               </div>
+               <div class="flex items-center gap-1 md:gap-2">
+                  <nav class="flex gap-0.5 md:gap-1">
+                     <a href="./" class="nav-link active">프로필</a>
+                     <a href="./schedule" class="nav-link">일정</a>
+                     <a href="https://meloming.com/channel/yourseru/musicbook" id="navMusicbook" class="nav-link" target="_blank">노래책</a>
+                     <a href="https://docs.google.com/spreadsheets/d/1AwL7lAwooyQGxBQMnEAoaPnkL6q2PIqHwX7ipy9KvN0/edit?usp=sharing" id="navKarma" class="nav-link" target="_blank">업보</a>
+                  </nav>
+                  <button id="themeToggle" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-[var(--bg)] border border-[var(--line)] flex items-center justify-center text-xs md:text-sm shrink-0 hover:border-textPurple transition shadow-sm ml-0.5" aria-label="다크모드 토글">
+                  <span id="themeIcon">🌙</span>
+                  </button>
+               </div>
+            </header>
+         </div>
+         <main class="max-w-4xl mx-auto px-4 md:px-6 mt-12 md:mt-20">
+            <section class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mb-16 md:mb-28">
+               <div class="md:col-span-5 flex justify-center tilt-container">
+                  <div class="relative group tilt-element" id="avatarTilt">
+                     <div class="absolute inset-0 rounded-full border border-themePurple scale-105 transition-transform duration-500 group-hover:scale-110 pointer-events-none"></div>
+                     <div class="w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden bg-white border-4 border-white shadow-2xl">
+                        <img src="./yourseru.webp" alt="세르 프로필" class="w-full h-full object-cover select-none">
+                     </div>
+                  </div>
+               </div>
+               <div class="md:col-span-7 flex flex-col justify-center text-center md:text-left">
+                  <div class="inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold tracking-widest text-[var(--brand-sub)] uppercase mb-3 md:mb-4 justify-center md:justify-start font-montserrat">
+                     <span>SINCE 2025. 11. 22</span>
+                     <span class="w-1.5 h-1.5 rounded-full bg-textPurple"></span>
+                     <span>SOOP STREAMER</span>
+                  </div>
+                  <h1 class="flex items-baseline justify-center md:justify-start gap-3 mb-4 md:mb-6">
+                     <span class="font-sans font-extrabold text-[2.25rem] md:text-[3rem] text-[var(--brand-dark)] leading-none">세르</span> 
+                     <span class="font-medium text-textPurple text-lg md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
+                  </h1>
+                  <p class="text-[var(--brand-sub)] text-sm md:text-base leading-relaxed mb-6 md:mb-8 max-w-md mx-auto md:mx-0 break-keep">
+                     연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
+                     <br class="hidden md:block" />
+                     숲 라이브 스트리머 세르입니다.
+                  </p>
+                  <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
+                     <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
+                        class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                           <polyline points="15 3 21 3 21 9"></polyline>
+                           <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        공식 팬카페 바로가기
+                     </a>
+                     <a href="https://www.sooplive.com/station/yourseru" target="_blank" rel="noopener" 
+                        style="background-color: var(--soop-bg); color: var(--soop-text);"
+                        class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md border border-[var(--line)]">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                           <polyline points="15 3 21 3 21 9"></polyline>
+                           <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        SOOP 방송국 바로가기
+                     </a>
+                  </div>
+               </div>
+            </section>
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 mb-12 md:mb-16">
+               <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
+                  <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Birthday</div>
+                  <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">06 . 08</div>
+                  <div class="mt-1.5"><span id="bdayBadge" class="text-[10px] sm:text-[11px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
+               </div>
+               <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
+                  <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Debut</div>
+                  <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">2025 . 11 . 22</div>
+                  <div class="mt-1.5"><span id="debutBadge" class="text-[10px] sm:text-[11px] font-extrabold bg-textPurple/15 text-textPurple px-2.5 py-0.5 rounded-full"></span></div>
+               </div>
+               <div class="premium-card py-5 px-3 sm:px-4 text-center flex flex-col justify-center items-center">
+                  <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Live Time</div>
+                  <div class="text-lg sm:text-xl font-bold text-[var(--brand-dark)] font-montserrat tracking-tight my-0.5">19 : 00</div>
+                  <p class="text-[10px] sm:text-[11px] text-[var(--brand-sub)] font-semibold mt-1 truncate w-full">오전 게릴라 방송 포함</p>
+               </div>
+               <div class="premium-card py-5 px-3 sm:px-4 text-center flex flex-col justify-center items-center">
+                  <div class="text-[10px] sm:text-xs font-bold tracking-widest text-textPurple uppercase mb-1 font-montserrat">Off-Day</div>
+                  <div class="text-base sm:text-lg font-bold text-[var(--brand-dark)] tracking-tight my-0.5">매주 일요일</div>
+                  <p class="text-[10px] sm:text-[11px] text-[var(--brand-sub)] font-semibold mt-1">정기 휴방일</p>
+               </div>
+            </section>
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-24">
+               <div class="premium-card p-6 sm:p-8 flex flex-col justify-between group/fandom">
+                  <div>
+                     <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">FANDOM BRANDING</div>
+                     <div class="flex items-center gap-4 sm:gap-5 pb-5 border-b border-[var(--line)] mb-5">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 shrink-0 flex items-center justify-center tilt-container select-none">
+                           <img src="./haetto_pf.png" alt="해또 프로필" id="haettoTilt" class="w-full h-full object-contain tilt-element filter drop-shadow-[0_4px_10px_rgba(140,122,230,0.12)]">
+                        </div>
+                        <div>
+                           <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)]">해또 <span class="font-light text-[var(--brand-sub)] text-xs sm:text-sm font-montserrat ml-0.5">haetto</span></h3>
+                           <p class="text-xs text-[var(--brand-sub)] mt-0.5 font-medium">세르의 가장 소중한 수호천사이자 동반자</p>
+                        </div>
+                     </div>
+                     <div class="text-[13px] text-[var(--brand-sub)] font-medium tracking-tight px-1 py-1 break-keep">
+                        <p class="leading-relaxed mb-4">
+                           항상 반짝이는 하얀 조개를 손에 소중하게 품고 다니며, 예쁜 리본이 달린 보라색 케이프가 가장 잘 어울리는 귀여운 연보라색 해달 요정입니다.
+                        </p>
+                        <p class="leading-relaxed">
+                           잔잔하게 밤하늘을 감상하는 낭만과 노래 듣기를 좋아하며, 세르의 곁을 언제나 변함없이 묵묵하고 든든하게 지켜주는 소중한 가족이자 팬덤입니다.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="border-t border-[var(--line)] mt-6 pt-5">
+                     <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">Fan Nickname</span>
+                        <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full">닉네임º˚</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="premium-card p-6 sm:p-8 flex flex-col justify-between group/charm">
+                  <div>
+                     <div class="text-xs font-bold tracking-widest text-textPurple uppercase mb-4 font-montserrat">IDENTITY PROFILE</div>
+                     <h3 class="text-xl sm:text-2xl font-bold text-[var(--brand-dark)] mb-6">세르의 매력 프로필</h3>
+                     <div class="space-y-4">
+                        <div class="flex items-center gap-3 group">
+                           <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🧸</span>
+                           <div>
+                              <h4 class="text-sm font-bold text-[var(--brand-dark)]">쫌 귀여움</h4>
+                              <p class="text-[11px] text-[var(--brand-sub)]">지나칠 수 없는 세르 고유의 패시브 특성</p>
+                           </div>
+                        </div>
+                        <div class="flex items-center gap-3 group">
+                           <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">🔋</span>
+                           <div>
+                              <h4 class="text-sm font-bold text-[var(--brand-dark)]">체력</h4>
+                              <p class="text-[11px] text-[var(--brand-sub)]">I🤍FP답게 에너지가 빨리 바닥나는 저전력 스트리머</p>
+                           </div>
+                        </div>
+                        <div class="flex items-center gap-3 group">
+                           <span class="flex items-center justify-center w-8 h-8 rounded-full bg-textPurple/15 text-base transition-all duration-300 group-hover:scale-110">😼</span>
+                           <div>
+                              <h4 class="text-sm font-bold text-[var(--brand-dark)]">표?독?한?가?</h4>
+                              <p class="text-[11px] text-[var(--brand-sub)]">과연 정말 표독한 스트리머일지 진실은 방송에서 확인</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="border-t border-[var(--line)] mt-6 pt-5">
+                     <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-[var(--brand-sub)] uppercase font-montserrat tracking-wide">SPECIALTY (특기)</span>
+                        <span class="font-bold text-[var(--brand-dark)] bg-textPurple/15 px-3 py-1.5 rounded-full transition-all duration-300 group-hover/charm:bg-textPurple/25">귀엽기 ⭐</span>
+                     </div>
+                  </div>
+               </div>
+            </section>
+            <section class="mb-16 md:mb-24">
+               <div class="text-center mb-8 sm:mb-12">
+                  <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">MILESTONE</div>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)]">세르의 여정</h3>
+               </div>
+               <div class="max-w-2xl mx-auto relative pl-6 space-y-8" id="milestoneContainer">
+               </div>
+            </section>
+            <section class="mb-12 text-center">
+               <div class="text-xs font-bold tracking-[6px] text-textPurple uppercase mb-3 font-montserrat">ARCHIVE</div>
+               <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)] mb-8 sm:mb-10">노래 커버 및 다시보기</h3>
+               <div class="max-w-3xl mx-auto relative px-2 sm:px-10">
+                  <button id="prevVidBtn" onclick="prevVideo()" class="absolute left-0 sm:-left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
+                     <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="15 18 9 12 15 6"/>
+                     </svg>
+                  </button>
+                  <button id="nextVidBtn" onclick="nextVideo()" class="absolute right-0 sm:-right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--card-bg)] border border-[var(--line)] shadow-lg flex items-center justify-center text-[var(--brand-dark)] hover:border-textPurple hover:bg-textPurple/10 transition duration-300">
+                     <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="9 18 15 12 9 6"/>
+                     </svg>
+                  </button>
+                  <div class="p-3 sm:p-5 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-md hover:shadow-lg transition-all duration-300">
+                     <div class="aspect-video w-full rounded-[18px] sm:rounded-[22px] overflow-hidden bg-black shadow-inner">
+                        <iframe id="mainVideoIframe" src="" allowfullscreen="true" allow="clipboard-write; web-share;" class="w-full h-full border-none"></iframe>
+                     </div>
+                     <div class="mt-4 px-2 text-center">
+                        <h4 id="mainVideoTitle" class="font-bold text-base sm:text-lg text-[var(--brand-dark)] truncate">영상을 불러오는 중...</h4>
+                     </div>
+                  </div>
+                  <div id="videoIndicators" class="flex items-center justify-center gap-2 mt-5"></div>
+               </div>
+            </section>
+         </main>
+         <footer class="text-center py-16 text-[var(--brand-sub)] text-xs font-semibold select-none">
+            <p class="font-montserrat tracking-wider">
+               © 2026 
+               <span onclick="location.href='./admin/'" class="admin-secret-link cursor-default">SERU.</span>
+               ALL RIGHTS RESERVED.
+            </p>
+         </footer>
+      </div>
+      <script>
+         const toggleBtn = document.getElementById('themeToggle');
+         const themeIcon = document.getElementById('themeIcon');
+         
+         function applyTheme(isDark) {
+           if (isDark) {
+             document.body.classList.add('dark');
+             document.documentElement.classList.add('dark');
+             themeIcon.textContent = '☀️';
+           } else {
+             document.body.classList.remove('dark');
+             document.documentElement.classList.remove('dark');
+             themeIcon.textContent = '🌙';
+           }
+         }
+         
+         if (localStorage.getItem('seru_theme') === 'dark') {
+           applyTheme(true);
+         }
+         
+         toggleBtn.addEventListener('click', () => {
+           const isDark = !document.body.classList.contains('dark');
+           applyTheme(isDark);
+           localStorage.setItem('seru_theme', isDark ? 'dark' : 'light');
+         });
+         
+         function calcDday(month, day) {
+           const now = new Date();
+           now.setHours(0,0,0,0);
+           let target = new Date(now.getFullYear(), month - 1, day);
+           if (target < now) target = new Date(now.getFullYear() + 1, month - 1, day);
+           const diff = Math.round((target - now) / (1000 * 60 * 60 * 24));
+           return diff === 0 ? 'D-Day 🎉' : `D-${diff}`;
+         }
+         
+         function calcDaysSince(year, month, day) {
+           const now = new Date();
+           now.setHours(0,0,0,0);
+           const start = new Date(year, month - 1, day);
+           start.setHours(0,0,0,0);
+           const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+           return diff >= 0 ? `D+${diff}` : `D-${Math.abs(diff)}`;
+         }
+         
+         document.getElementById('bdayBadge').textContent = calcDday(6, 8);
+         document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
+         
+         const popImages = [
+           './fx_shell.png',
+           './fx_haetto.png'
+         ];
+         
+         document.addEventListener('click', (e) => {
+           if (e.target.closest('button, a, input, textarea, iframe')) return;
+         
+           const count = 3;
+           for (let i = 0; i < count; i++) {
+             const img = document.createElement('img');
+             img.className = 'fxpop';
+         
+             img.src = popImages[Math.floor(Math.random() * popImages.length)];
+         
+             img.style.width = '24px';
+             img.style.height = '24px';
+             img.style.objectFit = 'contain';
+         
+             img.style.left = `${e.clientX - 12}px`;
+             img.style.top = `${e.clientY - 12}px`;
+         
+             const offsetX = (Math.random() - 0.5) * 35;
+             const rot = (Math.random() - 0.5) * 30;
+         
+             img.style.setProperty('--dx', `${offsetX}px`);
+             img.style.setProperty('--rot', `${rot}deg`);
+         
+             document.body.appendChild(img);
+             setTimeout(() => img.remove(), 800);
+           }
+         });
+         
+         const card = document.getElementById('avatarTilt');
+         card.addEventListener('mousemove', (e) => {
+           const { left, top, width, height } = card.getBoundingClientRect();
+           const x = e.clientX - left - width / 2;
+           const y = e.clientY - top - height / 2;
+           const rotateX = -(y / (height / 2)) * 15;
+           const rotateY = (x / (width / 2)) * 15;
+           card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+         });
+         card.addEventListener('mouseleave', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
+         
+         const haettoCard = document.getElementById('haettoTilt');
+         haettoCard.addEventListener('mousemove', (e) => {
+           const { left, top, width, height } = haettoCard.getBoundingClientRect();
+           const x = e.clientX - left - width / 2;
+           const y = e.clientY - top - height / 2;
+           const rotateX = -(y / (height / 2)) * 15;
+           const rotateY = (x / (width / 2)) * 15;
+           haettoCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+         });
+         haettoCard.addEventListener('mouseleave', () => { haettoCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; });
+      </script>
+      <script src="js/supabase-config.js"></script>
+      <script>
+         let videoList = [];
+         let currentVideoIdx = 0;
+         
+         async function loadMainSettings() {
+           try {
+             const { data } = await supabaseClient.from('settings').select('*');
+             if (!data) return;
+             data.forEach(item => {
+               if (item.key === 'musicbook_url' && item.value) {
+                 const el = document.getElementById('navMusicbook');
+                 if (el) el.href = item.value;
+               }
+               if (item.key === 'karma_url' && item.value) {
+                 const el = document.getElementById('navKarma');
+                 if (el) el.href = item.value;
+               }
+             });
+           } catch (err) { console.error('Main Settings Error:', err); }
+         }
+         
+         function getEmbedUrl(url) {
+           if (!url) return '';
+         
+           if (url.includes('sooplive.com') || url.includes('afreecatv.com')) {
+             const match = url.match(/(?:player\/|station\/[^\/]+\/vod\/)(\d+)/);
+             if (match && match[1]) {
+               return `https://vod.sooplive.com/player/${match[1]}/embed?showChat=false&autoPlay=false&mutePlay=false`;
+             }
+           }
+         
+           if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+             let videoId = '';
+             if (url.includes('youtu.be/')) {
+               videoId = url.split('youtu.be/')[1]?.split('?')[0];
+             } else {
+               const urlParams = new URLSearchParams(new URL(url).search);
+               videoId = urlParams.get('v');
+             }
+             if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+           }
+         
+           return url;
+         }
+         
+         async function loadMainVideos() {
+           const sliderBox = document.querySelector('#mainVideoIframe')?.closest('.max-w-3xl');
+         
+           try {
+             const { data, error } = await supabaseClient
+               .from('videos')
+               .select('*')
+               .order('created_at', { ascending: false });
+         
+             if (error) throw error;
+         
+             videoList = data || [];
+         
+             if (videoList.length === 0) {
+               if (sliderBox) {
+                 sliderBox.innerHTML = `
+                   <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center">
+                     <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-textPurple/10 text-textPurple flex items-center justify-center text-2xl sm:text-3xl mb-4 font-bold shadow-inner">
+                       🎬
+                     </div>
+                     <h4 class="font-bold text-base sm:text-lg text-[var(--brand-dark)] mb-1">등록된 영상이 없습니다</h4>
+                     <p class="text-xs sm:text-sm text-[var(--brand-sub)] font-medium">관리자 페이지에서 영상을 등록해 보세요!</p>
+                   </div>
+                 `;
+               }
+               return;
+             }
+         
+             renderVideoIndex(0);
+           } catch (err) {
+             console.error('Video Load Error:', err);
+           }
+         }
+         
+         function renderVideoIndex(idx) {
+           if (videoList.length === 0) return;
+           currentVideoIdx = idx;
+         
+           const video = videoList[currentVideoIdx];
+           document.getElementById('mainVideoIframe').src = getEmbedUrl(video.url);
+           document.getElementById('mainVideoTitle').textContent = video.title;
+         
+           if (videoList.length <= 1) {
+             document.getElementById('prevVidBtn').style.display = 'none';
+             document.getElementById('nextVidBtn').style.display = 'none';
+           } else {
+             document.getElementById('prevVidBtn').style.display = 'flex';
+             document.getElementById('nextVidBtn').style.display = 'flex';
+           }
+         
+           const indicatorContainer = document.getElementById('videoIndicators');
+           indicatorContainer.innerHTML = videoList.map((_, i) => `
+             <button onclick="renderVideoIndex(${i})" class="indicator-dot ${i === currentVideoIdx ? 'active' : ''}" aria-label="Slide ${i+1}"></button>
+           `).join('');
+         }
+         
+         function prevVideo() {
+           let nextIdx = currentVideoIdx - 1;
+           if (nextIdx < 0) nextIdx = videoList.length - 1;
+           renderVideoIndex(nextIdx);
+         }
+         
+         function nextVideo() {
+           let nextIdx = currentVideoIdx + 1;
+           if (nextIdx >= videoList.length) nextIdx = 0;
+           renderVideoIndex(nextIdx);
+         }
+         
+         let touchStartX = 0;
+         let touchEndX = 0;
+         const sliderContainer = document.getElementById('mainVideoIframe')?.closest('.max-w-3xl');
+         
+         if (sliderContainer) {
+           sliderContainer.addEventListener('touchstart', e => { 
+             touchStartX = e.changedTouches[0].screenX; 
+           }, {passive: true});
+         
+           sliderContainer.addEventListener('touchend', e => {
+             touchEndX = e.changedTouches[0].screenX;
+             handleSwipe();
+           }, {passive: true});
+         }
+         
+         function handleSwipe() {
+           if (touchEndX < touchStartX - 50) nextVideo();
+           if (touchEndX > touchStartX + 50) prevVideo();
+         }
+         
+         async function loadMilestones() {
+           const container = document.getElementById('milestoneContainer');
+           if (!container) return;
+         
+           try {
+             const { data, error } = await supabaseClient.from('milestones').select('*').order('event_date', { ascending: true });
+             if (error) throw error;
+         
+             if (!data || data.length === 0) {
+               container.innerHTML = `
+                 <div class="text-xs font-semibold text-[var(--brand-sub)] py-4">등록된 여정이 없습니다.</div>
+               `;
+               return;
+             }
+         
+             container.innerHTML = data.map(item => `
+               <div class="relative group">
+                 <div class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-textPurple border-4 border-[var(--bg)] shadow"></div>
+                 <div class="text-xs font-bold text-textPurple font-montserrat mb-1">${item.event_date}</div>
+                 <h4 class="text-base font-bold text-[var(--brand-dark)] mb-1">${item.title}</h4>
+                 ${item.description ? `<p class="text-xs text-[var(--brand-sub)] leading-relaxed">${item.description}</p>` : ''}
+               </div>
+             `).join('');
+           } catch (err) {
+             console.error(err);
+           }
+         }
+         
+         loadMainSettings();
+         loadMainVideos();
+         loadMilestones();
+      </script>
+   </body>
 </html>
