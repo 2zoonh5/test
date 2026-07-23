@@ -238,14 +238,13 @@
           <span class="font-medium text-textPurple text-lg md:text-2xl font-montserrat tracking-wide leading-none">SERU</span>
         </h1>
         
-        <!-- 모바일 줄바꿈 자연스럽게 수정 적용 -->
         <p class="text-[var(--brand-sub)] text-sm md:text-base leading-relaxed mb-6 md:mb-8 max-w-md mx-auto md:mx-0 break-keep">
           연보라빛 밤하늘을 닮은 목소리로 시청자들의 편안한 쉼터가 되어주는
           <br class="hidden md:block" />
           숲 라이브 스트리머 세르입니다.
         </p>
 
-        <!-- 바로가기 버튼 세트 (반응형 최적화) -->
+        <!-- 바로가기 버튼 세트 -->
         <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
           <a href="https://cafe.naver.com/sereudayo" target="_blank" rel="noopener" 
              class="inline-flex items-center justify-center gap-2.5 w-full sm:w-52 py-3.5 bg-naverGreen text-white hover:bg-naverGreenHover rounded-full text-xs font-bold tracking-wider transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-md">
@@ -270,7 +269,7 @@
       </div>
     </section>
 
-    <!-- INFO CARDS -->
+    <!-- INFO CARDS (수정된 PC/모바일 최적화 비율 적용) -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 mb-12 md:mb-16">
       <!-- BIRTHDAY -->
       <div class="premium-card py-5 px-3 sm:px-4 text-center relative overflow-hidden flex flex-col justify-center items-center">
@@ -383,7 +382,7 @@
   
       <!-- 영상 카드 그리드 (Supabase 자동 로드) -->
       <div id="videoContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <!-- JS에서 dynamic하게 추가됨 -->
+        <!-- JS에서 동적으로 생성됩니다 -->
       </div>
     </section>
     
@@ -444,7 +443,7 @@
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
 
-    // 조개, 해또 2종 클릭 이펙트 (위로 두둥실 모션)
+    // 클릭 이펙트
     const popImages = [
       './fx_shell.png',
       './fx_haetto.png'
@@ -519,12 +518,11 @@
         });
       } catch (err) { console.error('Main Settings Error:', err); }
     }
-    loadMainSettings();
+
     // SOOP VOD, 유튜브 등 다양한 링크 형태를 임베드 주소로 변환
     function getEmbedUrl(url) {
       if (!url) return '';
   
-      // SOOP VOD 임베드 URL 처리
       if (url.includes('sooplive.com') || url.includes('afreecatv.com')) {
         const match = url.match(/(?:player\/|station\/[^\/]+\/vod\/)(\d+)/);
         if (match && match[1]) {
@@ -532,7 +530,6 @@
         }
       }
   
-      // 유튜브 URL 처리
       if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
         let videoId = '';
         if (url.includes('youtu.be/')) {
@@ -544,7 +541,7 @@
         if (videoId) return `https://www.youtube.com/embed/${videoId}`;
       }
 
-      return url; // 이미 embed 형태인 경우 그대로 반환
+      return url;
     }
 
     // Supabase에서 영상 불러오기
@@ -590,7 +587,6 @@
       }
     }
 
-    // 기존 loadMainSettings() 실행 시 같이 호출
     loadMainSettings();
     loadMainVideos();
   </script>
