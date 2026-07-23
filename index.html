@@ -152,7 +152,7 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* 🔥 [고급 배경 1] 세련된 연보라 사선 오로라 빔 효과 */
+    /* 🔥 확실하게 느껴지는 동적 오로라 배경 */
     .aurora-container {
       position: fixed;
       inset: 0;
@@ -162,36 +162,35 @@
     }
     .aurora-beam-1 {
       position: absolute;
-      top: -20%;
+      top: -15%;
       left: -10%;
-      width: 70vw;
-      height: 70vw;
-      background: radial-gradient(circle, rgba(140, 122, 230, 0.22) 0%, rgba(218, 209, 254, 0.08) 50%, transparent 70%);
-      filter: blur(80px);
-      transform: rotate(-25deg);
-      animation: floatAurora1 12s ease-in-out infinite alternate;
+      width: 80vw;
+      height: 80vw;
+      background: radial-gradient(circle, rgba(140, 122, 230, 0.35) 0%, rgba(218, 209, 254, 0.15) 50%, transparent 70%);
+      filter: blur(60px);
+      animation: floatAurora1 10s ease-in-out infinite alternate;
     }
     .aurora-beam-2 {
       position: absolute;
-      bottom: 10%;
+      bottom: -15%;
       right: -10%;
-      width: 60vw;
-      height: 60vw;
-      background: radial-gradient(circle, rgba(184, 168, 255, 0.18) 0%, rgba(140, 122, 230, 0.05) 50%, transparent 70%);
-      filter: blur(90px);
-      animation: floatAurora2 15s ease-in-out infinite alternate;
+      width: 75vw;
+      height: 75vw;
+      background: radial-gradient(circle, rgba(184, 168, 255, 0.3) 0%, rgba(255, 214, 232, 0.15) 50%, transparent 70%);
+      filter: blur(70px);
+      animation: floatAurora2 12s ease-in-out infinite alternate;
     }
 
     @keyframes floatAurora1 {
-      0% { transform: rotate(-25deg) translateY(0px) scale(1); }
-      100% { transform: rotate(-15deg) translateY(40px) scale(1.15); }
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      100% { transform: translate(80px, 50px) scale(1.2) rotate(15deg); }
     }
     @keyframes floatAurora2 {
-      0% { transform: translateY(0px) scale(1); }
-      100% { transform: translateY(-50px) scale(1.2); }
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      100% { transform: translate(-60px, -40px) scale(1.25) rotate(-10deg); }
     }
 
-    /* 🔥 [고급 배경 2] 밤하늘 별빛 입자 캔버스 */
+    /* 🔥 밤하늘 별빛 입자 캔버스 레이어 */
     #starCanvas {
       position: fixed;
       inset: 0;
@@ -251,7 +250,7 @@
 </head>
 <body class="relative min-h-screen font-sans pb-32 overflow-x-hidden">
 
-  <!-- 🔥 백그라운드 레이어 (오로라 빔 + 별빛 파티클) -->
+  <!-- 백그라운드 레이어 (오로라 빔 + 별빛 파티클) -->
   <div class="aurora-container">
     <div class="aurora-beam-1"></div>
     <div class="aurora-beam-2"></div>
@@ -534,7 +533,7 @@
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
 
-    // 🔥 밤하늘 별빛 입자 캔버스 엔진
+    // 🔥 눈에 확실히 보이는 부유하는 별빛 입자 엔진
     const canvas = document.getElementById('starCanvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -547,14 +546,16 @@
 
     function initStars() {
       stars = [];
-      const count = Math.floor((canvas.width * canvas.height) / 18000);
+      const count = Math.floor((canvas.width * canvas.height) / 12000);
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 1.5 + 0.5,
+          radius: Math.random() * 2.2 + 0.8,
+          vy: Math.random() * 0.3 + 0.1,
           alpha: Math.random(),
-          speed: Math.random() * 0.01 + 0.005
+          alphaSpeed: Math.random() * 0.02 + 0.01,
+          colorType: Math.random() > 0.4 ? 'purple' : 'pink'
         });
       }
     }
@@ -562,17 +563,27 @@
     function drawStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const isDark = document.body.classList.contains('dark');
-      ctx.fillStyle = isDark ? '#FFFFFF' : '#8C7AE6';
 
       stars.forEach(star => {
         ctx.save();
-        ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * (isDark ? 0.6 : 0.35);
+        
+        if (isDark) {
+          ctx.fillStyle = star.colorType === 'purple' ? '#DAD1FE' : '#FFFFFF';
+          ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * 0.7 + 0.2;
+        } else {
+          ctx.fillStyle = star.colorType === 'purple' ? '#8C7AE6' : '#B8A8FF';
+          ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * 0.55 + 0.25;
+        }
+
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
 
-        star.alpha += star.speed;
+        star.y -= star.vy;
+        if (star.y < -10) star.y = canvas.height + 10;
+
+        star.alpha += star.alphaSpeed;
       });
 
       requestAnimationFrame(drawStars);
