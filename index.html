@@ -73,27 +73,28 @@
     /* ========================================== */
 
     :root {
-      --bg: #F9F8FC;
-      --card-bg: rgba(255, 255, 255, 0.85);
+      --bg: #F8F7FC;
+      --card-bg: rgba(255, 255, 255, 0.96);
       --theme-purple: #DAD1FE;
-      --brand-dark: #1E1B2C;
-      --brand-sub: #6E6B7B;
-      --line: rgba(218, 209, 254, 0.4);
-      --header-bg: rgba(255, 255, 255, 0.75);
-      --soop-bg: #1E1B2C;
+      --brand-dark: #1A1726;
+      --brand-sub: #5E5B6E;
+      --line: rgba(218, 209, 254, 0.6);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --soop-bg: #1A1726;
       --soop-text: #FFFFFF;
     }
 
+    /* 🔥 다크모드 가독성 대폭 강화 색상 세팅 */
     body.dark {
-      --bg: #0F0D15;
-      --card-bg: rgba(24, 21, 36, 0.85);
+      --bg: #0B0912;
+      --card-bg: rgba(22, 18, 33, 0.96);
       --theme-purple: #3A3258;
-      --brand-dark: #F1EDF8;
-      --brand-sub: #A39EB2;
-      --line: rgba(140, 122, 230, 0.25);
-      --header-bg: rgba(24, 21, 36, 0.75);
+      --brand-dark: #FFFFFF;
+      --brand-sub: #C8C3D4;
+      --line: rgba(140, 122, 230, 0.35);
+      --header-bg: rgba(22, 18, 33, 0.85);
       --soop-bg: #2B2540;
-      --soop-text: #F1EDF8;
+      --soop-text: #FFFFFF;
     }
 
     body {
@@ -108,18 +109,19 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: #DAD1FE; border-radius: 10px; }
 
+    /* 🔥 클린 미니멀 + 네온 글로우 카드 */
     .premium-card {
       background: var(--card-bg);
       border: 1px solid var(--line);
       border-radius: 24px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 24px rgba(30, 27, 44, 0.02);
-      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .premium-card:hover {
       transform: translateY(-4px);
-      border-color: #DAD1FE;
-      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.16);
+      border-color: #8C7AE6;
+      box-shadow: 0 8px 30px rgba(140, 122, 230, 0.22);
     }
 
     .nav-link {
@@ -152,48 +154,15 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* 🔥 확실하게 느껴지는 동적 오로라 배경 */
-    .aurora-container {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -2;
-      overflow: hidden;
-    }
-    .aurora-beam-1 {
+    /* 🔥 정갈한 정적 보랏빛 소프트 조명 (상단 1개만 미니멀하게 배치) */
+    .bg-glow-static {
       position: absolute;
-      top: -15%;
-      left: -10%;
-      width: 80vw;
-      height: 80vw;
-      background: radial-gradient(circle, rgba(140, 122, 230, 0.35) 0%, rgba(218, 209, 254, 0.15) 50%, transparent 70%);
-      filter: blur(60px);
-      animation: floatAurora1 10s ease-in-out infinite alternate;
-    }
-    .aurora-beam-2 {
-      position: absolute;
-      bottom: -15%;
-      right: -10%;
-      width: 75vw;
-      height: 75vw;
-      background: radial-gradient(circle, rgba(184, 168, 255, 0.3) 0%, rgba(255, 214, 232, 0.15) 50%, transparent 70%);
-      filter: blur(70px);
-      animation: floatAurora2 12s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatAurora1 {
-      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-      100% { transform: translate(80px, 50px) scale(1.2) rotate(15deg); }
-    }
-    @keyframes floatAurora2 {
-      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-      100% { transform: translate(-60px, -40px) scale(1.25) rotate(-10deg); }
-    }
-
-    /* 🔥 밤하늘 별빛 입자 캔버스 레이어 */
-    #starCanvas {
-      position: fixed;
-      inset: 0;
+      width: min(800px, 100vw);
+      height: min(800px, 100vw);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(140, 122, 230, 0.15) 0%, rgba(218, 209, 254, 0.04) 50%, transparent 70%);
+      top: -10%; left: 50%;
+      transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: -1;
     }
@@ -250,12 +219,8 @@
 </head>
 <body class="relative min-h-screen font-sans pb-32 overflow-x-hidden">
 
-  <!-- 백그라운드 레이어 (오로라 빔 + 별빛 파티클) -->
-  <div class="aurora-container">
-    <div class="aurora-beam-1"></div>
-    <div class="aurora-beam-2"></div>
-  </div>
-  <canvas id="starCanvas"></canvas>
+  <!-- 상단 은은한 미니멀 조명 -->
+  <div class="bg-glow-static"></div>
 
   <!-- FLOATING HEADER & NAVIGATION -->
   <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
@@ -533,66 +498,6 @@
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
 
-    // 🔥 눈에 확실히 보이는 부유하는 별빛 입자 엔진
-    const canvas = document.getElementById('starCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initStars();
-    }
-
-    function initStars() {
-      stars = [];
-      const count = Math.floor((canvas.width * canvas.height) / 12000);
-      for (let i = 0; i < count; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 2.2 + 0.8,
-          vy: Math.random() * 0.3 + 0.1,
-          alpha: Math.random(),
-          alphaSpeed: Math.random() * 0.02 + 0.01,
-          colorType: Math.random() > 0.4 ? 'purple' : 'pink'
-        });
-      }
-    }
-
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const isDark = document.body.classList.contains('dark');
-
-      stars.forEach(star => {
-        ctx.save();
-        
-        if (isDark) {
-          ctx.fillStyle = star.colorType === 'purple' ? '#DAD1FE' : '#FFFFFF';
-          ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * 0.7 + 0.2;
-        } else {
-          ctx.fillStyle = star.colorType === 'purple' ? '#8C7AE6' : '#B8A8FF';
-          ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * 0.55 + 0.25;
-        }
-
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        star.y -= star.vy;
-        if (star.y < -10) star.y = canvas.height + 10;
-
-        star.alpha += star.alphaSpeed;
-      });
-
-      requestAnimationFrame(drawStars);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    drawStars();
-
     // 클릭 이펙트
     const popImages = [
       './fx_shell.png',
@@ -712,7 +617,7 @@
         if (videoList.length === 0) {
           if (sliderBox) {
             sliderBox.innerHTML = `
-              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center backdrop-blur-lg">
+              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-textPurple/10 text-textPurple flex items-center justify-center text-2xl sm:text-3xl mb-4 font-bold shadow-inner">
                   🎬
                 </div>
