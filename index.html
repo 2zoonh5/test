@@ -74,7 +74,7 @@
 
     :root {
       --bg: #F9F8FC;
-      --card-bg: #FFFFFF;
+      --card-bg: rgba(255, 255, 255, 0.85);
       --theme-purple: #DAD1FE;
       --brand-dark: #1E1B2C;
       --brand-sub: #6E6B7B;
@@ -86,7 +86,7 @@
 
     body.dark {
       --bg: #0F0D15;
-      --card-bg: #181524;
+      --card-bg: rgba(24, 21, 36, 0.85);
       --theme-purple: #3A3258;
       --brand-dark: #F1EDF8;
       --brand-sub: #A39EB2;
@@ -112,13 +112,14 @@
       background: var(--card-bg);
       border: 1px solid var(--line);
       border-radius: 24px;
+      backdrop-filter: blur(12px);
       box-shadow: 0 4px 24px rgba(30, 27, 44, 0.02);
       transition: all 0.3s ease;
     }
     .premium-card:hover {
       transform: translateY(-4px);
       border-color: #DAD1FE;
-      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.12);
+      box-shadow: 0 12px 32px rgba(184, 168, 255, 0.16);
     }
 
     .nav-link {
@@ -151,34 +152,54 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* 🔥 눈에 확실히 보이는 연보라 오로라 배경 조명 🔥 */
-.bg-glow-radial {
-  position: absolute;
-  width: min(1000px, 120vw);
-  height: min(1000px, 120vw);
-  border-radius: 50%;
-  /* 색상 농도 및 범위를 대폭 강화 */
-  background: radial-gradient(circle, rgba(140, 122, 230, 0.28) 0%, rgba(218, 209, 254, 0.12) 45%, rgba(0,0,0,0) 70%);
-  top: -10%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: -1;
-  /* 4초 주기로 더 빠르게/크게 넘실거리도록 설정 */
-  animation: pulseGlow 4s ease-in-out infinite alternate;
-}
+    /* 🔥 [고급 배경 1] 세련된 연보라 사선 오로라 빔 효과 */
+    .aurora-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      overflow: hidden;
+    }
+    .aurora-beam-1 {
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 70vw;
+      height: 70vw;
+      background: radial-gradient(circle, rgba(140, 122, 230, 0.22) 0%, rgba(218, 209, 254, 0.08) 50%, transparent 70%);
+      filter: blur(80px);
+      transform: rotate(-25deg);
+      animation: floatAurora1 12s ease-in-out infinite alternate;
+    }
+    .aurora-beam-2 {
+      position: absolute;
+      bottom: 10%;
+      right: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(184, 168, 255, 0.18) 0%, rgba(140, 122, 230, 0.05) 50%, transparent 70%);
+      filter: blur(90px);
+      animation: floatAurora2 15s ease-in-out infinite alternate;
+    }
 
-@keyframes pulseGlow {
-  0% {
-    transform: translate(-50%, -50%) scale(0.85);
-    opacity: 0.5;
-  }
-  100% {
-    transform: translate(-50%, -40%) scale(1.35);
-    opacity: 1;
-  }
-}
+    @keyframes floatAurora1 {
+      0% { transform: rotate(-25deg) translateY(0px) scale(1); }
+      100% { transform: rotate(-15deg) translateY(40px) scale(1.15); }
+    }
+    @keyframes floatAurora2 {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(-50px) scale(1.2); }
+    }
 
-    /* ✨ [디자인 적용 2] 세르의 여정 수직선 은은한 연보라 그라데이션 */
+    /* 🔥 [고급 배경 2] 밤하늘 별빛 입자 캔버스 */
+    #starCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* 🔥 [세르의 여정] 수직선 은은한 연보라 그라데이션 */
     #milestoneContainer::before {
       content: '';
       position: absolute;
@@ -230,7 +251,12 @@
 </head>
 <body class="relative min-h-screen font-sans pb-32 overflow-x-hidden">
 
-  <div class="bg-glow-radial"></div>
+  <!-- 🔥 백그라운드 레이어 (오로라 빔 + 별빛 파티클) -->
+  <div class="aurora-container">
+    <div class="aurora-beam-1"></div>
+    <div class="aurora-beam-2"></div>
+  </div>
+  <canvas id="starCanvas"></canvas>
 
   <!-- FLOATING HEADER & NAVIGATION -->
   <div class="sticky top-4 z-50 px-3 md:px-6 max-w-4xl mx-auto">
@@ -419,7 +445,6 @@
         <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)]">세르의 여정</h3>
       </div>
 
-      <!-- 그라데이션 라인이 렌더링될 타임라인 컨테이너 -->
       <div class="max-w-2xl mx-auto relative pl-6 space-y-8" id="milestoneContainer">
         <!-- JS에서 동적으로 생성됩니다 -->
       </div>
@@ -508,6 +533,54 @@
 
     document.getElementById('bdayBadge').textContent = calcDday(6, 8);
     document.getElementById('debutBadge').textContent = calcDaysSince(2025, 11, 22);
+
+    // 🔥 밤하늘 별빛 입자 캔버스 엔진
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      const count = Math.floor((canvas.width * canvas.height) / 18000);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5 + 0.5,
+          alpha: Math.random(),
+          speed: Math.random() * 0.01 + 0.005
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const isDark = document.body.classList.contains('dark');
+      ctx.fillStyle = isDark ? '#FFFFFF' : '#8C7AE6';
+
+      stars.forEach(star => {
+        ctx.save();
+        ctx.globalAlpha = (Math.sin(star.alpha) + 1) / 2 * (isDark ? 0.6 : 0.35);
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        star.alpha += star.speed;
+      });
+
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    drawStars();
 
     // 클릭 이펙트
     const popImages = [
@@ -628,7 +701,7 @@
         if (videoList.length === 0) {
           if (sliderBox) {
             sliderBox.innerHTML = `
-              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center">
+              <div class="p-10 sm:p-14 bg-[var(--card-bg)] border border-[var(--line)] rounded-[28px] sm:rounded-[32px] shadow-sm text-center flex flex-col items-center justify-center backdrop-blur-lg">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-textPurple/10 text-textPurple flex items-center justify-center text-2xl sm:text-3xl mb-4 font-bold shadow-inner">
                   🎬
                 </div>
