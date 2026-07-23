@@ -151,16 +151,41 @@
       transition: transform 0.15s ease-out;
     }
 
+    /* ✨ [디자인 적용 1] 배경 은은한 숨쉬기 애니메이션 (Ambient Lighting) */
     .bg-glow-radial {
       position: absolute;
       width: min(700px, 100vw);
       height: min(700px, 100vw);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(218,209,254,0.25) 0%, rgba(249,248,252,0) 70%);
+      background: radial-gradient(circle, rgba(218,209,254,0.28) 0%, rgba(249,248,252,0) 70%);
       top: -15%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: -1;
+      animation: pulseGlow 8s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.18);
+        opacity: 1;
+      }
+    }
+
+    /* ✨ [디자인 적용 2] 세르의 여정 수직선 은은한 연보라 그라데이션 */
+    #milestoneContainer::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: linear-gradient(180deg, #8C7AE6 0%, rgba(140, 122, 230, 0.4) 60%, rgba(218, 209, 254, 0.05) 100%);
+      border-radius: 99px;
     }
 
     .fxpop {
@@ -392,7 +417,8 @@
         <h3 class="text-2xl sm:text-3xl font-bold text-[var(--brand-dark)]">세르의 여정</h3>
       </div>
 
-      <div class="max-w-2xl mx-auto relative pl-6 border-l-2 border-textPurple/30 space-y-8" id="milestoneContainer">
+      <!-- 그라데이션 라인이 렌더링될 타임라인 컨테이너 -->
+      <div class="max-w-2xl mx-auto relative pl-6 space-y-8" id="milestoneContainer">
         <!-- JS에서 동적으로 생성됩니다 -->
       </div>
     </section>
