@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <title>슈니 관리자 🔐</title>
+      <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+      <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="../apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192" href="../android-icon-192x192.png">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script>
+         tailwind.config = {
+           darkMode: 'class',
+           theme: { 
+             extend: {
+               colors: { 
+                 bg: 'var(--bg)', 
+                 themeBlue: 'var(--theme-blue)', 
+                 textBlue: '#7CA8D8',
+                 brandDark: 'var(--brand-dark)', 
+                 brandSub: 'var(--brand-sub)', 
+                 line: 'var(--line)' 
+               },
+               fontFamily: { 
+                 sans: ['Pretendard', 'sans-serif'], 
+                 montserrat: ['Montserrat', 'sans-serif'] 
+               }
+             }
+           }
+         }
+      </script>
+      <style>
+         html, body {
+         cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), auto !important;
+         }
+         button, [onclick], select, #themeToggle {
+         cursor: url('../cursors/Cursor5_ser_select.cur'), pointer !important;
+         }
+         a {
+         cursor: url('../cursors/Cursor15_ser_link.cur'), pointer !important;
+         }
+         input[type="text"], input[type="password"], input[type="url"], textarea {
+         cursor: url('../cursors/Cursor6_ser_text.cur'), text !important;
+         }
+         input[type="date"], input[type="time"] {
+         cursor: url('../cursors/Cursor5_ser_select.cur'), pointer !important;
+         }
+         :disabled, .disabled {
+         cursor: url('../cursors/Cursor8_ser_unavail.cur'), not-allowed !important;
+         }
+         .admin-secret-link {
+         cursor: url('../cursors/Cursor1_ser_arrow_1.cur'), default !important;
+         }
+         :root {
+         --bg: #F4F7FB;
+         --card-bg: #FFFFFF;
+         --input-bg: #F4F7FB;
+         --theme-blue: #BFD5EB;
+         --brand-dark: #1A212D;
+         --brand-sub: #586677;
+         --line: rgba(191, 213, 235, 0.5);
+         }
+         .dark {
+         --bg: #0B1017;
+         --card-bg: #131A24;
+         --input-bg: #0A0F17;
+         --theme-blue: #2A3B4D;
+         --brand-dark: #F0F5FA;
+         --brand-sub: #9CB0C1;
+         --line: rgba(124, 168, 216, 0.25);
+         }
+         body {
+         background-color: var(--bg);
+         color: var(--brand-dark);
+         transition: background-color 0.3s ease, color 0.3s ease;
+         }
+         .custom-modal-backdrop {
+         position: fixed; inset: 0; z-index: 200;
+         background: rgba(11, 16, 23, 0.7);
+         display: none; align-items: center; justify-content: center;
+         backdrop-filter: blur(8px);
+         padding: 16px;
+         }
+         .custom-modal-backdrop.open { display: flex; }
+         .custom-modal-content {
+         background: var(--card-bg);
+         border-radius: 24px;
+         padding: 24px;
+         max-width: 400px;
+         width: 100%;
+         border: 1px solid var(--line);
+         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+         animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+         }
+         @keyframes modalFadeIn {
+         from { opacity: 0; transform: scale(0.95) translateY(10px); }
+         to { opacity: 1; transform: scale(1) translateY(0); }
+         }
+      </style>
+   </head>
+   <body class="bg-[var(--bg)] min-h-screen font-sans text-[var(--brand-dark)] pb-20 overflow-x-hidden">
+      <div id="loginView" class="min-h-screen flex flex-col items-center justify-center px-4 relative">
+         <a href="../" class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-[var(--card-bg)] border border-[var(--line)] text-xs font-bold text-[var(--brand-sub)] hover:text-[var(--brand-dark)] transition shadow-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+               <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            메인으로 돌아가기
+         </a>
+         <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-xl text-center">
+            <div class="w-12 h-12 bg-[#BFD5EB]/30 text-[#7CA8D8] rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 font-bold">🔒</div>
+            <h2 class="text-xl font-bold font-montserrat tracking-wider mb-1">SHUNI ADMIN</h2>
+            <p class="text-xs text-[var(--brand-sub)] mb-6">관리자 인증이 필요합니다</p>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+               <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력" class="w-full h-12 px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               <button type="submit" class="w-full h-12 bg-[#7CA8D8] hover:bg-[#6897C7] text-white font-bold text-sm rounded-xl transition shadow-md">로그인</button>
+            </form>
+         </div>
+      </div>
+
+      <div id="adminView" class="hidden max-w-3xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
+         <div class="flex items-center justify-between gap-2 pb-5 mb-8 border-b border-[var(--line)]">
+            <div class="min-w-0">
+               <div class="text-[10px] sm:text-xs font-bold text-[#7CA8D8] tracking-widest font-montserrat uppercase truncate">ADMIN PAGE</div>
+               <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--brand-dark)] truncate">슈니 관리자 페이지</h1>
+            </div>
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+               <a href="../" class="text-[11px] sm:text-xs font-bold text-[var(--brand-sub)] hover:text-[var(--brand-dark)] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-[var(--line)] bg-[var(--card-bg)] transition">메인으로</a>
+               <button onclick="handleLogout()" class="text-[11px] sm:text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-red-200 dark:border-red-900/40 bg-[var(--card-bg)] transition">로그아웃</button>
+               <button id="themeToggle" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--card-bg)] border border-[var(--line)] flex items-center justify-center text-xs hover:border-textBlue transition shadow-sm ml-0.5" aria-label="다크모드 토글">
+               <span id="themeIcon">🌙</span>
+               </button>
+            </div>
+         </div>
+
+         <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-6 sm:mb-8">
+            <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
+               <span class="w-2 h-2 rounded-full bg-[#7CA8D8]"></span>메인 메뉴 링크 설정
+            </h3>
+            <form onsubmit="saveLinks(event)" class="space-y-4">
+               <div>
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">노래책 URL</label>
+                  <input type="url" id="musicbook_url" required placeholder="https://..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               </div>
+               <div>
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">업보 URL (구글 스프레드시트)</label>
+                  <input type="url" id="karma_url" required placeholder="https://docs.google.com/..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               </div>
+               <button type="submit" class="w-full h-11 sm:h-12 bg-[#7CA8D8] hover:bg-[#6897C7] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg">
+               링크 저장하기
+               </button>
+            </form>
+         </div>
+
+         <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-6 sm:mb-8">
+            <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
+               <span class="w-2 h-2 rounded-full bg-[#7CA8D8]"></span>다시보기 영상 관리
+            </h3>
+            <form onsubmit="saveVideo(event)" class="space-y-4">
+               <input type="hidden" id="video_id" value="">
+               <div>
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">영상 제목 *</label>
+                  <input type="text" id="video_title" required placeholder="예: 슈니 하이라이트 영상" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               </div>
+               <div>
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">영상 URL (SOOP VOD 또는 유튜브 링크) *</label>
+                  <input type="url" id="video_url" required placeholder="https://..." class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               </div>
+               <div class="flex gap-2">
+                  <button type="button" id="cancelVideoEditBtn" onclick="resetVideoForm()" class="hidden w-1/3 h-11 sm:h-12 bg-[var(--input-bg)] text-[var(--brand-dark)] font-bold text-xs sm:text-sm rounded-xl border border-[var(--line)] transition">
+                  취소
+                  </button>
+                  <button type="submit" id="saveVideoBtn" class="flex-1 h-11 sm:h-12 bg-[#7CA8D8] hover:bg-[#6897C7] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg">
+                  영상 등록하기
+                  </button>
+               </div>
+            </form>
+            <div class="mt-6 pt-5 border-t border-[var(--line)]">
+               <h4 class="text-xs font-bold text-[var(--brand-sub)] mb-3">등록된 영상 목록</h4>
+               <div id="adminVideoList" class="space-y-2.5"></div>
+            </div>
+         </div>
+
+         <div class="bg-[var(--card-bg)] border border-[var(--line)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-sm mb-8 sm:mb-10">
+            <h3 class="text-sm sm:text-base font-bold mb-4 flex items-center gap-2">
+               <span class="w-2 h-2 rounded-full bg-[#7CA8D8]"></span>새 일정 등록
+            </h3>
+            <form onsubmit="saveSchedule(event)" class="space-y-4">
+               <div class="w-full min-w-0">
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">일정 제목 *</label>
+                  <input type="text" id="title" required placeholder="예: 롤 랭크 게임 방송" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+               </div>
+               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div class="w-full min-w-0">
+                     <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">시작일 *</label>
+                     <input type="date" id="event_date" required class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+                  </div>
+                  <div class="w-full min-w-0">
+                     <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">종료일 (선택)</label>
+                     <input type="date" id="end_date" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+                  </div>
+                  <div class="w-full min-w-0">
+                     <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">방송 시간 (선택)</label>
+                     <input type="time" id="event_time" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+                  </div>
+               </div>
+               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div class="w-full min-w-0">
+                     <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">일정 유형 *</label>
+                     <select id="event_type" class="w-full h-11 px-3.5 sm:px-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs sm:text-sm bg-[var(--input-bg)] text-[var(--brand-dark)]">
+                        <option value="broadcast">방송</option>
+                        <option value="off">휴방</option>
+                        <option value="event">이벤트</option>
+                        <option value="collab">합방</option>
+                        <option value="tournament">대회</option>
+                        <option value="other">기타</option>
+                     </select>
+                  </div>
+               </div>
+               <div>
+                  <label class="block text-xs font-bold text-[var(--brand-sub)] mb-1">상세 내용 (선택)</label>
+                  <textarea id="description" rows="3" placeholder="상세 설명을 작성해주세요." class="w-full p-3.5 sm:p-4 rounded-xl border border-[var(--line)] focus:outline-none focus:border-textBlue text-xs bg-[var(--input-bg)] text-[var(--brand-dark)]"></textarea>
+               </div>
+               <button type="submit" class="w-full h-11 sm:h-12 bg-[#7CA8D8] hover:bg-[#6897C7] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg">
+               일정 등록하기
+               </button>
+            </form>
+         </div>
+
+         <div class="mb-10">
+            <h3 class="text-sm sm:text-base font-bold mb-4">등록된 일정 목록</h3>
+            <div id="scheduleList" class="space-y-3"></div>
+         </div>
+      </div>
+
+      <div id="customModal" class="custom-modal-backdrop">
+         <div class="custom-modal-content text-center">
+            <div id="modalIcon" class="w-12 h-12 rounded-2xl bg-[#BFD5EB]/30 text-[#7CA8D8] flex items-center justify-center text-xl mx-auto mb-3 font-bold">✨</div>
+            <h3 id="modalTitleText" class="text-lg font-bold text-[var(--brand-dark)] mb-1">알림</h3>
+            <p id="modalMsgText" class="text-xs text-[var(--brand-sub)] leading-relaxed mb-6"></p>
+            <div id="modalButtons" class="flex gap-2">
+               <button id="modalConfirmBtn" class="w-full h-11 bg-[#7CA8D8] text-white font-bold text-xs rounded-xl shadow-md transition">확인</button>
+            </div>
+         </div>
+      </div>
+
+      <script src="../js/supabase-config.js"></script>
+      <script>
+         const ADMIN_PW = "seru1432";
+         
+         const toggleBtn = document.getElementById('themeToggle');
+         const themeIcon = document.getElementById('themeIcon');
+         
+         function applyTheme(isDark) {
+           if (isDark) {
+             document.documentElement.classList.add('dark');
+             document.body.classList.add('dark');
+             themeIcon.textContent = '☀️';
+           } else {
+             document.documentElement.classList.remove('dark');
+             document.body.classList.remove('dark');
+             themeIcon.textContent = '🌙';
+           }
+         }
+         
+         if (localStorage.getItem('shuni_theme') === 'dark') {
+           applyTheme(true);
+         }
+         
+         toggleBtn.addEventListener('click', () => {
+           const isDark = !document.body.classList.contains('dark');
+           applyTheme(isDark);
+           localStorage.setItem('shuni_theme', isDark ? 'dark' : 'light');
+         });
+         
+         document.addEventListener("DOMContentLoaded", () => {
+           if (sessionStorage.getItem("shuni_admin_logged") === "true") {
+             document.getElementById('loginView').classList.add('hidden');
+             document.getElementById('adminView').classList.remove('hidden');
+             loadLinks();
+             loadAdminSchedules();
+             loadAdminVideos();
+           }
+         });
+         
+         function showAlert(title, msg, icon = "✨") {
+           document.getElementById('modalIcon').textContent = icon;
+           document.getElementById('modalTitleText').textContent = title;
+           document.getElementById('modalMsgText').textContent = msg;
+           
+           const btnArea = document.getElementById('modalButtons');
+           btnArea.innerHTML = `<button onclick="closeCustomModal()" class="w-full h-11 bg-[#7CA8D8] text-white font-bold text-xs rounded-xl shadow-md">확인</button>`;
+           
+           document.getElementById('customModal').classList.add('open');
+         }
+         
+         function showConfirm(title, msg, onConfirm) {
+           document.getElementById('modalIcon').textContent = "❓";
+           document.getElementById('modalTitleText').textContent = title;
+           document.getElementById('modalMsgText').textContent = msg;
+           
+           const btnArea = document.getElementById('modalButtons');
+           btnArea.innerHTML = `
+             <button onclick="closeCustomModal()" class="w-1/2 h-11 bg-[var(--input-bg)] text-[var(--brand-dark)] font-bold text-xs rounded-xl border border-[var(--line)]">취소</button>
+             <button id="confirmYesBtn" class="w-1/2 h-11 bg-[#E55353] hover:bg-[#D44242] text-white font-bold text-xs rounded-xl shadow-md">삭제하기</button>
+           `;
+           
+           document.getElementById('customModal').classList.add('open');
+           document.getElementById('confirmYesBtn').onclick = () => {
+             closeCustomModal();
+             onConfirm();
+           };
+         }
+         
+         function closeCustomModal() {
+           document.getElementById('customModal').classList.remove('open');
+         }
+         
+         function handleLogin(e) {
+           e.preventDefault();
+           const pw = document.getElementById('adminPassword').value;
+           if (pw === ADMIN_PW) {
+             sessionStorage.setItem("shuni_admin_logged", "true");
+             document.getElementById('loginView').classList.add('hidden');
+             document.getElementById('adminView').classList.remove('hidden');
+             loadLinks();
+             loadAdminSchedules();
+             loadAdminVideos();
+           } else {
+             showAlert("인증 실패", "비밀번호가 올바르지 않습니다.", "🔒");
+           }
+         }
+         
+         function handleLogout() {
+           sessionStorage.removeItem("shuni_admin_logged");
+           location.reload();
+         }
+         
+         async function loadLinks() {
+           try {
+             const { data, error } = await supabaseClient.from('settings').select('*');
+             if (error) throw error;
+             
+             data.forEach(item => {
+               if (item.key === 'musicbook_url') document.getElementById('musicbook_url').value = item.value;
+               if (item.key === 'karma_url') document.getElementById('karma_url').value = item.value;
+             });
+           } catch (err) { console.error(err); }
+         }
+         
+         async function saveLinks(e) {
+           e.preventDefault();
+           const musicbook = document.getElementById('musicbook_url').value;
+           const karma = document.getElementById('karma_url').value;
+         
+           try {
+             await supabaseClient.from('settings').upsert([
+               { key: 'musicbook_url', value: musicbook },
+               { key: 'karma_url', value: karma }
+             ]);
+             showAlert("저장 완료", "링크가 성공적으로 수정되었습니다!", "🔗");
+           } catch (err) {
+             showAlert("저장 실패", err.message, "⚠️");
+           }
+         }
+         
+         async function loadAdminSchedules() {
+           const list = document.getElementById('scheduleList');
+           try {
+             const { data, error } = await supabaseClient.from('schedules').select('*').order('event_date', { ascending: false });
+             if (error) throw error;
+             
+             if (!data || !data.length) {
+               list.innerHTML = '<div class="text-center py-8 text-xs text-[var(--brand-sub)] bg-[var(--card-bg)] rounded-2xl border border-[var(--line)]">등록된 일정이 없습니다.</div>';
+               return;
+             }
+         
+             list.innerHTML = data.map(item => `
+               <div class="flex items-center justify-between p-3.5 sm:p-4 bg-[var(--card-bg)] rounded-2xl border border-[var(--line)] transition-colors gap-2">
+                 <div class="min-w-0 flex-1">
+                   <div class="font-bold text-xs sm:text-sm text-[var(--brand-dark)] truncate">${item.title}</div>
+                   <div class="text-[10px] sm:text-xs text-[var(--brand-sub)] mt-0.5 font-montserrat truncate">
+                     ${item.event_date}${item.end_date ? ' ~ ' + item.end_date : ''} 
+                     ${item.event_time ? ' · ' + item.event_time.slice(0,5) : ''}
+                   </div>
+                 </div>
+                 <button onclick="deleteSchedule('${item.id}')" class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-900/40 transition shrink-0">삭제</button>
+               </div>
+             `).join('');
+           } catch (err) { console.error(err); }
+         }
+         
+         async function saveSchedule(e) {
+           e.preventDefault();
+           const title = document.getElementById('title').value;
+           const event_date = document.getElementById('event_date').value;
+           const end_date = document.getElementById('end_date').value || null;
+           const event_time = document.getElementById('event_time').value || null;
+           const event_type = document.getElementById('event_type').value;
+           const description = document.getElementById('description').value;
+         
+           try {
+             const { error } = await supabaseClient.from('schedules').insert([
+               { title, event_date, end_date, event_time, event_type, description }
+             ]);
+         
+             if (error) throw error;
+             showAlert("등록 완료", "새로운 방송 일정이 등록되었습니다!", "📅");
+             e.target.reset();
+             loadAdminSchedules();
+           } catch (err) {
+             showAlert("등록 실패", err.message, "⚠️");
+           }
+         }
+         
+         function deleteSchedule(id) {
+           showConfirm("일정 삭제", "정말로 이 일정을 삭제하시겠습니까?", async () => {
+             try {
+               const { error } = await supabaseClient.from('schedules').delete().eq('id', id);
+               if (error) throw error;
+               showAlert("삭제 완료", "일정이 정상적으로 삭제되었습니다.", "🗑️");
+               loadAdminSchedules();
+             } catch (err) {
+               showAlert("삭제 실패", err.message, "⚠️");
+             }
+           });
+         }
+         
+         async function saveVideo(e) {
+           e.preventDefault();
+           const id = document.getElementById('video_id').value;
+           const title = document.getElementById('video_title').value;
+           const url = document.getElementById('video_url').value;
+         
+           try {
+             if (id) {
+               const { error } = await supabaseClient.from('videos').update({ title, url }).eq('id', id);
+               if (error) throw error;
+               showAlert("수정 완료", "영상 정보가 성공적으로 수정되었습니다!", "🎥");
+             } else {
+               const { error } = await supabaseClient.from('videos').insert([{ title, url }]);
+               if (error) throw error;
+               showAlert("등록 완료", "새로운 영상이 등록되었습니다!", "🎥");
+             }
+         
+             resetVideoForm();
+             loadAdminVideos();
+           } catch (err) {
+             showAlert("저장 실패", err.message, "⚠️");
+           }
+         }
+         
+         async function loadAdminVideos() {
+           const list = document.getElementById('adminVideoList');
+           if (!list) return;
+         
+           try {
+             const { data, error } = await supabaseClient.from('videos').select('*').order('created_at', { ascending: false });
+             if (error) throw error;
+         
+             if (!data || data.length === 0) {
+               list.innerHTML = '<div class="text-center py-6 text-xs text-[var(--brand-sub)] bg-[var(--input-bg)] rounded-xl border border-[var(--line)]">등록된 영상이 없습니다.</div>';
+               return;
+             }
+         
+             list.innerHTML = data.map(item => `
+               <div class="flex items-center justify-between p-3 bg-[var(--input-bg)] rounded-xl border border-[var(--line)] gap-2">
+                 <div class="min-w-0 flex-1">
+                   <div class="font-bold text-xs sm:text-sm text-[var(--brand-dark)] truncate">${item.title}</div>
+                   <div class="text-[10px] text-[var(--brand-sub)] truncate font-montserrat">${item.url}</div>
+                 </div>
+                 <div class="flex items-center gap-1.5 shrink-0">
+                   <button onclick="editVideo('${item.id}', '${escapeHtml(item.title)}', '${item.url}')" class="text-xs font-bold text-[#7CA8D8] bg-[#BFD5EB]/20 px-2.5 py-1.5 rounded-lg border border-[#BFD5EB]/30 transition">수정</button>
+                   <button onclick="deleteVideo('${item.id}')" class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900/40 transition">삭제</button>
+                 </div>
+               </div>
+             `).join('');
+           } catch (err) {
+             console.error(err);
+           }
+         }
+         
+         function escapeHtml(str) {
+           return str.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+         }
+         
+         function editVideo(id, title, url) {
+           document.getElementById('video_id').value = id;
+           document.getElementById('video_title').value = title;
+           document.getElementById('video_url').value = url;
+           
+           document.getElementById('saveVideoBtn').textContent = "영상 수정하기";
+           document.getElementById('cancelVideoEditBtn').classList.remove('hidden');
+         }
+         
+         function resetVideoForm() {
+           document.getElementById('video_id').value = "";
+           document.getElementById('video_title').value = "";
+           document.getElementById('video_url').value = "";
+           
+           document.getElementById('saveVideoBtn').textContent = "영상 등록하기";
+           document.getElementById('cancelVideoEditBtn').classList.add('hidden');
+         }
+         
+         function deleteVideo(id) {
+           showConfirm("영상 삭제", "정말로 이 영상을 삭제하시겠습니까?", async () => {
+             try {
+               const { error } = await supabaseClient.from('videos').delete().eq('id', id);
+               if (error) throw error;
+               showAlert("삭제 완료", "영상이 삭제되었습니다.", "🗑️");
+               loadAdminVideos();
+             } catch (err) {
+               showAlert("삭제 실패", err.message, "⚠️");
+             }
+           });
+         }
+      </script>
+   </body>
+</html>
